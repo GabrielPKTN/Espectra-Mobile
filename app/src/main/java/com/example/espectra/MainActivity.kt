@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> innerPadding
                     //TelaLogin()
                     //TelaCadastro()
-                    TelaRedefinirSenha()
+                   // TelaRedefinirSenha()
 
                 }
             }
