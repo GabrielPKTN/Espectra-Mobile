@@ -18,14 +18,13 @@ import androidx.compose.ui.unit.sp
 import com.example.espectra.components.EspectraButton
 import com.example.espectra.components.EspectraHeader
 import com.example.espectra.components.EspectraTextField
-import com.example.espectra.components.*
 
 class RedefinirViewModel : ViewModel() {
     var email by mutableStateOf("")
 }
 
 @Composable
-fun TelaRedefinir(
+fun TelaRedefinirSenha(
     //navController: NavHostController, viewModel: RedefinirViewModel = viewModel()
     ) {
     Column(modifier = Modifier.fillMaxSize().background(Color(0xFF2B78D6))) {
@@ -35,7 +34,7 @@ fun TelaRedefinir(
             modifier = Modifier
                 .weight(0.7f)
                 .fillMaxWidth()
-                .background(Color(0xFFF9F9F9), shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp))
+                .background(Color(0xFFF9F9F9), shape = RoundedCornerShape(topStart = 32.dp))
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

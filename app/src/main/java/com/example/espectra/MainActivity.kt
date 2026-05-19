@@ -14,7 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.espectra.components.EspectraHeader
 import com.example.espectra.pages.TelaCadastro
 import com.example.espectra.pages.TelaLogin
-import com.example.espectra.pages.TelaRedefinir
+import com.example.espectra.pages.TelaRedefinirSenha
+import com.example.espectra.pages.TelaRedefinirSenha
 import com.example.espectra.ui.theme.EspectraTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> innerPadding
                     //TelaLogin()
                     //TelaCadastro()
-                    TelaRedefinir()
+                    TelaRedefinirSenha()
 
                 }
             }
