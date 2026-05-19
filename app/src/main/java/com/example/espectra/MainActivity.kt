@@ -5,17 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.espectra.components.EspectraHeader
-import com.example.espectra.pages.TelaCadastro
-import com.example.espectra.pages.TelaLogin
-import com.example.espectra.pages.TelaRedefinirSenha
-import com.example.espectra.pages.TelaRedefinirSenha
+import com.example.espectra.ui.screens.TelaCadastro
+import com.example.espectra.ui.screens.TelaLogin
+import com.example.espectra.ui.screens.TelaRedefinirSenha
 import com.example.espectra.ui.theme.EspectraTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,9 +19,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             EspectraTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> innerPadding
-                    //TelaLogin()
+                    TelaLogin()
                     //TelaCadastro()
-                   // TelaRedefinirSenha()
+                  // TelaRedefinirSenha()
 
                 }
             }

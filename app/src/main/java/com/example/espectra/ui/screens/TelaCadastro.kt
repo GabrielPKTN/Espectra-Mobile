@@ -1,11 +1,10 @@
-package com.example.espectra.pages
+package com.example.espectra.ui.screens
 
-import com.example.espectra.components.EspectraButton
-import com.example.espectra.components.EspectraTextField
+import com.example.espectra.ui.components.EspectraButton
+import com.example.espectra.ui.components.EspectraTextField
 
 
-import com.example.espectra.components.EspectraHeader
-import androidx.lifecycle.ViewModel
+import com.example.espectra.ui.components.EspectraHeader
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

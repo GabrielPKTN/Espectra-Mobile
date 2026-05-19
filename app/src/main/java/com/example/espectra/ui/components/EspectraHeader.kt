@@ -1,4 +1,4 @@
-package com.example.espectra.components
+package com.example.espectra.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-package com.example.espectra.pages
+package com.example.espectra.ui.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.compose.foundation.background
@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -18,10 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 //import androidx.lifecycle.viewmodel.compose.viewModel
 //import androidx.navigation.NavHostController
-import com.example.espectra.components.EspectraButton
-import com.example.espectra.components.EspectraHeader
-import com.example.espectra.components.EspectraTextField
-import com.example.espectra.components.*
+import com.example.espectra.ui.components.EspectraButton
+import com.example.espectra.ui.components.EspectraHeader
+import com.example.espectra.ui.components.EspectraTextField
+
 //import com.example.espectra.ui.navigation.Screen
 
 class LoginViewModel : ViewModel() {
