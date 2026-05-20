@@ -4,7 +4,7 @@ import com.example.espectra.ui.components.EspectraButton
 import com.example.espectra.ui.components.EspectraTextField
 
 
-import com.example.espectra.ui.components.EspectraHeader
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.espectra.ui.components.EspectraHeaderAzul
+
 //import androidx.lifecycle.viewmodel.compose.viewModel
 //import androidx.navigation.NavHostController
 //import com.exemplo.espectra.ui.components.*
@@ -43,7 +45,7 @@ fun TelaCadastro(
     //navController: NavHostController, viewModel: CadastroViewModel = viewModel()
     ) {
     Column(modifier = Modifier.fillMaxSize().background(Color(0xFF2B78D6))) {
-        EspectraHeader(modifier = Modifier.weight(0.25f))
+        EspectraHeaderAzul(modifier = Modifier.weight(0.25f))
 
         Column(
             modifier = Modifier

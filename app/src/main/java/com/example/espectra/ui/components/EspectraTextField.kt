@@ -1,6 +1,6 @@
 package com.example.espectra.ui.components
 
-
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedTextField
@@ -20,7 +20,9 @@ fun EspectraTextField(
     onValueChange: (String) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    shape: Shape = RoundedCornerShape(12.dp)
+
 ) {
     OutlinedTextField(
         value = value,
@@ -31,7 +33,7 @@ fun EspectraTextField(
         singleLine = true,
         visualTransformation = visualTransformation,
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = shape,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = Color(0xFF2B78D6),
             unfocusedBorderColor = Color(0xFFDCDCDC),

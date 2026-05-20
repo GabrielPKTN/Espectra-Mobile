@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 //import androidx.lifecycle.viewmodel.compose.viewModel
 //import androidx.navigation.NavHostController
 import com.example.espectra.ui.components.EspectraButton
-import com.example.espectra.ui.components.EspectraHeader
+import com.example.espectra.ui.components.EspectraHeaderAzul
 import com.example.espectra.ui.components.EspectraTextField
 
 class RedefinirViewModel : ViewModel() {
@@ -28,7 +28,7 @@ fun TelaRedefinirSenha(
     //navController: NavHostController, viewModel: RedefinirViewModel = viewModel()
     ) {
     Column(modifier = Modifier.fillMaxSize().background(Color(0xFF2B78D6))) {
-        EspectraHeader(modifier = Modifier.weight(0.3f))
+        EspectraHeaderAzul(modifier = Modifier.weight(0.3f))
 
         Column(
             modifier = Modifier

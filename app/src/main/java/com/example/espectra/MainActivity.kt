@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.espectra.ui.screens.TelaCadastro
+import com.example.espectra.ui.screens.TelaHome
 import com.example.espectra.ui.screens.TelaLogin
 import com.example.espectra.ui.screens.TelaRedefinirSenha
 import com.example.espectra.ui.theme.EspectraTheme
@@ -19,9 +20,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             EspectraTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> innerPadding
-                    TelaLogin()
-                    //TelaCadastro()
+                   // TelaLogin()
+                    TelaCadastro()
                   // TelaRedefinirSenha()
+                    //TelaHome()
 
                 }
             }
