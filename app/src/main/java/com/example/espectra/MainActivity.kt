@@ -21,9 +21,9 @@ class MainActivity : ComponentActivity() {
             EspectraTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -> innerPadding
                    // TelaLogin()
-                    TelaCadastro()
+                    //TelaCadastro()
                   // TelaRedefinirSenha()
-                    //TelaHome()
+                    TelaHome()
 
                 }
             }
