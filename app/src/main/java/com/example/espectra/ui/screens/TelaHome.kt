@@ -45,7 +45,11 @@ fun TelaHome(
         mutableStateOf(false)
     }
 
-    Column(modifier = Modifier.fillMaxSize().background(Color(0xFF2B78D6))) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(Color(0xFF2B78D6))
+
+    ) {
         EspectraHeaderBranco(modifier = Modifier.weight(0.25f))
 
         Column(
@@ -95,7 +99,7 @@ fun TelaHome(
                 }
             )
 
-            Spacer(modifier = Modifier.height(26.dp))
+            Spacer(modifier = Modifier.height(240.dp))
 
             EspectraButton(text = "Adicionar Paciente", onClick = { })
 

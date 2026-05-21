@@ -45,6 +45,7 @@ fun EspectraCardPaciente( selecionado: Boolean,
             1.dp,
             if (selecionado)
                 Color(0xFF2B78D6)
+
             else
                 Color(0xFFE0E0E0)
 
