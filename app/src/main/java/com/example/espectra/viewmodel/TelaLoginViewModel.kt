@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.espectra.model.ValidarLoginSenha
 
 class TelaLoginViewModel : ViewModel() {
 
@@ -31,30 +32,29 @@ class TelaLoginViewModel : ViewModel() {
         if(senhaErro != null ) senhaErro = null
     }
 
-    fun
 
     //a funcao principal chamada pelo botao login
     fun realizarLogin(onSuccess: () -> Unit){
         //executa as validacoes locais
-        val emalValido =
+        val validarEmail = ValidarLoginSenha.validarEmail(email )
+        val validarSenha = ValidarLoginSenha.validarSenha(senha)
+    }
+    if (!validarEmail){
+        emailErro = "Email Inválido"
     }
 
-}w
-
-
-
-// A função principal chamada pelo botão de Login
-fun realizarLOgin(onSuccess: () -> Unit) {
-    // 1. Executa as validações locais
-    val isEmailValid = Validator.isValidEmail(email)
-    val isPasswordValid = Validator.isValidPassword(password)
-
-    if (!isEmailValid) {
-        emailError = "E-mail inválido"
+    if (!validarSenha){
+        senhaErro = " A senha deve ter pelo menos 8  caractesres"
     }
-    if (!isPasswordValid) {
-        passwordError = "A senha deve ter pelo menos 6 caracteres"
-    }
+
+}
+
+
+
+
+
+
+
 
     // Se algo estiver errado, interrompe o fluxo aqui
     if (!isEmailValid || !isPasswordValid) return

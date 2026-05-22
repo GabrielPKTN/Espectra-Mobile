@@ -1,6 +1,6 @@
 package com.example.espectra.model
 
-import android.R
+
 
 object ValidarLoginSenha {
 
