@@ -6,6 +6,7 @@ data class DataTelaLogin (
         //java.lang.String
     )
 
+
     data class RespostaAutenticacao(
         val token: String?,
         val mensagem: String?,

@@ -7,4 +7,5 @@ data class DataTelaCadastro(
     val dataNascimento: String,
     val telefone: String,
     val senha: String
+
 )

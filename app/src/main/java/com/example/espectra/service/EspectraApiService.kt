@@ -5,6 +5,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
+
 interface EspectraApiService {
     @POST("auth/login") // Ajuste a rota para a correspondente do seu backend
     suspend fun login(@Body request: DataTelaLogin): Response<RespostaAutenticacao>

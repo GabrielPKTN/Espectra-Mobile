@@ -7,6 +7,7 @@ object RetrofitInstance {
 
     private const val BASE_URL = "http://10.0.2.2:8080/"
 
+
     // ✅ CORRIGIDO: Mudou de EspectraApiService.EspectraApiService para apenas EspectraApiService
     val espectraApiService: EspectraApiService by lazy {
         Retrofit.Builder()
