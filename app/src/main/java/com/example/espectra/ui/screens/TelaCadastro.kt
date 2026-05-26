@@ -1,7 +1,7 @@
 package com.example.espectra.ui.screens
 
-import com.example.espectra.ui.components.EspectraButton
-import com.example.espectra.ui.components.EspectraTextField
+import com.example.espectra.ui.components.componentsGerais.EspectraButton
+import com.example.espectra.ui.components.componentsGerais.EspectraTextField
 
 
 
@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.espectra.ui.components.EspectraHeaderAzul
+import com.example.espectra.ui.components.TelaCadastroLogin.EspectraHeaderAzul
 
 //import androidx.lifecycle.viewmodel.compose.viewModel
 //import androidx.navigation.NavHostController

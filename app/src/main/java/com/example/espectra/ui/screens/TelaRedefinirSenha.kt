@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 //import androidx.lifecycle.viewmodel.compose.viewModel
 //import androidx.navigation.NavHostController
-import com.example.espectra.ui.components.EspectraButton
-import com.example.espectra.ui.components.EspectraHeaderAzul
-import com.example.espectra.ui.components.EspectraTextField
+import com.example.espectra.ui.components.componentsGerais.EspectraButton
+import com.example.espectra.ui.components.TelaCadastroLogin.EspectraHeaderAzul
+import com.example.espectra.ui.components.componentsGerais.EspectraTextField
 
 class RedefinirViewModel : ViewModel() {
     var email by mutableStateOf("")

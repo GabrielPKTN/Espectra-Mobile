@@ -1,4 +1,4 @@
-package com.example.espectra.ui.components
+package com.example.espectra.ui.components.componentsGerais
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
