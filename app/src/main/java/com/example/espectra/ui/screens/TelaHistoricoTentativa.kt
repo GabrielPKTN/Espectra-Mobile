@@ -51,7 +51,7 @@ fun TelaHistoricoTentativa(padding: PaddingValues) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(padding)
-                .padding(top = 20.dp),
+                .padding(top = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -87,8 +87,7 @@ fun TelaHistoricoTentativa(padding: PaddingValues) {
         Text(
             text = "9. Estende a mão em direção a um objeto oferecido",
             fontFamily = fontInclusiveSans,
-            fontSize = 32.sp,
-            color = Color(0, 0, 0, 255),
+            fontSize = 24.sp,
             modifier = Modifier
                 .padding(vertical = 24.dp)
         )
@@ -101,7 +100,7 @@ fun TelaHistoricoTentativa(padding: PaddingValues) {
                 fontSize = 20.sp,
                 color = Color(0, 0, 0, 255),
                 modifier = Modifier
-                    .padding(vertical = 16.dp)
+                    .padding(vertical = 24.dp)
             )
 
             LazyColumn(

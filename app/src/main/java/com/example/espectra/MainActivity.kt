@@ -25,11 +25,10 @@ class MainActivity : ComponentActivity() {
                     // TelaCadastro()
                     // TelaRedefinirSenha()
                     // TelaHome()
-                    TelaHistoricoTentativa(innerPadding)
+                    // TelaHistoricoTentativa(innerPadding)
 
                 }
             }
         }
     }
 }
-
