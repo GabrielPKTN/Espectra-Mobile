@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,17 +23,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.espectra.R
+import androidx.compose.foundation.lazy.LazyColumn
+import com.example.espectra.ui.components.TelaHistoricoTentativa.CardTentativa
 
 @Composable
 fun TelaHistoricoTentativa(padding: PaddingValues) {
 
+    val fontInclusiveSans = FontFamily(Font(R.font.inclusivesans_variablefont_wght))
+    val fontInstrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
+
     Column(
 
         modifier = Modifier
-            .background(Color(253, 0, 0, 255))
+            .padding(horizontal = 15.dp)
             .fillMaxSize()
 
     ) {
@@ -42,8 +51,7 @@ fun TelaHistoricoTentativa(padding: PaddingValues) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(padding)
-                .padding(horizontal = 10.dp)
-                .background(Color.Green),
+                .padding(top = 20.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -71,6 +79,49 @@ fun TelaHistoricoTentativa(padding: PaddingValues) {
                         shape = CircleShape
                     )
             )
+
+        }
+        // Fim header
+
+        //Ínicio do conteúdo da tela
+        Text(
+            text = "9. Estende a mão em direção a um objeto oferecido",
+            fontFamily = fontInclusiveSans,
+            fontSize = 32.sp,
+            color = Color(0, 0, 0, 255),
+            modifier = Modifier
+                .padding(vertical = 24.dp)
+        )
+
+        Column() {
+
+            Text(
+                text = "Tentativas:",
+                fontFamily = fontInclusiveSans,
+                fontSize = 20.sp,
+                color = Color(0, 0, 0, 255),
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+            )
+
+            LazyColumn(
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(450.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+
+            ) {
+
+                items(5) { index ->
+
+                    CardTentativa()
+
+                }
+
+
+            }
+
 
         }
 
