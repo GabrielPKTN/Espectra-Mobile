@@ -37,6 +37,7 @@ import com.patrykandpatrick.vico.compose.common.component.rememberShapeComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 import com.patrykandpatrick.vico.compose.common.rememberHorizontalLegend
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 
 @Composable
@@ -92,17 +93,20 @@ fun GraficoTentativa() {
             label = "Falha"
         )
 
-        val formatadorEixoX = rememberBottom(
-            valueFormatter = CartesianValueFormatter { context, value, verticalAxisPosition ->
+        val sdfEntrada = android.icu.text.SimpleDateFormat("dd/MM", Locale.getDefault())
 
-                val timestamp = value.toLong()
+        val timeStampX = remember {
 
-                val data = Date(timestamp)
+            datas.map { stringData ->
 
-                SimpleDateFormat("dd/MM", Locale.getDefault()).format(data)
+                val dataObjeto = sdfEntrada.parse(stringData)
+                dataObjeto?.time?.toDouble() ?: 0.0
 
             }
-        )
+
+        }
+
+
 
         val legenda = rememberHorizontalLegend<CartesianMeasuringContext, CartesianDrawingContext>(
 
