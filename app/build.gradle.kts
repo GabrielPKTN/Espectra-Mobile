@@ -57,4 +57,8 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     implementation("io.coil-kt:coil-compose:2.6.0")
+
+
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m3)
 }

@@ -14,12 +14,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -29,9 +33,27 @@ import androidx.compose.ui.unit.sp
 import com.example.espectra.R
 import com.example.espectra.ui.components.perfilPaciente.ButtonHabilidade
 import com.example.espectra.ui.components.perfilPaciente.HeaderPerfil
+import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
+import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
+import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.compose.cartesian.data.columnSeries
+import com.patrykandpatrick.vico.compose.cartesian.layer.ColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
+import com.patrykandpatrick.vico.compose.common.Fill
+import com.patrykandpatrick.vico.compose.common.component.LineComponent
+import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 
 @Composable
 fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
+
+    val red = rememberLineComponent(fill = Fill(Color.Red), thickness = 12.dp)
+    val blue = rememberLineComponent(fill = Fill(Color.Blue), thickness = 12.dp)
+    val green = rememberLineComponent(fill = Fill(Color.Green), thickness = 12.dp)
+    val yellow = rememberLineComponent(fill = Fill(Color.Yellow), thickness = 12.dp)
+    val gray = rememberLineComponent(fill = Fill(Color.Gray), thickness = 12.dp)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -116,6 +138,51 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
                 fontWeight = FontWeight.SemiBold,
                 color = Color(0xFF2B78D6),
             )
+
+            val modelProducer = remember { CartesianChartModelProducer() }
+
+            val columnProvider = object : ColumnCartesianLayer.ColumnProvider {
+                override fun getColumn(seriesIndex: Int, dataSetIndex: Int) =
+                    when (seriesIndex) {
+                        0 -> red
+                        1 -> blue
+                        2 -> green
+                        3 -> yellow
+                        4 -> gray
+                        else -> gray
+                    }
+            }
+
+            LaunchedEffect(Unit) {
+                modelProducer.runTransaction {
+                    columnSeries {
+                        series(1, 2, 5, 3, 4)
+                    }
+                }
+            }
+
+            CartesianChartHost(
+                chart = rememberCartesianChart(
+                    rememberColumnCartesianLayer(
+                        columnProvider = columnProvider
+                    ),
+                    bottomAxis = HorizontalAxis.rememberBottom(
+                        line = rememberLineComponent(
+                            thickness = 3.dp
+                        ),
+                        tick = null,
+                        guideline = null,
+                        itemPlacer = remember { HorizontalAxis.ItemPlacer.aligned() },
+                        label = null,
+                    )
+                ),
+                modelProducer = modelProducer,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp)
+            )
+
+
 
             Text(
                 text = "Essa criança ainda não tem um gráfico de desempenho, ou não está visível para os responsáveis",
