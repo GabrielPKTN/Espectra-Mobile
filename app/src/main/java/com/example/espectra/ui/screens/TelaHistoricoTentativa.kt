@@ -45,6 +45,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.espectra.ui.components.TelaHistoricoTentativa.CardTentativa
+import com.example.espectra.ui.components.TelaHistoricoTentativa.GraficoTentativa
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
@@ -67,11 +68,6 @@ fun TelaHistoricoTentativa(padding: PaddingValues) {
     val fontInstrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
 
     val scrollState = rememberScrollState()
-
-    val corIndenpendente    = Color(53, 189, 0, 255)
-    val corAjudaMinima      = Color(225, 208, 0, 255)
-    val corAjudaTotal       = Color(255, 87, 34, 255)
-    val corError            = Color(238, 6, 6, 255)
 
     Column(
 
@@ -175,115 +171,12 @@ fun TelaHistoricoTentativa(padding: PaddingValues) {
 
             Spacer(modifier = Modifier.height(25.dp))
 
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color(254, 254, 254, 255)
-                ),
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 8.dp
-                )
-            ) {
+            GraficoTentativa()
 
-                Spacer(modifier = Modifier.height(25.dp))
-
-                val modelProducer = remember { CartesianChartModelProducer() }
-
-                LaunchedEffect(Unit) {
-                    modelProducer.runTransaction { lineSeries {
-
-                        series(0, 3, 5, 6, 7, 8)
-                        series(4, 5, 8, 8, 8, 8)
-                        series(0, 0, 0, 0, 0, 0)
-                        series(0, 0, 0, 0, 0, 0)
-
-                    } }
-                }
-
-                CartesianChartHost(
-                    chart = rememberCartesianChart(
-                        rememberLineCartesianLayer(
-
-                            lineProvider = LineCartesianLayer.LineProvider.series(
-
-                                LineCartesianLayer.rememberLine(
-                                    fill = LineCartesianLayer.LineFill.single(Fill(corIndenpendente)),
-                                    pointProvider = LineCartesianLayer.PointProvider.single(
-                                        LineCartesianLayer.Point(
-                                            component = rememberShapeComponent(shape = CircleShape, fill = Fill(corIndenpendente)),
-                                            size = 8.dp
-                                        )
-                                    )
-                                ),
-
-                                LineCartesianLayer.rememberLine(
-                                    fill = LineCartesianLayer.LineFill.single(Fill(corAjudaMinima)),
-                                    pointProvider = LineCartesianLayer.PointProvider.single(
-                                        LineCartesianLayer.Point(
-                                            component = rememberShapeComponent(shape = CircleShape, fill = Fill(corAjudaMinima)),
-                                            size = 8.dp
-                                        )
-                                    )
-                                ),
-
-                                LineCartesianLayer.rememberLine(
-                                    fill = LineCartesianLayer.LineFill.single(Fill(corAjudaTotal)),
-                                    pointProvider = LineCartesianLayer.PointProvider.single(
-                                        LineCartesianLayer.Point(
-                                            component = rememberShapeComponent(shape = CircleShape, fill = Fill(corAjudaTotal)),
-                                            size = 8.dp
-                                        )
-                                    )
-                                ),
-
-                                LineCartesianLayer.rememberLine(
-                                    fill = LineCartesianLayer.LineFill.single(Fill(corError)),
-                                    pointProvider = LineCartesianLayer.PointProvider.single(
-                                        LineCartesianLayer.Point(
-                                            component = rememberShapeComponent(shape = CircleShape, fill = Fill(corError)),
-                                            size = 8.dp
-                                        )
-                                    )
-                                ),
-
-                                )
-                        ),
-
-
-                        startAxis = VerticalAxis.rememberStart(),
-                        bottomAxis = HorizontalAxis.rememberBottom(),
-                        getXStep = {1.0}
-                    ),
-                    modelProducer
-                )
-
-            }
-
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(100.dp))
 
         }
 
     }
 
 }
-
-val legendaDoGrafico = rememberHorizontalLegend(
-
-    items = {
-
-        add(
-            LegendItem(
-                icon = rememberShapeComponent(
-                    fill = Fill(corIndenpendente),
-                    shape = CircleShape
-                ),
-                labelComponent = rememberTextComponent(style = TextStyle(color = Color.Black)),
-                label = "Independente"
-            )
-        )
-
-    }
-
-
-)
