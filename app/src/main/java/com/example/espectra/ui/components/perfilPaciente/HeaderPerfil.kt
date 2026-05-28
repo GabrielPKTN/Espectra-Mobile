@@ -3,10 +3,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -51,6 +53,15 @@ fun HeaderPerfil(
                 }
             }
         }
+
+        Image(
+            painter = painterResource(R.drawable.foto_paciente),
+            contentDescription = "foto paciente",
+            modifier = Modifier
+                    .size(100.dp)
+                    .clip(CircleShape)
+                    .align(Alignment.BottomCenter)
+        )
 
 //            fotoPerfil?.let { url ->
 //

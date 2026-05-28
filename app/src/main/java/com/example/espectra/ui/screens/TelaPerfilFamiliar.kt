@@ -1,13 +1,18 @@
 package com.example.espectra.ui.screens
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,27 +37,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.espectra.R
 import com.example.espectra.ui.components.perfilPaciente.ButtonHabilidade
+import com.example.espectra.ui.components.perfilPaciente.ColunaLegenda
 import com.example.espectra.ui.components.perfilPaciente.HeaderPerfil
+import com.example.espectra.ui.components.perfilPaciente.LegendaGrafico
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.compose.cartesian.data.columnSeries
 import com.patrykandpatrick.vico.compose.cartesian.layer.ColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.layer.LineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLine
+import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.component.LineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
+import com.patrykandpatrick.vico.compose.common.component.rememberShapeComponent
 
 @Composable
 fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
 
-    val red = rememberLineComponent(fill = Fill(Color.Red), thickness = 12.dp)
-    val blue = rememberLineComponent(fill = Fill(Color.Blue), thickness = 12.dp)
-    val green = rememberLineComponent(fill = Fill(Color.Green), thickness = 12.dp)
-    val yellow = rememberLineComponent(fill = Fill(Color.Yellow), thickness = 12.dp)
-    val gray = rememberLineComponent(fill = Fill(Color.Gray), thickness = 12.dp)
+    val corSocializacao         = Color(162, 226, 137, 255)
+    val corLinguagem            = Color(255, 200, 123, 255)
+    val corCognicao             = Color(113, 175, 255, 255)
+    val corAutoCuidados         = Color(210, 147, 240, 255)
+    val corDesenvolvimentoMotor = Color(200, 200, 200, 255)
 
     Column(
         modifier = Modifier
@@ -82,7 +93,7 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
                 fontFamily = FontFamily(
                     Font(R.font.instrumentsans_variablefont_wdth_wght)
                 ),
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
                 color = Color(0xFF2B78D6),
             )
 
@@ -101,10 +112,11 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-                    .shadow(elevation = 10.dp, shape = CircleShape),
+                    .padding(horizontal = 52.dp)
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp))
+                    .height(40.dp),
                 colors = ButtonDefaults.buttonColors(Color.White),
-                shape = RoundedCornerShape(2.dp)
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text(
                     text = "Editar informações pessoais",
@@ -112,88 +124,97 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
                     fontFamily = FontFamily(
                         Font(R.font.instrumentsans_variablefont_wdth_wght)
                     ),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier
-                        .padding(horizontal = 2.dp)
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold
                 )
             }
 
         }
 
         // GRÁFICO
-
         Column(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
+
             Text(
                 text = "Grafico de Desempenho",
                 fontSize = 24.sp,
                 fontFamily = FontFamily(
                     Font(R.font.instrumentsans_variablefont_wdth_wght)
                 ),
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
                 color = Color(0xFF2B78D6),
             )
 
-            val modelProducer = remember { CartesianChartModelProducer() }
+            ColunaLegenda()
 
-            val columnProvider = object : ColumnCartesianLayer.ColumnProvider {
-                override fun getColumn(seriesIndex: Int, dataSetIndex: Int) =
-                    when (seriesIndex) {
-                        0 -> red
-                        1 -> blue
-                        2 -> green
-                        3 -> yellow
-                        4 -> gray
-                        else -> gray
-                    }
-            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(18.dp)
+            ) {
 
-            LaunchedEffect(Unit) {
-                modelProducer.runTransaction {
-                    columnSeries {
-                        series(1, 2, 5, 3, 4)
+
+                val modelProducer = remember { CartesianChartModelProducer() }
+                val columnProvider = ColumnCartesianLayer.ColumnProvider.series(
+                    rememberLineComponent(fill = Fill(corSocializacao), thickness = 10.dp),
+                    rememberLineComponent(fill = Fill(corLinguagem), thickness = 10.dp),
+                    rememberLineComponent(fill = Fill(corCognicao), thickness = 10.dp),
+                    rememberLineComponent(fill = Fill(corAutoCuidados), thickness = 10.dp),
+                    rememberLineComponent(fill = Fill(corDesenvolvimentoMotor), thickness = 10.dp),
+                )
+
+                LaunchedEffect(Unit) {
+                    modelProducer.runTransaction {
+                        columnSeries {
+                            series(1)
+                            series(2)
+                            series(5)
+                            series(3)
+                            series(4)
+                        }
                     }
                 }
-            }
 
-            CartesianChartHost(
-                chart = rememberCartesianChart(
-                    rememberColumnCartesianLayer(
-                        columnProvider = columnProvider
-                    ),
-                    bottomAxis = HorizontalAxis.rememberBottom(
-                        line = rememberLineComponent(
-                            thickness = 3.dp
+                CartesianChartHost(
+                    chart = rememberCartesianChart(
+                        rememberColumnCartesianLayer(
+                            columnProvider
                         ),
-                        tick = null,
-                        guideline = null,
-                        itemPlacer = remember { HorizontalAxis.ItemPlacer.aligned() },
-                        label = null,
-                    )
-                ),
-                modelProducer = modelProducer,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-            )
+                        bottomAxis = HorizontalAxis.rememberBottom(
+                            line = rememberLineComponent(
+                                thickness = 3.dp
+                            ),
+                            tick = null,
+                            guideline = null,
+                            itemPlacer = remember { HorizontalAxis.ItemPlacer.aligned() },
+                            label = null,
+                        )
+                    ),
+                    modelProducer = modelProducer,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp)
+                )
 
 
+//
+//                Text(
+//                    text = "Essa criança ainda não tem um gráfico de desempenho, ou não está visível para os responsáveis",
+//                    fontFamily = FontFamily(
+//                        Font(R.font.inclusivesans_variablefont_wght)
+//                    ),
+//                    fontSize = 18.sp,
+//                    textAlign = TextAlign.Center
+//                )
 
-            Text(
-                text = "Essa criança ainda não tem um gráfico de desempenho, ou não está visível para os responsáveis",
-                fontFamily = FontFamily(
-                    Font(R.font.inclusivesans_variablefont_wght)
-                ),
-                fontSize = 18.sp,
-                textAlign = TextAlign.Center
-            )
-
+            }
         }
+
+
 
 
         // BOTÕES DE HABILIDADE
@@ -201,26 +222,27 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            ButtonHabilidade(cor = 0xFFA2E289, nomeHabilidade = "Socialização")
-            ButtonHabilidade(cor = 0xFFA2E289, nomeHabilidade = "Linguagem")
-            ButtonHabilidade(cor = 0xFFA2E289, nomeHabilidade = "Cognição")
-            ButtonHabilidade(cor = 0xFFA2E289, nomeHabilidade = "Auto-Cuidados")
-            ButtonHabilidade(cor = 0xFFA2E289, nomeHabilidade = "Desenvolvimento motor")
+            ButtonHabilidade(cor = corSocializacao, nomeHabilidade = "Socialização")
+            ButtonHabilidade(cor = corLinguagem, nomeHabilidade = "Linguagem")
+            ButtonHabilidade(cor = corCognicao, nomeHabilidade = "Cognição")
+            ButtonHabilidade(cor = corAutoCuidados, nomeHabilidade = "Auto-Cuidados")
+            ButtonHabilidade(cor = corDesenvolvimentoMotor, nomeHabilidade = "Desenvolvimento motor")
         }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 32.dp)
-                .padding(horizontal = 40.dp)
+                .padding(horizontal = 52.dp)
         ) {
             Button(
                 onClick = {},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp),
+                    .padding(horizontal = 24.dp)
+                    .height(40.dp),
                 colors = ButtonDefaults.buttonColors(Color(0xFFEA1212)),
-                shape = RoundedCornerShape(24.dp)
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text(
                     text = "Excluir familiar",
@@ -228,9 +250,8 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
                     fontFamily = FontFamily(
                         Font(R.font.instrumentsans_variablefont_wdth_wght)
                     ),
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(vertical = 6.dp)
 
                 )
             }

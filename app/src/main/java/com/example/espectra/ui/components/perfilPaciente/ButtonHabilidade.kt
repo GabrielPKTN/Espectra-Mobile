@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.example.espectra.R
 
 @Composable
-fun ButtonHabilidade(cor: Long, nomeHabilidade: String) {
+fun ButtonHabilidade(cor: Color, nomeHabilidade: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -32,8 +32,8 @@ fun ButtonHabilidade(cor: Long, nomeHabilidade: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp),
-            colors = ButtonDefaults.buttonColors(Color(cor)),
-            shape = RoundedCornerShape(24.dp)
+            colors = ButtonDefaults.buttonColors(cor),
+            shape = RoundedCornerShape(8.dp)
         ) {
             Text(
                 text = nomeHabilidade,
