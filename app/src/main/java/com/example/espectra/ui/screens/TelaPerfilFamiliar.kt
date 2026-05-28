@@ -55,6 +55,7 @@ import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.component.LineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberShapeComponent
+import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 
 @Composable
 fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
@@ -64,6 +65,9 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
     val corCognicao             = Color(113, 175, 255, 255)
     val corAutoCuidados         = Color(210, 147, 240, 255)
     val corDesenvolvimentoMotor = Color(200, 200, 200, 255)
+
+    val instrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
+    val inclusiveSans = FontFamily(Font(R.font.inclusivesans_variablefont_wght))
 
     Column(
         modifier = Modifier
@@ -90,18 +94,14 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
             Text(
                 text = "JOÃO PEDRO SILVA PEREIRA",
                 fontSize = 24.sp,
-                fontFamily = FontFamily(
-                    Font(R.font.instrumentsans_variablefont_wdth_wght)
-                ),
+                fontFamily = instrumentSans,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF2B78D6),
             )
 
             Text(
                text = "Detalhes do paciente",
-                fontFamily = FontFamily(
-                    Font(R.font.inclusivesans_variablefont_wght)
-                ),
+                fontFamily = inclusiveSans,
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center
             )
@@ -121,9 +121,7 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
                 Text(
                     text = "Editar informações pessoais",
                     color = Color(0xFF2B78D6),
-                    fontFamily = FontFamily(
-                        Font(R.font.instrumentsans_variablefont_wdth_wght)
-                    ),
+                    fontFamily = instrumentSans,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -141,9 +139,7 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
             Text(
                 text = "Grafico de Desempenho",
                 fontSize = 24.sp,
-                fontFamily = FontFamily(
-                    Font(R.font.instrumentsans_variablefont_wdth_wght)
-                ),
+                fontFamily = instrumentSans,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF2B78D6),
             )
@@ -182,7 +178,11 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
                 CartesianChartHost(
                     chart = rememberCartesianChart(
                         rememberColumnCartesianLayer(
-                            columnProvider
+                            columnProvider,
+                            dataLabel = rememberTextComponent(
+                                color = Color.Black,
+                                textSize = 12.sp
+                            )
                         ),
                         bottomAxis = HorizontalAxis.rememberBottom(
                             line = rememberLineComponent(
@@ -247,9 +247,7 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
                 Text(
                     text = "Excluir familiar",
                     color = Color.White,
-                    fontFamily = FontFamily(
-                        Font(R.font.instrumentsans_variablefont_wdth_wght)
-                    ),
+                    fontFamily = instrumentSans,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
 
