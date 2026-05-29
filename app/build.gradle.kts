@@ -58,6 +58,11 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:2.6.0")
 
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+
 
     implementation(libs.vico.compose)
     implementation(libs.vico.compose.m3)
