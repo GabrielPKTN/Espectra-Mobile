@@ -67,7 +67,7 @@ fun ColunaLegenda(modifier: Modifier = Modifier) {
             ) {
 
             LegendaGrafico("Linguagem", corLinguagem)
-            LegendaGrafico("Desenvovimento-motor", corDesenvolvimentoMotor)
+            LegendaGrafico("Desenvolvimento-motor", corDesenvolvimentoMotor)
 
         }
 

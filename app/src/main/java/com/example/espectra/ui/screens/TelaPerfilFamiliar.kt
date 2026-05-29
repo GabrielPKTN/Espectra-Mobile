@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +45,8 @@ import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianLayerRangeProvider
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.compose.cartesian.data.columnSeries
 import com.patrykandpatrick.vico.compose.cartesian.layer.ColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.LineCartesianLayer
@@ -53,6 +56,7 @@ import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLa
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.component.LineComponent
+import com.patrykandpatrick.vico.compose.common.component.TextComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberShapeComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
@@ -163,6 +167,15 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
                     rememberLineComponent(fill = Fill(corDesenvolvimentoMotor), thickness = 10.dp),
                 )
 
+                val dataLabelComponent = remember {
+                    TextComponent(
+                        textStyle = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    )
+                }
+
                 LaunchedEffect(Unit) {
                     modelProducer.runTransaction {
                         columnSeries {
@@ -170,7 +183,7 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
                             series(2)
                             series(5)
                             series(3)
-                            series(4)
+                            series(6)
                         }
                     }
                 }
@@ -179,9 +192,19 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
                     chart = rememberCartesianChart(
                         rememberColumnCartesianLayer(
                             columnProvider,
-                            dataLabel = rememberTextComponent(
-                                color = Color.Black,
-                                textSize = 12.sp
+                            dataLabel = dataLabelComponent,
+
+                            dataLabelValueFormatter = CartesianValueFormatter{
+                                _, value, _ ->
+                                if (value.toInt() == 1){
+                                    "${value.toInt()} ano"
+                                }else{
+                                    "${value.toInt()} anos"
+                                }
+                                                                             },
+                            rangeProvider = CartesianLayerRangeProvider.fixed(
+                                minY = 0.0,
+                                maxY = 7.0
                             )
                         ),
                         bottomAxis = HorizontalAxis.rememberBottom(
