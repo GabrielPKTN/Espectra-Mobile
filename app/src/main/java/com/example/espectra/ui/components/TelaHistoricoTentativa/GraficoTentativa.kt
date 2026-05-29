@@ -55,11 +55,18 @@ fun GraficoTentativa() {
     ) {
 
         val datas = listOf(
-            "01/05",
-            "02/05",
-            "03/05",
-            "04/05",
-            "05/05"
+            "01/05/2026",
+            "02/05/2026",
+            "03/05/2026",
+            "04/05/2026",
+            "05/05/2026",
+            "06/05/2026",
+            "07/05/2026",
+            "08/05/2026",
+            "10/05/2026",
+            "11/05/2026",
+            "12/05/2026",
+            "13/05/2026"
         )
 
         val corIndenpendente    = Color(53, 189, 0, 255)
@@ -93,21 +100,6 @@ fun GraficoTentativa() {
             label = "Falha"
         )
 
-        val sdfEntrada = android.icu.text.SimpleDateFormat("dd/MM", Locale.getDefault())
-
-        val timeStampX = remember {
-
-            datas.map { stringData ->
-
-                val dataObjeto = sdfEntrada.parse(stringData)
-                dataObjeto?.time?.toDouble() ?: 0.0
-
-            }
-
-        }
-
-
-
         val legenda = rememberHorizontalLegend<CartesianMeasuringContext, CartesianDrawingContext>(
 
             items = {
@@ -119,6 +111,8 @@ fun GraficoTentativa() {
 
         )
 
+        val xValues = List(datas.size) { it.toFloat() }
+
         val modelProducer = remember { CartesianChartModelProducer() }
 
         Spacer(modifier = Modifier.height(25.dp))
@@ -126,10 +120,25 @@ fun GraficoTentativa() {
         LaunchedEffect(Unit) {
             modelProducer.runTransaction { lineSeries {
 
-                series(0, 3, 5, 6, 7, 8)
-                series(4, 5, 8, 8, 8, 8)
-                series(0, 0, 0, 0, 0, 0)
-                series(0, 0, 0, 0, 0, 0)
+                series(
+                    x = xValues,
+                    y = listOf(0.0, 3.0, 5.0, 6.0, 7.0, 8.0, 8.0, 8.0)
+                )
+
+                series(
+                    x = xValues,
+                    y = listOf(4.0, 5.0, 8.0, 8.0, 8.0)
+                )
+
+                series(
+                    x = xValues,
+                    y = listOf(0.0, 0.0, 0.0, 0.0, 0.0)
+                )
+
+                series(
+                    x = xValues,
+                    y = listOf(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0)
+                )
 
             } }
         }
@@ -185,16 +194,23 @@ fun GraficoTentativa() {
                 ),
 
                 legend = legenda,
-                bottomAxis = formatadorEixoX,
+                bottomAxis = rememberBottom(
+                    valueFormatter = { _, value, _ ->
+                        val index = value.toInt()
+                        if (index in datas.indices) datas[index].substring(0, 5) else ""
+                    }
+                ),
 
                 startAxis = VerticalAxis.rememberStart(),
+
                 getXStep = {1.0}
 
             ),
 
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .padding(vertical = 12.dp),
+                .padding(vertical = 12.dp)
+                .height(270.dp),
 
             modelProducer = modelProducer
 
