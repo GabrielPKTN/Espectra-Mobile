@@ -17,7 +17,7 @@ import com.example.espectra.R
 
 @Composable
 fun HeaderPerfil(
-    //fotoPerfil: String?
+    fotoPerfil: String?
 ) {
 
     Box(

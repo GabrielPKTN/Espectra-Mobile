@@ -23,6 +23,8 @@ import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,11 +38,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.espectra.R
 import com.example.espectra.ui.components.perfilPaciente.ButtonHabilidade
 import com.example.espectra.ui.components.perfilPaciente.ColunaLegenda
 import com.example.espectra.ui.components.perfilPaciente.HeaderPerfil
 import com.example.espectra.ui.components.perfilPaciente.LegendaGrafico
+import com.example.espectra.viewmodel.PerfilViewModel
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
@@ -62,7 +66,7 @@ import com.patrykandpatrick.vico.compose.common.component.rememberShapeComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 
 @Composable
-fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
+fun TelaPerfilFamiliar(viewModel: PerfilViewModel = viewModel() ) {
 
     val corSocializacao         = Color(162, 226, 137, 255)
     val corLinguagem            = Color(255, 200, 123, 255)
@@ -72,6 +76,12 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
 
     val instrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
     val inclusiveSans = FontFamily(Font(R.font.inclusivesans_variablefont_wght))
+
+    val perfil by viewModel.perfil.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.carregarPerfil(id = 1)
+    }
 
     Column(
         modifier = Modifier
@@ -83,7 +93,8 @@ fun TelaPerfilFamiliar(paddingValues: PaddingValues) {
     ) {
 
         HeaderPerfil(
-            // faltando implementar a foto
+            perfil?.foto
+
         )
 
         // NOME E DETALHES DO PACIENTE
