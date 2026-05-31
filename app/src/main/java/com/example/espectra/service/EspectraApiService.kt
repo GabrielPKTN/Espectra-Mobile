@@ -16,6 +16,6 @@ interface EspectraApiService {
 //    ): Response<RespostaLogin>
 
 
-    @Headers("x-access-token: ${id_atividade}")
+
 
 }

@@ -1,8 +1,7 @@
 package com.example.espectra.model.tentativa
 
 import java.sql.Date
-
-data class DataTelaHistoricoTentativa(
+data class Tentativa(
 
     val auxilio: String,
     val resultado: Boolean,
@@ -12,6 +11,13 @@ data class DataTelaHistoricoTentativa(
     val id_tentativa: Int,
     val comportamento: String,
     val data_tentativa: Date,
-    val numero_questao: Int
+    val numero_questao: Int?
+
+)
+
+data class Habilidade(
+
+    val id_habilidade: Int,
+    val nome_habilidade: String
 
 )
