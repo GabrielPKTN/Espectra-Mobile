@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.espectra.R
+import com.example.espectra.storage.GerenciarSessao
 import com.example.espectra.ui.components.EspectraButton
 import com.example.espectra.ui.components.EspectraCardPaciente
 import com.example.espectra.ui.components.EspectraHeaderBranco
@@ -32,9 +33,11 @@ import com.example.espectra.ui.components.EspectraTextField
 
 
 @Composable
-fun TelaHome(
+fun TelaHomePaciente(
 
-    //navController: NavHostController, viewModel: CadastroViewModel = viewModel()
+
+    gerenciarSessao: GerenciarSessao,
+    onLogout: () -> Unit = {}
 ) {
     var cardSelecionado by remember {
         mutableStateOf(false)
