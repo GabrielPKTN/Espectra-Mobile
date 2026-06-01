@@ -15,7 +15,7 @@ object ValidarLoginSenha {
 
     fun validarSenha(senha: String): Boolean {
 
-        return senha.isNotBlank() && senha.length >= 8
+        return senha.isNotBlank() && senha.length  >= 8
     }
 }
 
