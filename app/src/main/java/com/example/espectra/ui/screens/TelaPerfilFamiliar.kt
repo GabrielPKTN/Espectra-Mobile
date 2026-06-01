@@ -66,7 +66,11 @@ import com.patrykandpatrick.vico.compose.common.component.rememberShapeComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 
 @Composable
-fun TelaPerfilFamiliar(viewModel: PerfilViewModel = viewModel() ) {
+fun TelaPerfilFamiliar(
+    viewModel: PerfilViewModel = viewModel(),
+    token: String,
+    idPaciente: Int
+) {
 
     val corSocializacao         = Color(162, 226, 137, 255)
     val corLinguagem            = Color(255, 200, 123, 255)
@@ -75,12 +79,12 @@ fun TelaPerfilFamiliar(viewModel: PerfilViewModel = viewModel() ) {
     val corDesenvolvimentoMotor = Color(200, 200, 200, 255)
 
     val instrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
-    val inclusiveSans = FontFamily(Font(R.font.inclusivesans_variablefont_wght))
+    val inclusiveSans  = FontFamily(Font(R.font.inclusivesans_variablefont_wght))
 
-    val perfil by viewModel.perfil.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.carregarPerfil(id = 1)
+
+    LaunchedEffect(token, idPaciente) {
+        viewModel.buscarPerfil(idPaciente, token)
     }
 
     Column(
@@ -92,10 +96,7 @@ fun TelaPerfilFamiliar(viewModel: PerfilViewModel = viewModel() ) {
 
     ) {
 
-        HeaderPerfil(
-            perfil?.foto
-
-        )
+        HeaderPerfil()
 
         // NOME E DETALHES DO PACIENTE
 

@@ -1,46 +1,37 @@
 package com.example.espectra.viewmodel
 
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.espectra.model.perfilFamiliar.DataPerfilFamiliar
-import com.example.espectra.service.EspectraApiService
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import com.example.espectra.model.perfilFamiliar.PerfilFamiliar
+import com.example.espectra.service.RetrofitFactory
+import com.google.gson.Gson
 
-class PerfilViewModel(
-    private val service: EspectraApiService
-) : ViewModel() {
+class PerfilViewModel() : ViewModel() {
 
-    private val _perfil = MutableStateFlow<DataPerfilFamiliar?>(null)
-    val perfil: StateFlow<DataPerfilFamiliar?> = _perfil
+    private var _perfilFamiliar by mutableStateOf<PerfilFamiliar?>(null)
+    val perfil get() = _perfilFamiliar
 
-    private val _loading = MutableStateFlow(false)
-    val loading: StateFlow<Boolean> = _loading
+    suspend fun buscarPerfil(id: Int, token: String){
+        try {
 
-    private val _erro = MutableStateFlow<String?>(null)
-    val erro: StateFlow<String?> = _erro
+            val result = RetrofitFactory()
+                .getEspectraService()
+                .getPerfilById(token, id)
 
-    fun carregarPerfil(id: Int) {
+            Log.d("API_PERFIL", Gson().toJson(result))
 
-        viewModelScope.launch {
+            _perfilFamiliar = result
 
-            _loading.value = true
+        }catch(error: Exception){
+            Log.e("API_PERFIL", "Erro ao buscar perfil", error)
 
-            try {
-
-                val response = service.buscarPaciente(id)
-
-                _perfil.value = response.body()
-
-            } catch (e: Exception) {
-
-                _erro.value = e.message
-
-            } finally {
-
-                _loading.value = false
-            }
+            _perfilFamiliar = null
         }
     }
+
+
+
 }
