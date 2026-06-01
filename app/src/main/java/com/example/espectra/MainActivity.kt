@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.example.espectra.storage.GerenciarSessao
+import com.example.espectra.ui.screens.TelaHomePaciente
 import com.example.espectra.ui.screens.TelaLogin
 import com.example.espectra.ui.theme.EspectraTheme
 import com.example.espectra.viewmodel.TelaLoginViewModel
@@ -45,14 +46,20 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
+
                             "home" -> {
-                                //TelaHomePaciente(
-                                   // gerenciarSessao = gerenciarSessao,
-                                   // onLogout = {
-                                      //  gerenciarSessao.limparSessao()
-                                      //  telaAtual = "login"
-                                   // }
-                                //)
+
+                                val idUsuarioLogado = gerenciarSessao.buscarIdUsuario()
+
+                                key(idUsuarioLogado) {
+                                    TelaHomePaciente(
+                                        gerenciarSessao = gerenciarSessao,
+                                        onLogout = {
+                                            gerenciarSessao.limparSessao()
+                                            telaAtual = "login"
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
