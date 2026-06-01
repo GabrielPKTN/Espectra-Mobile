@@ -13,7 +13,7 @@ object ValidarLoginSenha {
 
 
     fun validarSenha(senha: String ): Boolean {
-        return senha.isBlank() && senha.length >= 8
+        return senha.isBlank() && senha.length  >= 8
     }
 
 }
