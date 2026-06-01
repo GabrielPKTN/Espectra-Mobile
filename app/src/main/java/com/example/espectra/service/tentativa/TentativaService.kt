@@ -1,10 +1,10 @@
 package com.example.espectra.service.tentativa
 
+import com.example.espectra.model.tentativa.ResponseTentativa
 import com.example.espectra.model.tentativa.Tentativa
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -14,9 +14,9 @@ interface TentativaService {
     suspend fun getTentativasByIdAtividade(
 
         @Header("x-access-token") token: String,
-        @Path(value = "id_tentativa") idTentativa: Int,
+        @Path(value = "id_atividade") idTentativa: Int,
 
-    ): ArrayList<Tentativa>
+    ): ResponseTentativa
 
     @POST("v1/espectra/tentativa/")
     suspend fun postTentativa(
@@ -24,6 +24,6 @@ interface TentativaService {
         @Header("x-access-token") token: String,
         @Body request: Tentativa
 
-    ): ArrayList<Tentativa>
+    ): ResponseTentativa
 
 }

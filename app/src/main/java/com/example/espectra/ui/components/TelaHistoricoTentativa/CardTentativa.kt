@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.example.espectra.R
 
 @Composable
-fun CardTentativa() {
+fun CardTentativa(auxilio: String, resultado: Int, data: String) {
 
     val fontInclusiveSans = FontFamily(Font(R.font.inclusivesans_variablefont_wght))
     val fontInstrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
