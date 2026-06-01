@@ -1,11 +1,10 @@
-package com.example.espectra.ui.components
+package com.example.espectra.ui.components.componentsGerais
 
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable

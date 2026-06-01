@@ -14,9 +14,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.espectra.ui.components.EspectraButton
-import com.example.espectra.ui.components.EspectraHeaderAzul
-import com.example.espectra.ui.components.EspectraTextField
+import com.example.espectra.ui.components.componentsGerais.EspectraButton
+import com.example.espectra.ui.components.TelaCadastroLogin.EspectraHeaderAzul
+import com.example.espectra.ui.components.componentsGerais.EspectraTextField
 import com.example.espectra.storage.GerenciarSessao
 import com.example.espectra.viewmodel.TelaLoginViewModel
 

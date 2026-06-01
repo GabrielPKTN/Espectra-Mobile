@@ -1,8 +1,7 @@
-package com.example.espectra.ui.components
+package com.example.espectra.ui.components.Home
 
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.ui.graphics.Shape
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
