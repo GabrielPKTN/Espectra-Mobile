@@ -1,4 +1,4 @@
-package com.example.espectra.ui.components
+package com.example.espectra.ui.components.TelaCadastroLogin
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,12 +13,12 @@ import androidx.compose.ui.unit.dp
 import com.example.espectra.R
 
 @Composable
-fun EspectraHeaderBranco(modifier: Modifier = Modifier) {
+fun EspectraHeaderAzul(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .height(200.dp)
-            .background(Color(0xFFF9F9F9)) // Branco/cinza das telas
+            .background(Color(0xFF2B78D6)) // Azul das telas
             .padding(top = 40.dp, bottom = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -27,7 +27,7 @@ fun EspectraHeaderBranco(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(12.dp))
         // Substitua pelo ID correto do seu ícone de quebra-cabeça
         Image(
-            painter = painterResource(id = R.drawable.logotipo_azul),
+            painter = painterResource(id = R.drawable.logotipo_branco),
             contentDescription = "Logo Espectra",
             modifier = Modifier
                 .width(155.dp)
@@ -35,3 +35,5 @@ fun EspectraHeaderBranco(modifier: Modifier = Modifier) {
         )
     }
 }
+
+
