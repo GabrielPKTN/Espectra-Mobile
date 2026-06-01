@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                                 TelaLogin(
                                     viewModel = loginViewModel,
                                     gerenciarSessao = gerenciarSessao,
-                                    onNavegarParaHome = {
+                                    onNavegarParaHome =  {
                                         telaAtual = "home"
                                     }
                                 )
