@@ -40,7 +40,7 @@ class TelaHomeViewModel : ViewModel() {
             try {
                 // Executa a chamada passando o token formatado e o ID
                 val respostaApi = RetrofitInstance.espectraApiService.obterPacientes(
-                    token = token, // Ex: "Bearer seu_jwt_token" (adicione "Bearer " se seu backend exigir)
+                    token = "Bearer $token", // Ex: "Bearer seu_jwt_token" (adicione "Bearer " se seu backend exigir)
                     idUsuario = idUsuario
                 )
                 listaPacientes = respostaApi
