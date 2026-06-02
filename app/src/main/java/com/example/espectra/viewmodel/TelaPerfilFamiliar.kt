@@ -21,9 +21,9 @@ class PerfilViewModel() : ViewModel() {
                 .getEspectraService()
                 .getPerfilById(token, id)
 
-            Log.d("API_PERFIL", Gson().toJson(result))
+            Log.d("API_PERFIL", Gson().toJson(result.items))
 
-            _perfilFamiliar = result
+            _perfilFamiliar = result.items
 
         }catch(error: Exception){
             Log.e("API_PERFIL", "Erro ao buscar perfil", error)
@@ -31,7 +31,5 @@ class PerfilViewModel() : ViewModel() {
             _perfilFamiliar = null
         }
     }
-
-
 
 }

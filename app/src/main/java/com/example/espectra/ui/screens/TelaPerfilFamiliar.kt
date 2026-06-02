@@ -1,5 +1,6 @@
 package com.example.espectra.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -44,6 +45,7 @@ import com.example.espectra.ui.components.perfilPaciente.ButtonHabilidade
 import com.example.espectra.ui.components.perfilPaciente.ColunaLegenda
 import com.example.espectra.ui.components.perfilPaciente.HeaderPerfil
 import com.example.espectra.ui.components.perfilPaciente.LegendaGrafico
+import com.example.espectra.ui.components.perfilPaciente.TextDetalhes
 import com.example.espectra.viewmodel.PerfilViewModel
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
@@ -79,13 +81,20 @@ fun TelaPerfilFamiliar(
     val corDesenvolvimentoMotor = Color(200, 200, 200, 255)
 
     val instrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
-    val inclusiveSans  = FontFamily(Font(R.font.inclusivesans_variablefont_wght))
-
 
 
     LaunchedEffect(token, idPaciente) {
         viewModel.buscarPerfil(idPaciente, token)
     }
+
+    val perfil = viewModel.perfil
+
+    val grafico = perfil?.grafico ?: emptyList()
+    val exibirGrafico = grafico.any { it.valorMeses > 0 }
+
+    Log.d("grafico", exibirGrafico.toString())
+
+
 
     Column(
         modifier = Modifier
@@ -98,8 +107,6 @@ fun TelaPerfilFamiliar(
 
         HeaderPerfil()
 
-        // NOME E DETALHES DO PACIENTE
-
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -107,20 +114,29 @@ fun TelaPerfilFamiliar(
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
-            Text(
-                text = "JOÃO PEDRO SILVA PEREIRA",
-                fontSize = 24.sp,
-                fontFamily = instrumentSans,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF2B78D6),
-            )
 
-            Text(
-               text = "Detalhes do paciente",
-                fontFamily = inclusiveSans,
-                fontSize = 18.sp,
-                textAlign = TextAlign.Center
-            )
+            perfil?.let { perfil ->
+                Text(
+                    text = perfil.nome,
+                    fontSize = 24.sp,
+                    fontFamily = instrumentSans,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF2B78D6),
+                )
+            }
+
+
+
+            perfil?.let { perfil ->
+                TextDetalhes(
+                    nome = perfil.nome,
+                    dataNascimento = perfil.dataNascimento,
+                    idade = perfil.idade,
+                    serieEscolar = perfil.serieEscolar,
+                    diagnosticos = perfil.diagnostico,
+                    grauSuporte = perfil.grauSuporte
+                )
+            }
 
             Button(
                 onClick = {
@@ -134,6 +150,7 @@ fun TelaPerfilFamiliar(
                 colors = ButtonDefaults.buttonColors(Color.White),
                 shape = RoundedCornerShape(8.dp)
             ) {
+
                 Text(
                     text = "Editar informações pessoais",
                     color = Color(0xFF2B78D6),
@@ -188,63 +205,66 @@ fun TelaPerfilFamiliar(
                     )
                 }
 
-                LaunchedEffect(Unit) {
-                    modelProducer.runTransaction {
-                        columnSeries {
-                            series(1)
-                            series(2)
-                            series(5)
-                            series(3)
-                            series(6)
+                LaunchedEffect(grafico) {
+                    if (exibirGrafico){
+                        modelProducer.runTransaction {
+                            columnSeries {
+                                grafico.forEach {
+                                    series(it.valorMeses / 12.0)
+                                }
+                            }
                         }
                     }
+
                 }
 
-                CartesianChartHost(
-                    chart = rememberCartesianChart(
-                        rememberColumnCartesianLayer(
-                            columnProvider,
-                            dataLabel = dataLabelComponent,
+                if (exibirGrafico){
+                    CartesianChartHost(
+                        chart = rememberCartesianChart(
+                            rememberColumnCartesianLayer(
+                                columnProvider,
+                                dataLabel = dataLabelComponent,
 
-                            dataLabelValueFormatter = CartesianValueFormatter{
-                                _, value, _ ->
-                                if (value.toInt() == 1){
-                                    "${value.toInt()} ano"
-                                }else{
-                                    "${value.toInt()} anos"
-                                }
-                                                                             },
-                            rangeProvider = CartesianLayerRangeProvider.fixed(
-                                minY = 0.0,
-                                maxY = 7.0
+                                dataLabelValueFormatter = CartesianValueFormatter{
+                                        _, value, _ ->
+                                    if (value.toInt() == 1){
+                                        "${value.toInt()} ano"
+                                    }else{
+                                        "${value.toInt()} anos"
+                                    }
+                                },
+                                rangeProvider = CartesianLayerRangeProvider.fixed(
+                                    minY = 0.0,
+                                    maxY = 7.0
+                                )
+                            ),
+                            bottomAxis = HorizontalAxis.rememberBottom(
+                                line = rememberLineComponent(
+                                    thickness = 3.dp
+                                ),
+                                tick = null,
+                                guideline = null,
+                                itemPlacer = remember { HorizontalAxis.ItemPlacer.aligned() },
+                                label = null,
                             )
                         ),
-                        bottomAxis = HorizontalAxis.rememberBottom(
-                            line = rememberLineComponent(
-                                thickness = 3.dp
-                            ),
-                            tick = null,
-                            guideline = null,
-                            itemPlacer = remember { HorizontalAxis.ItemPlacer.aligned() },
-                            label = null,
-                        )
-                    ),
-                    modelProducer = modelProducer,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 32.dp)
-                )
+                        modelProducer = modelProducer,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 32.dp)
+                    )
+                } else{
 
-
-//
-//                Text(
-//                    text = "Essa criança ainda não tem um gráfico de desempenho, ou não está visível para os responsáveis",
-//                    fontFamily = FontFamily(
-//                        Font(R.font.inclusivesans_variablefont_wght)
-//                    ),
-//                    fontSize = 18.sp,
-//                    textAlign = TextAlign.Center
-//                )
+                    Text(
+                        text = "Essa criança ainda não tem um gráfico de desempenho, ou não está visível para os responsáveis",
+                        fontFamily = FontFamily(
+                            Font(R.font.inclusivesans_variablefont_wght)
+                        ),
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color(0xFF2B78D6),
+                    )
+                }
 
             }
         }
