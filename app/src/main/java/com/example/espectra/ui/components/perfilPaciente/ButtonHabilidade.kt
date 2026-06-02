@@ -20,7 +20,10 @@ import androidx.compose.ui.unit.sp
 import com.example.espectra.R
 
 @Composable
-fun ButtonHabilidade(cor: Color, nomeHabilidade: String) {
+fun ButtonHabilidade(
+    cor: Color, nomeHabilidade: String,
+    id: Int
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

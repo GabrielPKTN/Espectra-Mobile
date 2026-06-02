@@ -95,7 +95,6 @@ fun TelaPerfilFamiliar(
     Log.d("grafico", exibirGrafico.toString())
 
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -104,8 +103,9 @@ fun TelaPerfilFamiliar(
 
 
     ) {
-
-        HeaderPerfil()
+        perfil?.let { perfil ->
+            HeaderPerfil(perfil.foto)
+        }
 
         Column(
             modifier = Modifier
@@ -270,18 +270,16 @@ fun TelaPerfilFamiliar(
         }
 
 
-
-
         // BOTÕES DE HABILIDADE
 
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            ButtonHabilidade(cor = corSocializacao, nomeHabilidade = "Socialização")
-            ButtonHabilidade(cor = corLinguagem, nomeHabilidade = "Linguagem")
-            ButtonHabilidade(cor = corCognicao, nomeHabilidade = "Cognição")
-            ButtonHabilidade(cor = corAutoCuidados, nomeHabilidade = "Auto-Cuidados")
-            ButtonHabilidade(cor = corDesenvolvimentoMotor, nomeHabilidade = "Desenvolvimento motor")
+            ButtonHabilidade(cor = corSocializacao, nomeHabilidade = "Socialização", 1)
+            ButtonHabilidade(cor = corLinguagem, nomeHabilidade = "Linguagem", 2)
+            ButtonHabilidade(cor = corCognicao, nomeHabilidade = "Cognição", 3)
+            ButtonHabilidade(cor = corAutoCuidados, nomeHabilidade = "Auto-Cuidados", 4)
+            ButtonHabilidade(cor = corDesenvolvimentoMotor, nomeHabilidade = "Desenvolvimento motor", 5)
         }
 
         Row(

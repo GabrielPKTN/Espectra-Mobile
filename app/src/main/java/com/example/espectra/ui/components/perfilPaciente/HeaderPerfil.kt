@@ -11,13 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.espectra.R
 
 @Composable
 fun HeaderPerfil(
-    //fotoPerfil: String?
+    fotoPerfil: String?
 ) {
 
     Box(
@@ -54,28 +56,28 @@ fun HeaderPerfil(
             }
         }
 
-        Image(
-            painter = painterResource(R.drawable.foto_paciente),
-            contentDescription = "foto paciente",
-            modifier = Modifier
+        if (fotoPerfil != null) {
+            AsyncImage(
+                model = fotoPerfil,
+                contentDescription = "Foto de perfil",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
                     .size(100.dp)
                     .clip(CircleShape)
                     .align(Alignment.BottomCenter)
-        )
+            )
+        } else {
+            Image(
+                painter = painterResource(R.drawable.default_photo),
+                contentDescription = "Foto padrão",
 
-//            fotoPerfil?.let { url ->
-//
-//            AsyncImage(
-//                model = url,
-//                contentDescription = "Foto de perfil",
-//
-//                modifier = Modifier
-//                    .size(100.dp)
-//                    .clip(CircleShape)
-//                    .align(Alignment.BottomCenter)
-//
-//            )
-//        }
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(CircleShape)
+                    .align(Alignment.BottomCenter)
+            )
+        }
+
     }
 }
 
