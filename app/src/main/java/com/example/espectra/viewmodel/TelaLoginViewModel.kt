@@ -56,7 +56,7 @@ class TelaLoginViewModel : ViewModel() {
         viewModelScope.launch {
             carregarDados = true
             try {
-                // Envia as strings já tratadas sem espaços
+
                 val response = RetrofitInstance.espectraApiService.login(
                     DataTelaLogin(emailLimpo, senhaLimpa)
                 )
