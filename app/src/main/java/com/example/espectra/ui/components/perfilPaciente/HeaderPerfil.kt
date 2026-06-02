@@ -14,12 +14,14 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.espectra.R
 
 @Composable
 fun HeaderPerfil(
-    fotoPerfil: String?
+    fotoPerfil: String?,
+    navController: NavController
 ) {
 
     Box(
@@ -45,7 +47,7 @@ fun HeaderPerfil(
             ) {
 
                 IconButton(
-                    onClick = { }
+                    onClick = { navController.popBackStack() }
                 ) {
                     Image(
                         painter = painterResource(R.drawable.arrow_back),

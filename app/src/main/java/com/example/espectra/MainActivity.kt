@@ -7,7 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.example.espectra.ui.screens.TelaCadastro
+import com.example.espectra.ui.screens.TelaEditarFamiliar
 import com.example.espectra.ui.screens.TelaHome
 import com.example.espectra.ui.screens.TelaLogin
 import com.example.espectra.ui.screens.TelaPerfilFamiliar
@@ -25,9 +27,11 @@ class MainActivity : ComponentActivity() {
                     // TelaCadastro()
                   // TelaRedefinirSenha()
                    // TelaHome()
-                    TelaPerfilFamiliar(
-                        token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsImlhdCI6MTc4MDMyMzA3OSwiZXhwIjoxMDAwMDE3ODAzMjMwNzl9.Ybxh8Ri_b6CXNcTwdQOHuRJJzLd76MDohbmilx9E5io",
-                        idPaciente = 6)
+//                    TelaPerfilFamiliar(
+//                        token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsImlhdCI6MTc4MDMyMzA3OSwiZXhwIjoxMDAwMDE3ODAzMjMwNzl9.Ybxh8Ri_b6CXNcTwdQOHuRJJzLd76MDohbmilx9E5io",
+//                        idPaciente = 6)
+
+                    TelaEditarFamiliar()
 
                 }
             }

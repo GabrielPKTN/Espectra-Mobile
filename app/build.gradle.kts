@@ -63,6 +63,8 @@ dependencies {
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 
+    implementation("androidx.navigation:navigation-compose:2.9.7")
+
 
     implementation(libs.vico.compose)
     implementation(libs.vico.compose.m3)
