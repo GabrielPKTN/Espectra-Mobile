@@ -41,8 +41,12 @@ class TelaLoginViewModel : ViewModel() {
 
 
     fun realizarLogin(gerenciarSessao: GerenciarSessao, onSuccess: () -> Unit) {
-        val validarEmail = ValidarLoginSenha.validarEmail(email)
-        val validarSenha = ValidarLoginSenha.validarSenha(senha)
+        // Remove espaços em branco das pontas
+        val emailLimpo = email.trim()
+        val senhaLimpa = senha.trim()
+
+        val validarEmail = ValidarLoginSenha.validarEmail(emailLimpo)
+        val validarSenha = ValidarLoginSenha.validarSenha(senhaLimpa)
 
         if (!validarEmail) emailErro = "E-mail Inválido"
         if (!validarSenha) senhaErro = "A senha deve ter pelo menos 8 caracteres"
@@ -52,8 +56,10 @@ class TelaLoginViewModel : ViewModel() {
         viewModelScope.launch {
             carregarDados = true
             try {
-                val response = RetrofitInstance.espectraApiService.login(DataTelaLogin(email, senha))
-
+                // Envia as strings já tratadas sem espaços
+                val response = RetrofitInstance.espectraApiService.login(
+                    DataTelaLogin(emailLimpo, senhaLimpa)
+                )
                 if (response.isSuccessful && response.body()?.sucesso == true) {
                     val corpoResposta = response.body()
                     val token = corpoResposta?.token
