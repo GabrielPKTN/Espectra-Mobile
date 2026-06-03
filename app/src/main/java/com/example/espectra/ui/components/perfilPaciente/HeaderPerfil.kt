@@ -21,7 +21,7 @@ import com.example.espectra.R
 @Composable
 fun HeaderPerfil(
     fotoPerfil: String?,
-    navController: NavController
+    //navController: NavController
 ) {
 
     Box(
@@ -47,7 +47,9 @@ fun HeaderPerfil(
             ) {
 
                 IconButton(
-                    onClick = { navController.popBackStack() }
+                    onClick = {
+                        //navController.popBackStack()
+                    }
                 ) {
                     Image(
                         painter = painterResource(R.drawable.arrow_back),

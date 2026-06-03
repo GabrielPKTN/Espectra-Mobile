@@ -70,7 +70,7 @@ import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 
 @Composable
 fun TelaPerfilFamiliar(
-    navController: NavController,
+    //navController: NavController,
     viewModel: PerfilViewModel = viewModel(),
     token: String,
     idPaciente: Int
@@ -106,7 +106,8 @@ fun TelaPerfilFamiliar(
 
     ) {
         perfil?.let { perfil ->
-            HeaderPerfil(perfil.foto, navController)
+            HeaderPerfil(perfil.foto, //navController)
+            )
         }
 
         Column(
@@ -142,7 +143,7 @@ fun TelaPerfilFamiliar(
 
             Button(
                 onClick = {
-                    navController.navigate("editar_familiar")
+                    //navController.navigate("editar_familiar")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
