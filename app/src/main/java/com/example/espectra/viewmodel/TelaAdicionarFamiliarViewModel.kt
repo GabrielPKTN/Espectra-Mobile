@@ -77,7 +77,7 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
                 "Nome deve ter no máximo 150 caracteres!"
             }
 
-            !nome.matches(Regex("^[a-zA-ZÀ-ÿ\\\\s]+\$")) -> {
+            !nome.matches(Regex("^[a-zA-ZÀ-ÿ\\s]+\$")) -> {
                 "Nome não pode conter números ou caracteres especiais!"
             }
 
@@ -161,6 +161,10 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
 
     fun onNomeChange(valor: String) {
         nome = valor
+
+        if (erroNome != null){
+            erroNome = null
+        }
     }
 
     fun onDataNascimentoChange(valor: String) {
