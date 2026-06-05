@@ -1,4 +1,4 @@
-package com.example.espectra.ui.components.perfilPaciente.editarFamiliar
+package com.example.espectra.ui.components.editarFamiliar
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable fun SelectExample(
+@Composable fun Select(
     fieldModifier: Modifier = Modifier,
     modifier: Modifier = Modifier,
     placeholder: String

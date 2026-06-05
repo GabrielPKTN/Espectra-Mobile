@@ -1,4 +1,4 @@
-package com.example.espectra.ui.components.perfilPaciente.editarFamiliar
+package com.example.espectra.ui.components.editarFamiliar
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border

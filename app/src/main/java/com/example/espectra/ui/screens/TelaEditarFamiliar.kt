@@ -2,6 +2,7 @@ package com.example.espectra.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,8 +39,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.espectra.R
-import com.example.espectra.ui.components.perfilPaciente.editarFamiliar.SelectExample
-import com.example.espectra.ui.components.perfilPaciente.editarFamiliar.TextFieldEditar
+import com.example.espectra.ui.components.editarFamiliar.Select
+import com.example.espectra.ui.components.editarFamiliar.TextFieldEditar
 
 @Composable
 fun TelaEditarFamiliar(
@@ -58,7 +59,7 @@ fun TelaEditarFamiliar(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 8.dp)
+            .background(Color.White)
     ) {
         Row(
             modifier = Modifier
@@ -165,7 +166,7 @@ fun TelaEditarFamiliar(
                                     )
                             )
 
-                            SelectExample(
+                            Select(
                                 fieldModifier = Modifier
                                     .weight(1f)
                                     .border(
@@ -181,7 +182,7 @@ fun TelaEditarFamiliar(
 
 
 
-                        SelectExample(
+                        Select(
                             fieldModifier = Modifier
                                     .border(
                                         width = 2.dp,
@@ -194,7 +195,7 @@ fun TelaEditarFamiliar(
                         )
 
 
-                        SelectExample(
+                        Select(
                                 fieldModifier = Modifier
                                     .border(
                                         width = 2.dp,
@@ -244,3 +245,4 @@ fun TelaEditarFamiliar(
         }
     }
 }
+
