@@ -33,6 +33,13 @@ fun CardTentativa(auxilio: String, resultado: Int, data: String) {
     val fontInclusiveSans = FontFamily(Font(R.font.inclusivesans_variablefont_wght))
     val fontInstrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
 
+
+
+    var dataSplit = data.split("-").reversed()
+
+    var data = "${dataSplit[0]}/${dataSplit[1]}/${dataSplit[2]}"
+
+
     Card (
         modifier = Modifier
             .fillMaxWidth(),
@@ -47,14 +54,31 @@ fun CardTentativa(auxilio: String, resultado: Int, data: String) {
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        Text(
-            text = "Atividade realizada com auxilio parcial",
-            modifier = Modifier.padding(horizontal = 10.dp),
-            color = Color(0,0,0),
-            fontSize = 24.sp,
-            fontFamily = fontInstrumentSans,
-            fontWeight = FontWeight.Bold
-        )
+        if(auxilio == "Auxílio total" || auxilio == "Auxílio parcial" ) {
+
+            Text(
+                text = "Atividade realizada com ${auxilio.lowercase()}",
+                modifier = Modifier.padding(horizontal = 10.dp),
+                color = Color(0,0,0),
+                fontSize = 24.sp,
+                fontFamily = fontInstrumentSans,
+                fontWeight = FontWeight.Bold
+            )
+
+        } else {
+
+            Text(
+                text = "Atividade realizada de forma ${auxilio.lowercase()}",
+                modifier = Modifier.padding(horizontal = 10.dp),
+                color = Color(0,0,0),
+                fontSize = 24.sp,
+                fontFamily = fontInstrumentSans,
+                fontWeight = FontWeight.Bold
+            )
+
+        }
+
+
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -74,18 +98,35 @@ fun CardTentativa(auxilio: String, resultado: Int, data: String) {
                     fontFamily = fontInclusiveSans
                 )
 
-                Text(
-                    text = "Êxito",
-                    color = Color(0,255,0),
-                    fontFamily = fontInstrumentSans,
-                    fontWeight = FontWeight.Bold
-                )
+                if(resultado == 0) {
+
+                    Text(
+
+                        text = "Falha",
+                        color = Color(194, 0, 0, 255),
+                        fontFamily = fontInstrumentSans,
+                        fontWeight = FontWeight.Bold
+
+                    )
+
+                } else {
+
+                    Text(
+
+                        text = "Êxito",
+                        color = Color(67, 194, 0, 255),
+                        fontFamily = fontInstrumentSans,
+                        fontWeight = FontWeight.Bold
+
+                    )
+
+                }
 
             }
 
             //Data
             Text(
-                text = "26/05/2026",
+                text = data,
                 color = Color(0,0,0),
                 fontFamily = fontInstrumentSans,
                 fontWeight = FontWeight.Bold

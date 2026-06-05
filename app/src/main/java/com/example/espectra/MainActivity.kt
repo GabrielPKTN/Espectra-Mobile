@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                      TelaHistoricoTentativa(
                          innerPadding,
                          5,
-                         1,
+                         2,
                          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsImlhdCI6MTc4MDI2MjE4NSwiZXhwIjoxMDAwMDE3ODAyNjIxODV9.IFFixs2vMO3uP7f9M_I2PIRH1krHcHBrcPJzqDOewf4"
                      )
 

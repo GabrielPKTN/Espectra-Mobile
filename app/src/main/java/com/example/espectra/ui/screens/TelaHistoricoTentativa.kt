@@ -1,5 +1,6 @@
 package com.example.espectra.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -68,6 +69,12 @@ fun TelaHistoricoTentativa(
 
     val tentativas = viewModelTentativa.tentativas
     val atividade = viewModelAtividade.atividade
+
+    val datas = viewModelTentativa.datas.reversed()
+    val independente = viewModelTentativa.listIndependente
+    val parcial = viewModelTentativa.listParcial
+    val total = viewModelTentativa.listTotal
+    val erro = viewModelTentativa.listErro
 
     val isLoading = tentativas.isEmpty() || atividade == null
 
@@ -210,7 +217,15 @@ fun TelaHistoricoTentativa(
 
                 Spacer(modifier = Modifier.height(25.dp))
 
-                GraficoTentativa()
+                GraficoTentativa(
+
+                    datas = datas,
+                    listIndependente = independente,
+                    listParcial = parcial,
+                    listTotal = total,
+                    listErro = erro
+
+                )
 
                 Spacer(modifier = Modifier.height(100.dp))
 

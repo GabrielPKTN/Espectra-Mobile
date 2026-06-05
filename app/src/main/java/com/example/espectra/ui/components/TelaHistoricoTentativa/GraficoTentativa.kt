@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import java.util.Locale
 import androidx.compose.ui.unit.dp
+import com.example.espectra.model.tentativa.Tentativa
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.CartesianDrawingContext
 import com.patrykandpatrick.vico.compose.cartesian.CartesianMeasuringContext
@@ -41,7 +42,17 @@ import java.util.Calendar
 import java.util.Date
 
 @Composable
-fun GraficoTentativa() {
+fun GraficoTentativa(
+
+    datas: List<String>,
+    listIndependente: List<Int>,
+    listParcial: List<Int>,
+    listTotal: List<Int>,
+    listErro: List<Int>
+
+) {
+
+
 
     Card(
         modifier = Modifier
@@ -54,20 +65,7 @@ fun GraficoTentativa() {
         )
     ) {
 
-        val datas = listOf(
-            "01/05/2026",
-            "02/05/2026",
-            "03/05/2026",
-            "04/05/2026",
-            "05/05/2026",
-            "06/05/2026",
-            "07/05/2026",
-            "08/05/2026",
-            "10/05/2026",
-            "11/05/2026",
-            "12/05/2026",
-            "13/05/2026"
-        )
+        val datas = datas
 
         val corIndenpendente    = Color(53, 189, 0, 255)
         val corAjudaMinima      = Color(225, 208, 0, 255)
@@ -122,22 +120,22 @@ fun GraficoTentativa() {
 
                 series(
                     x = xValues,
-                    y = listOf(0.0, 3.0, 5.0, 6.0, 7.0, 8.0, 8.0, 8.0)
+                    y = listIndependente
                 )
 
                 series(
                     x = xValues,
-                    y = listOf(4.0, 5.0, 8.0, 8.0, 8.0)
+                    y = listParcial
                 )
 
                 series(
                     x = xValues,
-                    y = listOf(0.0, 0.0, 0.0, 0.0, 0.0)
+                    y = listTotal
                 )
 
                 series(
                     x = xValues,
-                    y = listOf(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0)
+                    y = listErro
                 )
 
             } }
