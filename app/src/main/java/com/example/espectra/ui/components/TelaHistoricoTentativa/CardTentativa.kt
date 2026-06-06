@@ -26,14 +26,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.espectra.R
+import com.example.espectra.model.tentativa.Tentativa
 
 @Composable
-fun CardTentativa(auxilio: String, resultado: Int, data: String) {
+fun CardTentativa(
+    auxilio: String,
+    resultado: Int,
+    data: String,
+    onCliqueDetalhes: () -> Unit
+) {
 
     val fontInclusiveSans = FontFamily(Font(R.font.inclusivesans_variablefont_wght))
     val fontInstrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
-
-
 
     var dataSplit = data.split("-").reversed()
 
@@ -145,7 +149,7 @@ fun CardTentativa(auxilio: String, resultado: Int, data: String) {
 
             Button(
                 //Exibe detalhes a mais da tentativa
-                onClick = {TODO()},
+                onClick = onCliqueDetalhes,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(R.color.primary_color)
                 )

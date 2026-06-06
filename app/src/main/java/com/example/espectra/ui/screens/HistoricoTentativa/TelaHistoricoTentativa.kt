@@ -1,16 +1,13 @@
-package com.example.espectra.ui.screens
+package com.example.espectra.ui.screens.HistoricoTentativa
 
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,17 +32,35 @@ import com.example.espectra.R
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.espectra.model.tentativa.Tentativa
 import com.example.espectra.ui.components.TelaHistoricoTentativa.CardTentativa
 import com.example.espectra.ui.components.TelaHistoricoTentativa.GraficoTentativa
 import com.example.espectra.ui.viewmodel.AtividadeViewModel
 import com.example.espectra.ui.viewmodel.TentativaViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TelaHistoricoTentativa(
 
@@ -77,6 +92,8 @@ fun TelaHistoricoTentativa(
     val erro = viewModelTentativa.listErro
 
     val isLoading = tentativas.isEmpty() || atividade == null
+
+    var tentativaSelecionada by remember { mutableStateOf<Tentativa?>(null) }
 
     Column(
 
@@ -192,9 +209,10 @@ fun TelaHistoricoTentativa(
                     items(tentativas) { tentativa ->
 
                         CardTentativa(
-                            tentativa.auxilio,
-                            tentativa.resultado,
-                            tentativa.data_tentativa
+                            auxilio = tentativa.auxilio,
+                            resultado = tentativa.resultado,
+                            data = tentativa.data_tentativa,
+                            onCliqueDetalhes = { tentativaSelecionada = tentativa }
                         )
 
                     }
@@ -233,6 +251,14 @@ fun TelaHistoricoTentativa(
 
         }
 
+    }
+
+    tentativaSelecionada?.let { tentativa ->
+
+        ModalDetalhesTentativa(
+            tentativa = tentativa,
+            onDismissRequest = { tentativaSelecionada = null }
+        )
     }
 
 }
