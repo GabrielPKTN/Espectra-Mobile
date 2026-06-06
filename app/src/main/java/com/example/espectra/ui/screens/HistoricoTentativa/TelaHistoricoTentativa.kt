@@ -57,6 +57,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.espectra.model.tentativa.Tentativa
 import com.example.espectra.ui.components.TelaHistoricoTentativa.CardTentativa
 import com.example.espectra.ui.components.TelaHistoricoTentativa.GraficoTentativa
+import com.example.espectra.ui.components.componentsGerais.Header
 import com.example.espectra.ui.viewmodel.AtividadeViewModel
 import com.example.espectra.ui.viewmodel.TentativaViewModel
 
@@ -104,43 +105,7 @@ fun TelaHistoricoTentativa(
 
     ) {
 
-        // Header (Componentizar)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(padding)
-                .padding(top = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Icon(
-                painter = painterResource(R.drawable.baseline_arrow_back_24),
-                contentDescription = null,
-                tint = colorResource(R.color.primary_color),
-                modifier = Modifier.size(32.dp)
-            )
-
-            // if(paciente tem foto?) { se sim mostra foto } else { se não mostra o ícone de usuário sem foto }
-
-            Image(
-
-                painter = painterResource(R.drawable.responsavel),
-                contentDescription = "Foto do usuário",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(52.dp)
-                    .clip(CircleShape)
-                    .border(
-                        width = 2.dp,
-                        color = colorResource(R.color.primary_color),
-                        shape = CircleShape
-                    )
-            )
-        }
-        // Fim header
-
-        //Ínicio do conteúdo da tela
+        Header(padding)
 
         if(isLoading) {
 

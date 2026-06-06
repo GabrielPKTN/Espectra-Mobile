@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 fun EspectraButton(
     text: String,
     onClick: () -> Unit,
+    corLetra: Color = Color.White,
     modifier: Modifier = Modifier
 ) {
     Button(
@@ -26,6 +27,6 @@ fun EspectraButton(
             .fillMaxWidth(0.6f) // Controla a largura para ficar igual ao layout
             .height(48.dp)
     ) {
-        Text(text = text, color = Color.White, fontSize = 16.sp)
+        Text(text = text, color = corLetra, fontSize = 16.sp)
     }
 }
