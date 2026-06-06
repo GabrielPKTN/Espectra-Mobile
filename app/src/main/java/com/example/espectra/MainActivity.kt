@@ -13,6 +13,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.example.espectra.storage.GerenciarSessao
 import com.example.espectra.ui.screens.TelaLogin
+import com.example.espectra.ui.screens.TelaPerfilFamiliar
+import com.example.espectra.ui.screens.TelaRedefinirSenha
 import com.example.espectra.ui.theme.EspectraTheme
 import com.example.espectra.viewmodel.TelaLoginViewModel
 
