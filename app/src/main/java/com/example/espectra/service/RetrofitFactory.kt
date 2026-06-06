@@ -1,9 +1,7 @@
 package com.example.espectra.service
 
-
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 
 class RetrofitFactory {
 
