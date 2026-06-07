@@ -9,13 +9,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.espectra.R
 
 @Composable
-fun Header(padding: PaddingValues) {
+fun Header(
+    padding: PaddingValues,
+    colorResource: Color = colorResource(R.color.primary_color)
+) {
     Row(
         modifier = Modifier
             .padding(padding)
@@ -27,7 +31,7 @@ fun Header(padding: PaddingValues) {
         Icon(
             painter = painterResource(R.drawable.baseline_arrow_back_24),
             contentDescription = null,
-            tint = colorResource(R.color.primary_color),
+            tint = colorResource,
             modifier = Modifier.size(32.dp)
         )
 

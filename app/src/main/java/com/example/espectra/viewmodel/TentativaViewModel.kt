@@ -1,14 +1,11 @@
-package com.example.espectra.ui.viewmodel
+package com.example.espectra.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.espectra.model.tentativa.Tentativa
 import com.example.espectra.service.RetrofitFactory
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class TentativaViewModel : ViewModel() {
 
