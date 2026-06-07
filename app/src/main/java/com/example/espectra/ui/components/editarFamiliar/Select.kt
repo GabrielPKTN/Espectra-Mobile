@@ -20,20 +20,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable fun Select(
+@Composable
+fun <T> Select(
+    options: List<T>,
+    selectedOption: T?,
+    onOptionSelected: (T) -> Unit,
+    optionLabel: (T) -> String,
+    placeholder: String,
     fieldModifier: Modifier = Modifier,
-    modifier: Modifier = Modifier,
-    placeholder: String
+    modifier: Modifier = Modifier
 ) {
 
-    val options = listOf(
-        "Masculino",
-        "Feminino",
-        "Outro"
-    )
-
     var expanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf("") }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -42,22 +40,24 @@ import androidx.compose.ui.unit.sp
     ) {
 
         OutlinedTextField(
-            value = selectedOption,
+            value = selectedOption?.let(optionLabel) ?: "",
             onValueChange = {},
             readOnly = true,
+            placeholder = {
+                Text(
+                    text = placeholder,
+                    fontSize = 16.sp
+                )
+            },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
                     expanded = expanded
                 )
             },
-            placeholder = {Text(placeholder, fontSize = 16.sp)},
-            shape = RoundedCornerShape(12.dp),
-            modifier = fieldModifier.height(48.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = Color(0xFFFAFAFA),
-                unfocusedContainerColor = Color.White
-            )
-
+            modifier = fieldModifier
+                .menuAnchor()
+                .height(48.dp),
+            shape = RoundedCornerShape(12.dp)
         )
 
         ExposedDropdownMenu(
@@ -66,11 +66,18 @@ import androidx.compose.ui.unit.sp
                 expanded = false
             }
         ) {
+
             options.forEach { option ->
+
                 DropdownMenuItem(
-                    text = { Text(option, fontSize = 16.sp) },
+                    text = {
+                        Text(
+                            text = optionLabel(option),
+                            fontSize = 16.sp
+                        )
+                    },
                     onClick = {
-                        selectedOption = option
+                        onOptionSelected(option)
                         expanded = false
                     }
                 )

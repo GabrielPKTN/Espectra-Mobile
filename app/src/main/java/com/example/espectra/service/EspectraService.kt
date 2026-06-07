@@ -3,7 +3,7 @@
 package com.example.espectra.service
 
 import com.example.espectra.service.PerfilFamiliar.PerfilFamiliarService
-import com.example.espectra.service.editarFamiliar.editarFamiliar
+import com.example.espectra.service.editarFamiliar.EditarFamiliarService
 
 
-interface EspectraService: PerfilFamiliarService, editarFamiliar
+interface EspectraService: PerfilFamiliarService, EditarFamiliarService

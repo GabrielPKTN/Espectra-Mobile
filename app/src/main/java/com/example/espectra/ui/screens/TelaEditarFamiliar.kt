@@ -55,6 +55,36 @@ fun TelaEditarFamiliar(
 
     val instrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
 
+    data class SerieEscolar(
+        val id: Int,
+        val nome: String
+    )
+
+    data class GrauSuporte(
+        val id: Int,
+        val nome: String
+    )
+
+    val series = listOf(
+        SerieEscolar(1, "GRAU I"),
+        SerieEscolar(2, "GRAU II"),
+        SerieEscolar(3, "GRAU III")
+    )
+
+    val graus = listOf(
+        GrauSuporte(1, "MATERNAL"),
+        GrauSuporte(2, "JARDIM I"),
+        GrauSuporte(3, "JARDIM II")
+    )
+
+    var serieSelecionada by remember {
+        mutableStateOf<SerieEscolar?>(null)
+    }
+
+    var grauSelecionado by remember {
+        mutableStateOf<GrauSuporte?>(null)
+    }
+
 
     Column(
         modifier = Modifier
@@ -175,7 +205,15 @@ fun TelaEditarFamiliar(
                                         shape = RoundedCornerShape(12.dp)
                                     ),
                                 modifier = Modifier.weight(1f),
-                                placeholder = "série escolar"
+                                placeholder = "série escolar",
+                                options = series,
+                                selectedOption = serieSelecionada,
+                                onOptionSelected = {
+                                    serieSelecionada = it
+                                },
+                                optionLabel = { serie ->
+                                    serie.nome
+                                }
                             )
 
                         }
@@ -191,7 +229,15 @@ fun TelaEditarFamiliar(
                                     )
                                 .fillMaxWidth(),
                                 modifier = Modifier.fillMaxWidth(),
-                                placeholder = "Grau de suporte"
+                                placeholder = "Grau de suporte",
+                                options = graus,
+                                selectedOption = grauSelecionado,
+                                onOptionSelected = {
+                                    grauSelecionado = it
+                                },
+                                optionLabel = { grau ->
+                                    grau.nome
+                                }
                         )
 
 
@@ -204,7 +250,15 @@ fun TelaEditarFamiliar(
                                     )
                                     .fillMaxWidth(),
                                 modifier = Modifier.fillMaxWidth(),
-                                placeholder = "Diagnóstico"
+                                placeholder = "Diagnóstico",
+                                options = series,
+                                selectedOption = serieSelecionada,
+                                onOptionSelected = {
+                                    serieSelecionada = it
+                                },
+                                optionLabel = { serie ->
+                                    serie.nome
+                                }
                         )
 
 

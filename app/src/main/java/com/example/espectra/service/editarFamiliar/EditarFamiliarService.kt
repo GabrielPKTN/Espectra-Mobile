@@ -9,7 +9,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 
-interface editarFamiliar{
+interface EditarFamiliarService{
     @Multipart
     @PUT("v1/espectra/paciente/{id_usuario}")
     suspend fun atualizarFamiliar(
