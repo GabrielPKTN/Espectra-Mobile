@@ -21,6 +21,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,13 +40,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.espectra.R
+import com.example.espectra.model.perfilFamiliar.Diagnostico
 import com.example.espectra.ui.components.editarFamiliar.Select
 import com.example.espectra.ui.components.editarFamiliar.TextFieldEditar
+import com.example.espectra.viewmodel.DiagnosticoViewModel
+import com.example.espectra.viewmodel.PerfilViewModel
 
 @Composable
 fun TelaEditarFamiliar(
     //navController: NavController
+    viewModel: DiagnosticoViewModel = viewModel(),
+    token: String
 ) {
 
     var nome by remember { mutableStateOf("") }
@@ -52,6 +60,12 @@ fun TelaEditarFamiliar(
     var serieEscolar by remember { mutableStateOf("") }
     var diagnostico by remember { mutableStateOf("") }
     var grauSuporte by remember { mutableStateOf("") }
+
+    val diagnosticos by viewModel.diagnosticos.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.carregarDiagnosticos(token)
+    }
 
     val instrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
 
@@ -83,6 +97,10 @@ fun TelaEditarFamiliar(
 
     var grauSelecionado by remember {
         mutableStateOf<GrauSuporte?>(null)
+    }
+
+    var diagnosticoSelecionado by remember {
+        mutableStateOf<Diagnostico?>(null)
     }
 
 
@@ -251,13 +269,13 @@ fun TelaEditarFamiliar(
                                     .fillMaxWidth(),
                                 modifier = Modifier.fillMaxWidth(),
                                 placeholder = "Diagnóstico",
-                                options = series,
-                                selectedOption = serieSelecionada,
+                                options = diagnosticos,
+                                selectedOption = diagnosticoSelecionado,
                                 onOptionSelected = {
-                                    serieSelecionada = it
+                                    diagnosticoSelecionado = it
                                 },
-                                optionLabel = { serie ->
-                                    serie.nome
+                                optionLabel = { diagnostico ->
+                                    diagnostico.sigla
                                 }
                         )
 

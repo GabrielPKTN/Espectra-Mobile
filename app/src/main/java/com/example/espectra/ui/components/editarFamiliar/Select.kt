@@ -49,6 +49,12 @@ fun <T> Select(
                     fontSize = 16.sp
                 )
             },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedContainerColor = Color(0xFFFAFAFA),
+                unfocusedContainerColor = Color.White
+            ),
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
                     expanded = expanded
