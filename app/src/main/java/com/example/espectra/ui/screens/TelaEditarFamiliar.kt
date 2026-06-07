@@ -1,11 +1,14 @@
 package com.example.espectra.ui.screens
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +22,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.InputChip
+import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -99,8 +104,8 @@ fun TelaEditarFamiliar(
         mutableStateOf<GrauSuporte?>(null)
     }
 
-    var diagnosticoSelecionado by remember {
-        mutableStateOf<Diagnostico?>(null)
+    var diagnosticosSelecionados by remember {
+        mutableStateOf<List<Diagnostico>>(emptyList())
     }
 
 
@@ -246,16 +251,12 @@ fun TelaEditarFamiliar(
                                         shape = RoundedCornerShape(12.dp)
                                     )
                                 .fillMaxWidth(),
-                                modifier = Modifier.fillMaxWidth(),
-                                placeholder = "Grau de suporte",
-                                options = graus,
-                                selectedOption = grauSelecionado,
-                                onOptionSelected = {
-                                    grauSelecionado = it
-                                },
-                                optionLabel = { grau ->
-                                    grau.nome
-                                }
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = "Grau de suporte",
+                            options = graus,
+                            selectedOption = grauSelecionado,
+                            onOptionSelected = { grauSelecionado = it },
+                            optionLabel = { grau -> grau.nome }
                         )
 
 
@@ -270,15 +271,49 @@ fun TelaEditarFamiliar(
                                 modifier = Modifier.fillMaxWidth(),
                                 placeholder = "Diagnóstico",
                                 options = diagnosticos,
-                                selectedOption = diagnosticoSelecionado,
-                                onOptionSelected = {
-                                    diagnosticoSelecionado = it
+                                selectedOption = null,
+                                onOptionSelected = { diagnostico ->
+
+                                    if (diagnostico !in diagnosticosSelecionados) {
+                                        diagnosticosSelecionados = diagnosticosSelecionados + diagnostico
+                                    }
                                 },
                                 optionLabel = { diagnostico ->
                                     diagnostico.sigla
                                 }
                         )
 
+                        FlowRow (
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ){
+                            diagnosticosSelecionados.forEach { diagnostico ->
+
+                                InputChip(
+                                    selected = true,
+                                    onClick = {},
+                                    label = {
+                                        Text(diagnostico.sigla)
+                                    },
+                                    colors = InputChipDefaults.inputChipColors(
+                                        selectedContainerColor = Color(0xFF3277CF),
+                                    ),
+                                    trailingIcon = {
+                                        Image(
+                                            painter = painterResource(R.drawable.close),
+                                            contentDescription = "Remover",
+                                            modifier = Modifier
+                                                .size(14.dp)
+                                                .clickable {
+                                                    diagnosticosSelecionados =
+                                                        diagnosticosSelecionados.filter { it != diagnostico }
+                                                }
+                                        )
+                                    }
+
+                                )
+                            }
+                        }
 
                     }
 
