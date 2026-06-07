@@ -41,7 +41,6 @@ class TelaLoginViewModel : ViewModel() {
 
 
     fun realizarLogin(gerenciarSessao: GerenciarSessao, onSuccess: () -> Unit) {
-        // Remove espaços em branco das pontas
         val emailLimpo = email.trim()
         val senhaLimpa = senha.trim()
 
@@ -56,26 +55,34 @@ class TelaLoginViewModel : ViewModel() {
         viewModelScope.launch {
             carregarDados = true
             try {
-
                 val response = RetrofitInstance.espectraApiService.login(
                     DataTelaLogin(emailLimpo, senhaLimpa)
                 )
+
                 if (response.isSuccessful && response.body()?.sucesso == true) {
                     val corpoResposta = response.body()
                     val token = corpoResposta?.token
-
-
                     val idUsuario = corpoResposta?.idUsuario ?: 0
-
 
                     if (token != null && idUsuario != 0) {
                         gerenciarSessao.salvarSessao(token, idUsuario)
+
+                        //comentar linha de baixo depois
+                        android.util.Log.d("TOKEN_TESTE", "O token recuperado é: ${gerenciarSessao.buscarToken()}")
                         onSuccess()
                     } else {
                         emailErro = "Erro: Dados de sessão inválidos (Token ou ID nulos)."
                     }
                 } else {
-                    emailErro = response.body()?.mensagem ?: "E-mail ou senha incorretos."
+                    // CORREÇÃO AQUI: Se o servidor rejeitou (401), pegamos a resposta real dele
+                    val erroDoServidor = response.errorBody()?.string()
+
+                    // Exibe o erro real vindo do backend na tela para você diagnosticar
+                    emailErro = if (!erroDoServidor.isNullOrBlank()) {
+                        "Erro do Servidor (${response.code()}): $erroDoServidor"
+                    } else {
+                        response.body()?.mensagem ?: "E-mail ou senha incorretos."
+                    }
                 }
             } catch (e: Exception) {
                 emailErro = "Falha ao conectar com o servidor: ${e.localizedMessage}"

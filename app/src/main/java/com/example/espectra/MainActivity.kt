@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.example.espectra.storage.GerenciarSessao
 import com.example.espectra.ui.screens.TelaLogin
+import com.example.espectra.ui.screens.TelaHome
 import com.example.espectra.ui.theme.EspectraTheme
 import com.example.espectra.viewmodel.TelaLoginViewModel
 
@@ -30,9 +31,8 @@ class MainActivity : ComponentActivity() {
             EspectraTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                    var telaAtual by remember {
-                        mutableStateOf(if (gerenciarSessao.buscarToken() != null) "home" else "login")
-                    }
+                    // ✅ ALTERADO: Toda vez que o app abrir, a tela inicial será OBRIGATORIAMENTE o "login"
+                    var telaAtual by remember { mutableStateOf("login") }
 
                     Box(modifier = Modifier.padding(innerPadding)) {
                         when (telaAtual) {
@@ -46,18 +46,21 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             "home" -> {
-                                //TelaHomePaciente(
-                                   // gerenciarSessao = gerenciarSessao,
-                                   // onLogout = {
-                                      //  gerenciarSessao.limparSessao()
-                                      //  telaAtual = "login"
-                                   // }
-                                //)
+                                TelaHome(
+                                    gerenciarSessao = gerenciarSessao,
+                                    onLogout = {
+                                        // Limpa os dados seguros ao deslogar
+                                        gerenciarSessao.limparSessao()
+                                        telaAtual = "login"
+                                    }
+                                )
                             }
                         }
                     }
                 }
             }
         }
+
     }
+
 }
