@@ -24,7 +24,8 @@ import com.example.espectra.viewmodel.TelaLoginViewModel
 fun TelaLogin(
     viewModel: TelaLoginViewModel,
     gerenciarSessao: GerenciarSessao,
-    onNavegarParaHome: () -> Unit
+    onNavegarParaHome: () -> Unit,
+    onNavegarParaCadastro: () -> Unit
 ) {
 
     Column(
@@ -34,7 +35,7 @@ fun TelaLogin(
     ) {
         EspectraHeaderAzul(modifier = Modifier.weight(0.3f))
 
-        // Card Branco com cantos arredondados superiores
+
         Column(
             modifier = Modifier
                 .weight(0.7f)
@@ -46,19 +47,18 @@ fun TelaLogin(
             Text(text = "Login", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color(0xFF004481))
             Spacer(modifier = Modifier.height(24.dp))
 
-
             EspectraTextField(
                 value = viewModel.email,
                 onValueChange = { viewModel.novoEmail(it) },
                 placeholder = "E-mail"
             )
-            // Mostra o erro de e-mail se houver
+
             if (viewModel.emailErro != null) {
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(text = viewModel.emailErro ?: "", color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-
 
             EspectraTextField(
                 value = viewModel.senha,
@@ -68,9 +68,9 @@ fun TelaLogin(
             )
 
             if (viewModel.senhaErro != null) {
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(text = viewModel.senhaErro ?: "", color = Color.Red, fontSize = 12.sp)
             }
-
 
             Box(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), contentAlignment = Alignment.CenterEnd) {
                 Text(
@@ -85,18 +85,16 @@ fun TelaLogin(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-
             EspectraButton(
                 text = if (viewModel.carregarDados) "Carregando..." else "Entrar",
                 onClick = {
                     viewModel.realizarLogin(gerenciarSessao) {
-                        onNavegarParaHome() // Vai para a Home quando der sucesso
+                        onNavegarParaHome()
                     }
                 }
             )
 
             Spacer(modifier = Modifier.weight(1f))
-
 
             Row {
                 Text(text = "Não possui uma conta? ", color = Color.Gray, fontSize = 14.sp)
@@ -107,7 +105,8 @@ fun TelaLogin(
                     fontWeight = FontWeight.Bold,
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier.clickable {
-
+                        viewModel.limparErros()
+                        onNavegarParaCadastro()
                     }
                 )
             }
