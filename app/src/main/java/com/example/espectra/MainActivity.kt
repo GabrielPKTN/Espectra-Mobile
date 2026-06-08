@@ -31,7 +31,12 @@ class MainActivity : ComponentActivity() {
 //                       token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsImlhdCI6MTc4MDMyMzA3OSwiZXhwIjoxMDAwMDE3ODAzMjMwNzl9.Ybxh8Ri_b6CXNcTwdQOHuRJJzLd76MDohbmilx9E5io",
 //                        idPaciente = 6)
 
-                   TelaEditarFamiliar(token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsImlhdCI6MTc4MDMyMzA3OSwiZXhwIjoxMDAwMDE3ODAzMjMwNzl9.Ybxh8Ri_b6CXNcTwdQOHuRJJzLd76MDohbmilx9E5io")
+                   TelaEditarFamiliar(
+                       token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsImlhdCI6MTc4MDMyMzA3OSwi" +
+                               "ZXhwIjoxMDAwMDE3ODAzMjMwNzl9.Ybxh8Ri_b6CXNcTwdQOHuRJJzLd76MDohbmilx9E5io",
+                       idUsuario = 1,
+                       idFamiliar = 1
+                   )
 
                 }
             }

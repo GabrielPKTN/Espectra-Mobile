@@ -2,11 +2,14 @@ package com.example.espectra.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.espectra.model.editarFamiliar.AtualizarFamiliarRequest
 import com.example.espectra.service.RetrofitFactory
 import com.example.espectra.viewmodel.UploadUtils.createImagePart
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -26,7 +29,7 @@ class EditarFamiliarViewModel : ViewModel() {
 
 
 
-    suspend fun atualizarPaciente(
+    fun atualizarPaciente(
         context: Context,
         token: String,
         idUsuario: Int,
@@ -34,30 +37,56 @@ class EditarFamiliarViewModel : ViewModel() {
         fotoUri: Uri?
     ) {
 
-        val diagnosticoJson = Gson().toJson(
-            request.diagnosticos.map {
-                mapOf("id" to it)
-            }
-        )
+        viewModelScope.launch {
+            try {
+                val diagnosticoJson = Gson().toJson(
+                    request.diagnostico.map {
+                        mapOf("id" to it)
+                    }
+                )
 
-        service.atualizarFamiliar(
-            token = token,
-            idUsuario = idUsuario,
+                val response = service.atualizarFamiliar(
+                    token = token,
+                    idUsuario = idUsuario,
 
-            nome = request.nome.toTextRequestBody(),
 
-            cpf = request.cpf.toTextRequestBody(),
+                    idFamiliar = request.id
+                        .toString()
+                        .toTextRequestBody(),
+                    nome = request.nome.toTextRequestBody(),
 
-            dataNascimento = request.dataNascimento.toTextRequestBody(),
+                    dataNascimento = request.dataNascimento.toTextRequestBody(),
 
-            diagnostico = diagnosticoJson.toTextRequestBody(),
+                    diagnostico = diagnosticoJson.toTextRequestBody(),
 
-            foto = fotoUri?.let {
-                createImagePart(
-                    context,
-                    it
+                    serieEscolar = request.serieEscolar
+                        .toString()
+                        .toTextRequestBody(),
+
+                    grauSuporte = request.grauSuporte
+                        .toString()
+                        .toTextRequestBody(),
+
+                    foto = fotoUri?.let {
+                        createImagePart(
+                            context,
+                            it
+                        )
+                    }
+                )
+
+                Log.d("respostaEditar", response.toString())
+
+            }catch (e: Exception){
+                Log.e(
+                    "EditarFamiliarViewModel",
+                    "Erro ao atualizar paciente",
+                    e
                 )
             }
-        )
+
+        }
+
+
     }
 }

@@ -1,6 +1,8 @@
 package com.example.espectra.ui.screens
 
 import android.graphics.drawable.Icon
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,33 +40,46 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.i18n.DateTimeFormatter
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.espectra.R
+import com.example.espectra.model.editarFamiliar.AtualizarFamiliarRequest
 import com.example.espectra.model.perfilFamiliar.Diagnostico
 import com.example.espectra.ui.components.editarFamiliar.Select
+import com.example.espectra.ui.components.editarFamiliar.TextFieldData
 import com.example.espectra.ui.components.editarFamiliar.TextFieldEditar
 import com.example.espectra.viewmodel.DiagnosticoViewModel
+import com.example.espectra.viewmodel.EditarFamiliarViewModel
 import com.example.espectra.viewmodel.PerfilViewModel
+import java.time.LocalDate
 
 @Composable
 fun TelaEditarFamiliar(
     //navController: NavController
     viewModel: DiagnosticoViewModel = viewModel(),
-    token: String
+    viewModelEditar: EditarFamiliarViewModel = viewModel(),
+    token: String,
+    idUsuario: Int,
+    idFamiliar: Int
 ) {
 
     var nome by remember { mutableStateOf("") }
-    var dataNascimento by remember { mutableStateOf("") }
-    var serieEscolar by remember { mutableStateOf("") }
-    var diagnostico by remember { mutableStateOf("") }
-    var grauSuporte by remember { mutableStateOf("") }
+    var dataNascimentoTexto by remember {
+        mutableStateOf(TextFieldValue())
+    }
+
+    val context  = LocalContext.current
+
 
     val diagnosticos by viewModel.diagnosticos.collectAsState()
 
@@ -85,15 +100,28 @@ fun TelaEditarFamiliar(
     )
 
     val series = listOf(
-        SerieEscolar(1, "GRAU I"),
-        SerieEscolar(2, "GRAU II"),
-        SerieEscolar(3, "GRAU III")
+        SerieEscolar(1, "MATERNAL"),
+        SerieEscolar(2, "JARDIM I"),
+        SerieEscolar(3, "JARDIM II"),
+        SerieEscolar(4, "1º ANO"),
+        SerieEscolar(5, "2º ANO"),
+        SerieEscolar(6, "3º ANO"),
+        SerieEscolar(7, "4º ANO"),
+        SerieEscolar(8, "5º ANO"),
+        SerieEscolar(9, "6º ANO"),
+        SerieEscolar(10, "7º ANO"),
+        SerieEscolar(11, "8º ANO"),
+        SerieEscolar(12, "9º ANO"),
+        SerieEscolar(13, "1º MÉDIO"),
+        SerieEscolar(14, "2º MÉDIO"),
+        SerieEscolar(15, "3º MÉDIO")
+
     )
 
     val graus = listOf(
-        GrauSuporte(1, "MATERNAL"),
-        GrauSuporte(2, "JARDIM I"),
-        GrauSuporte(3, "JARDIM II")
+        GrauSuporte(1, "GRAU I"),
+        GrauSuporte(2, "GRAU II"),
+        GrauSuporte(3, "GRAU III")
     )
 
     var serieSelecionada by remember {
@@ -107,6 +135,7 @@ fun TelaEditarFamiliar(
     var diagnosticosSelecionados by remember {
         mutableStateOf<List<Diagnostico>>(emptyList())
     }
+
 
 
     Column(
@@ -168,7 +197,7 @@ fun TelaEditarFamiliar(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(20.dp),
+                        .padding(horizontal = 20.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
 
@@ -206,9 +235,32 @@ fun TelaEditarFamiliar(
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
 
                         ) {
-                            TextFieldEditar(
-                                value = dataNascimento,
-                                onValueChange = {dataNascimento = it},
+
+                            TextFieldData(
+                                value = dataNascimentoTexto,
+                                onValueChange = { novoValor ->
+
+                                    val numeros = novoValor.text
+                                        .filter(Char::isDigit)
+                                        .take(8)
+
+                                    val textoFormatado = when {
+                                        numeros.length <= 2 -> numeros
+
+                                        numeros.length <= 4 ->
+                                            "${numeros.substring(0, 2)}/${numeros.substring(2)}"
+
+                                        else ->
+                                            "${numeros.substring(0, 2)}/" +
+                                                    "${numeros.substring(2, 4)}/" +
+                                                    numeros.substring(4)
+                                    }
+
+                                    dataNascimentoTexto = TextFieldValue(
+                                        text = textoFormatado,
+                                        selection = TextRange(textoFormatado.length)
+                                    )
+                                },
                                 placeholder = "DD/MM/AAAA",
                                 modifier = Modifier
                                     .weight(1f)
@@ -240,7 +292,6 @@ fun TelaEditarFamiliar(
                             )
 
                         }
-
 
 
                         Select(
@@ -293,7 +344,10 @@ fun TelaEditarFamiliar(
                                     selected = true,
                                     onClick = {},
                                     label = {
-                                        Text(diagnostico.sigla)
+                                        Text(
+                                            diagnostico.sigla,
+                                            color = Color.White
+                                            )
                                     },
                                     colors = InputChipDefaults.inputChipColors(
                                         selectedContainerColor = Color(0xFF3277CF),
@@ -324,11 +378,51 @@ fun TelaEditarFamiliar(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 24.dp)
+                    .padding(top = 12.dp)
             ) {
                 Button(
                     onClick = {
-                        //navController.navigate("editar_familiar")
+
+                        val partes = dataNascimentoTexto.text.split("/")
+
+                        val dataNascimento = "${partes[2]}-${partes[1]}-${partes[0]}"
+
+                        if (
+                            nome.isBlank() ||
+                            serieSelecionada == null ||
+                            grauSelecionado == null ||
+                            diagnosticosSelecionados.isEmpty()
+                        ) {
+                            Toast.makeText(
+                                context,
+                                "Preencha todos os campos obrigatórios",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@Button
+                        }
+
+                        val idSerieEscolar = serieSelecionada!!.id
+                        val idGrauSuporte = grauSelecionado!!.id
+
+                        val request = AtualizarFamiliarRequest(
+                            id = idFamiliar,
+                            nome = nome,
+                            dataNascimento = dataNascimento,
+                            diagnostico = diagnosticosSelecionados.map { it.id },
+                            grauSuporte = idGrauSuporte,
+                            serieEscolar = idSerieEscolar
+                        )
+
+                        Log.d("datamsg", request.toString())
+
+//                        viewModelEditar.atualizarPaciente(
+//                            context = context,
+//                            token = token,
+//                            idUsuario = idUsuario,
+//                            request = request,
+//                            fotoUri = null
+//                        )
+
                     },
                     modifier = Modifier
                         .fillMaxWidth()

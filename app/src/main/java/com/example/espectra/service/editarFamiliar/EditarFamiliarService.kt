@@ -16,11 +16,13 @@ interface EditarFamiliarService{
         @Header("x-access-token") token: String,
         @Path("id_usuario") idUsuario: Int,
 
+        @Part("id") idFamiliar: RequestBody,
         @Part("nome") nome: RequestBody,
-        @Part("cpf") cpf: RequestBody,
         @Part("data_nascimento") dataNascimento: RequestBody,
         @Part("diagnostico") diagnostico: RequestBody,
-
+        @Part("id_serie_escolar") serieEscolar: RequestBody,
+        @Part("id_grau_suporte") grauSuporte: RequestBody,
         @Part foto: MultipartBody.Part?
+
     ): ResponseBody
 }

@@ -1,8 +1,19 @@
 package com.example.espectra.model.editarFamiliar
 
+import com.google.gson.annotations.SerializedName
+
 data class AtualizarFamiliarRequest(
+    val id: Int,
     val nome: String,
-    val cpf: String,
+
+    @SerializedName("data_nascimento")
     val dataNascimento: String,
-    val diagnosticos: List<Int>
+
+    val diagnostico: List<Int>,
+
+    @SerializedName("id_serie_escolar")
+    val serieEscolar: Int,
+
+    @SerializedName("id_grau_suporte")
+    val grauSuporte: Int
 )
