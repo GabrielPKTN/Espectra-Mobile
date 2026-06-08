@@ -114,7 +114,8 @@ fun TelaEditarFamiliar(
         SerieEscolar(12, "9º ANO"),
         SerieEscolar(13, "1º MÉDIO"),
         SerieEscolar(14, "2º MÉDIO"),
-        SerieEscolar(15, "3º MÉDIO")
+        SerieEscolar(15, "3º MÉDIO"),
+        SerieEscolar(16, "3º CONCLUÍDO")
 
     )
 
@@ -415,13 +416,13 @@ fun TelaEditarFamiliar(
 
                         Log.d("datamsg", request.toString())
 
-//                        viewModelEditar.atualizarPaciente(
-//                            context = context,
-//                            token = token,
-//                            idUsuario = idUsuario,
-//                            request = request,
-//                            fotoUri = null
-//                        )
+                        viewModelEditar.atualizarPaciente(
+                            context = context,
+                            token = token,
+                            idUsuario = idUsuario,
+                            request = request,
+                            fotoUri = null
+                        )
 
                     },
                     modifier = Modifier

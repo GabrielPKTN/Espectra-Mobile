@@ -77,6 +77,7 @@ class EditarFamiliarViewModel : ViewModel() {
 
                 Log.d("respostaEditar", response.toString())
 
+
             }catch (e: Exception){
                 Log.e(
                     "EditarFamiliarViewModel",
