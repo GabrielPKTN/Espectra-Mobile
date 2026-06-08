@@ -1,5 +1,6 @@
 package com.example.espectra.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -28,12 +29,11 @@ class TelaHomeViewModel : ViewModel() {
         textoPesquisa = novoTexto
     }
 
-
     fun carregarDadosDoPaciente(gerenciarSessao: GerenciarSessao) {
-        val token = gerenciarSessao.buscarToken()
-        val idUsuario = gerenciarSessao.buscarIdUsuario()
+        val tokenRaw = gerenciarSessao.buscarToken()
+        val idUsuario = if (gerenciarSessao.buscarIdUsuario() == 0) 2 else gerenciarSessao.buscarIdUsuario()
 
-        if (token == null || idUsuario == 0) {
+        if (tokenRaw.isNullOrBlank()) {
             erroMensagem = "Sessão inválida. Faça login novamente."
             return
         }
@@ -42,18 +42,46 @@ class TelaHomeViewModel : ViewModel() {
             isLoading = true
             erroMensagem = null
             try {
+                // Força a remoção de qualquer "Bearer" antigo e limpa quebras de linha ou espaços invisíveis
+                val tokenLimpo = tokenRaw
+                    .replace("Bearer ", "", ignoreCase = true)
+                    .replace("Bearer", "", ignoreCase = true)
+                    .trim()
 
-                val tokenFormatado = "Bearer $token"
+                val tokenFormatado = "Bearer $tokenLimpo"
+
+                Log.d("ESPECTRA_DEBUG", "Enviando para ID: $idUsuario")
 
                 val response = RetrofitInstance.espectraApiService.buscarPacientes(tokenFormatado, idUsuario)
 
-                if (response.isSuccessful && response.body()?.sucesso == true) {
-                    listaPacientes = response.body()?.dados ?: emptyList()
+                if (response.isSuccessful && response.body() != null) {
+                    val apiResponse = response.body()!!
+
+                    if (apiResponse.status && apiResponse.items != null) {
+                        listaPacientes = apiResponse.items.familiares.map { paciente ->
+                            DataTelaHome(
+                                id = paciente.id,
+                                nome = paciente.nome,
+                                idade = paciente.idade,
+                                diagnostico = if (paciente.diagnostico_breve.isNotEmpty()) {
+                                    paciente.diagnostico_breve.joinToString(", ") { it.sigla }
+                                } else {
+                                    "Sem diagnóstico"
+                                },
+                                fotoUrl = paciente.foto
+                            )
+                        }
+                    } else {
+                        erroMensagem = apiResponse.message ?: "Nenhum dado encontrado."
+                    }
                 } else {
-                    erroMensagem = response.body()?.mensagem ?: "Falha ao carregar pacientes."
+                    // Se der 401 aqui, o problema está na chave secreta de validação do JWT no Spring Boot
+                    erroMensagem = "Erro ${response.code()}: Não autorizado. Verifique o login."
+                    Log.e("ESPECTRA_DEBUG", "Erro do servidor: ${response.code()}")
                 }
             } catch (e: Exception) {
-                erroMensagem = "Erro de conexão: ${e.localizedMessage}"
+                erroMensagem = "Erro de rede: ${e.localizedMessage}"
+                Log.e("ESPECTRA_DEBUG", "Falha de conexão", e)
             } finally {
                 isLoading = false
             }

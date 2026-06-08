@@ -1,5 +1,6 @@
 package com.example.espectra.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,9 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.espectra.model.DataTelaCadastro
 import com.example.espectra.service.RetrofitInstance
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class TelaCadastroViewModel : ViewModel() {
-
 
     var isPsicopedagogo by mutableStateOf(false)
     var isFamilia by mutableStateOf(true)
@@ -31,9 +32,9 @@ class TelaCadastroViewModel : ViewModel() {
         isFamilia = !psicopedagogoSelecionado
     }
 
-
+    // Garante que a data saia perfeitamente limpa no padrão YYYY-MM-DD exigido pelo banco (LocalDate do Java)
     private fun formatarDataParaBanco(dataOriginal: String): String {
-        val limpa = dataOriginal.replace("/", "").replace("-", "").trim()
+        val limpa = dataOriginal.replace("/", "").replace("-", "").replace(".", "").trim()
         return if (limpa.length == 8) {
             val dia = limpa.substring(0, 2)
             val mes = limpa.substring(2, 4)
@@ -86,6 +87,8 @@ class TelaCadastroViewModel : ViewModel() {
                     idTipoUsuario = idTipoUsuarioCalculado
                 )
 
+                Log.d("ESPECTRA_CADASTRO", "Enviando: $request")
+
                 val response = RetrofitInstance.espectraApiService.cadastrar(request)
 
                 if (response.isSuccessful) {
@@ -93,10 +96,23 @@ class TelaCadastroViewModel : ViewModel() {
                     onSucesso()
                 } else {
                     val erroJson = response.errorBody()?.string()
-                    errorMessage = erroJson ?: "Erro ao realizar cadastro."
+                    Log.e("ESPECTRA_CADASTRO", "Erro retornado: $erroJson")
+
+                    // Tenta extrair a chave "message" ou "mensagem" de dentro do JSON de erro do Spring
+                    errorMessage = try {
+                        val jsonObject = JSONObject(erroJson ?: "")
+                        when {
+                            jsonObject.has("message") -> jsonObject.getString("message")
+                            jsonObject.has("mensagem") -> jsonObject.getString("mensagem")
+                            else -> "Erro ${response.code()}: Falha ao realizar cadastro."
+                        }
+                    } catch (e: Exception) {
+                        "Erro ${response.code()}: Falha no servidor."
+                    }
                 }
             } catch (e: Exception) {
                 errorMessage = "Falha na conexão: ${e.localizedMessage}"
+                Log.e("ESPECTRA_CADASTRO", "Exceção disparada", e)
             } finally {
                 isLoading = false
             }

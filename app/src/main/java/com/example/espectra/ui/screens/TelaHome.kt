@@ -26,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.Text
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -40,26 +39,17 @@ import com.example.espectra.ui.components.componentsGerais.EspectraButton
 import com.example.espectra.ui.components.componentsGerais.EspectraTextField
 import com.example.espectra.viewmodel.TelaHomeViewModel
 
-
 @Composable
 fun TelaHome(
-
     gerenciarSessao: GerenciarSessao,
     onLogout: () -> Unit,
     viewModel: TelaHomeViewModel = viewModel()
 ) {
     var cardIdSelecionado by remember { mutableStateOf<Int?>(null) }
 
-
     LaunchedEffect(Unit) {
         viewModel.carregarDadosDoPaciente(gerenciarSessao)
     }
-
-    DisposableEffect(Unit) {
-        onDispose { gerenciarSessao.limparSessao()
-        }
-    }
-
 
     Column(
         modifier = Modifier
@@ -70,7 +60,10 @@ fun TelaHome(
         EspectraHeaderBranco(
             modifier = Modifier
                 .weight(0.25f)
-                .clickable { onLogout() } // Exemplo: desloga se clicar no header ou ícone correspondente
+                .clickable {
+                    gerenciarSessao.limparSessao()
+                    onLogout()
+                }
         )
 
         Column(
@@ -108,7 +101,6 @@ fun TelaHome(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Gerenciamento de Estados de Rede na UI
             if (viewModel.isLoading) {
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator(color = Color(0xFF2B78D6))
@@ -118,12 +110,11 @@ fun TelaHome(
             } else if (viewModel.listaPacientes.isEmpty()) {
                 Text(text = "Nenhum paciente cadastrado para este usuário.", color = Color.Gray, fontSize = 14.sp)
             } else {
-                // Renderiza dinamicamente os cartões com os dados de cada paciente do id específico
                 viewModel.listaPacientes.filter {
                     it.nome.contains(viewModel.textoPesquisa, ignoreCase = true)
                 }.forEach { paciente ->
                     EspectraCardPaciente(
-                        // Adapte seu componente customizado para receber o Objeto 'paciente' real se possível
+                        paciente = paciente,
                         selecionado = cardIdSelecionado == paciente.id,
                         onClick = { cardIdSelecionado = paciente.id }
                     )
