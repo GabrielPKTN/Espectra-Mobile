@@ -64,7 +64,7 @@ fun TelaAdicionarFamiliar(modifier: Modifier = Modifier, viewModel: TelaAdiciona
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
-                .padding(top = 45.dp),
+                .padding(top = 16.dp),
             contentAlignment = Alignment.Center
         ) {
 
@@ -96,14 +96,14 @@ fun TelaAdicionarFamiliar(modifier: Modifier = Modifier, viewModel: TelaAdiciona
             }
         }
 
-        Spacer(modifier = Modifier.height(18.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         EspectraCard()
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
+                .padding(top = 22.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             EspectraButtonAdicionarFamiliarWhite(

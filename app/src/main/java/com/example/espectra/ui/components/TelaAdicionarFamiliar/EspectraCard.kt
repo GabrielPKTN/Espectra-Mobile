@@ -43,6 +43,7 @@ import com.example.espectra.R
 import com.example.espectra.model.familiar.grauSuporte
 import com.example.espectra.model.familiar.seriesEscolares
 import com.example.espectra.model.familiar.transtornos
+import com.example.espectra.utils.CpfTransformation
 import com.example.espectra.utils.MascaraDataTransformation
 import com.example.espectra.viewmodel.TelaAdicionarFamiliarViewModel
 
@@ -74,8 +75,8 @@ fun EspectraCard(modifier: Modifier = Modifier) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(425.dp)
-            .padding(horizontal = 16.dp),
+            .height(470.dp)
+            .padding(horizontal = 12.dp),
         shape = RoundedCornerShape(44.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFFFAFAFA)
@@ -87,11 +88,10 @@ fun EspectraCard(modifier: Modifier = Modifier) {
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
 
-        //Icon da Foto do familiar
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 32.dp),
+                .padding(top = 20.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
@@ -111,7 +111,7 @@ fun EspectraCard(modifier: Modifier = Modifier) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(12.dp)
         ) {
             OutlinedTextField(
                 modifier = Modifier
@@ -146,7 +146,7 @@ fun EspectraCard(modifier: Modifier = Modifier) {
                 }
             )
 
-            //Row que armazena OutlinedTextFiel de Data de nascimento e de Série Escolar
+            //Row que armazena OutlinedTextField de Data de nascimento e de Série Escolar
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -243,6 +243,49 @@ fun EspectraCard(modifier: Modifier = Modifier) {
                         }
                     }
                 }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = viewModel.cpf,
+                    onValueChange = {
+                        viewModel.onCpfChange((it))
+                    },
+                    visualTransformation = CpfTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    ),
+                    label = {
+                        Text("CPF")
+                    },
+                    placeholder = {
+                        Text("000.000.000-00")
+                    },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF3277CF),
+                        unfocusedBorderColor = Color(0xFF3277CF)
+                    ),
+                    textStyle = TextStyle(
+                        fontSize = 18.sp,
+                        color = Color.Black,
+                        fontFamily = FontFamily(
+                            Font(R.font.instrumentsans_variablefont_wdth_wght)
+                        ),
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    singleLine = true,
+                    isError = viewModel.erroCpf != null,
+                    supportingText = {
+                        if (viewModel.erroCpf != null) Text(text = viewModel.erroCpf!!)
+                    }
+                )
             }
 
             //Dropdown -> Diagnóstico

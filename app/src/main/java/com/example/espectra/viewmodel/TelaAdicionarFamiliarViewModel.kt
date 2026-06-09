@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import android.app.Application
+import android.util.Log.e
 import androidx.lifecycle.viewModelScope
 import com.example.espectra.model.familiar.Familiar
 import com.example.espectra.service.RetrofitFactory
@@ -22,13 +23,15 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.FileOutputStream
 
 class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel(application) {
 
     private val context = application.applicationContext
-    private val espectraService = RetrofitFactory().getEspectraService()
+
+    private val espectraService by lazy { RetrofitFactory().getEspectraService() }
 
     var estaCarregando by mutableStateOf(false)
         private set
@@ -40,6 +43,10 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
         private set
 
     var dataNascimento by mutableStateOf("")
+        private set
+
+
+    var cpf by mutableStateOf("")
         private set
 
     var serieEscolarSelecionada by mutableStateOf<SerieEscolar?>(null)
@@ -56,6 +63,9 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
         private set
 
     var erroDataNascimento by mutableStateOf<String?>(null)
+        private set
+
+    var erroCpf by mutableStateOf<String?>(null)
         private set
 
     var erroSerieEscolar by mutableStateOf<String?>(null)
@@ -123,6 +133,43 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
         }
     }
 
+    private fun isCpfValido(cpf: String): Boolean {
+        val numeros = cpf.filter { it.isDigit() }
+
+        if (numeros.length != 11 || numeros.all { it == numeros[0] }) return false
+
+        var soma = 0
+        for (i in 0 until 9) {
+            soma += (numeros[i].toString().toInt()) * (10 - i)
+        }
+        var resto = soma % 11
+        val digito1 = if (resto < 2) 0 else 11 - resto
+        if (numeros[9].toString().toInt() != digito1) return false
+
+        soma = 0
+        for (i in 0 until 10) {
+            soma += (numeros[i].toString().toInt()) * (11 - i)
+        }
+        resto = soma % 11
+        val digito2 = if (resto < 2) 0 else 11 - resto
+        if (numeros[10].toString().toInt() != digito2) return false
+
+        return true
+    }
+
+    private fun validarCpf(){
+        erroCpf = when {
+            cpf.isBlank() -> {
+                "CPF é obrigatório!"
+            }
+
+            !isCpfValido(cpf) -> {
+                "CPF inválido! Verifique os números"
+            }
+
+            else -> null
+        }
+    }
     private fun validarSerieEscolar() {
         erroSerieEscolar = when {
             serieEscolarSelecionada == null -> {
@@ -169,6 +216,10 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
 
     fun onDataNascimentoChange(valor: String) {
         dataNascimento = valor.filter { it.isDigit() }.take(8)
+
+        if (erroDataNascimento != null) {
+            erroDataNascimento = null
+        }
     }
 
     fun onSerieEscolarChange(valor: SerieEscolar) {
@@ -192,16 +243,26 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
         fotoUri = uri
     }
 
+    fun onCpfChange(valor: String){
+        cpf = valor.filter { it.isDigit() }.take(11)
+
+        if (erroCpf != null) {
+            erroCpf = null
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun validarDados(): Boolean {
         validarNome()
         validarDataNascimento()
+        validarCpf()
         validarSerieEscolar()
         validarDiagnostico()
         validarGrauSuporte()
 
         return erroNome == null &&
                 erroDataNascimento == null &&
+                erroCpf == null &&
                 erroSerieEscolar == null &&
                 erroDiagnostico == null &&
                 erroGrauSuporte == null
@@ -216,23 +277,36 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
             mensagemStatus = null
 
             try {
-                val diagnosticoIds = diagnosticoSelecionado.map { it.id }
                 val apenasDigitosData = dataNascimento.filter { it.isDigit() }
                 val dataInvertidaParaAPI = apenasDigitosData.replace(Regex("(\\d{2})(\\d{2})(\\d{4})"), "$3-$2-$1")
 
-                val novoFamiliar = Familiar(
-                    nome = nome,
-                    data_nascimento = dataInvertidaParaAPI,
-                    id_serie_escolar = serieEscolarSelecionada?.id ?: 0,
-                    id_diagnostico = diagnosticoIds,
-                    id_grau_suporte = grauSuporteSelecionado?.id ?: 0,
-                    foto_url = null
-                )
+                val diagnosticoIds = diagnosticoSelecionado.map { it.id }
+                val diagnosticoJsonString = com.google.gson.Gson().toJson(diagnosticoIds)
+
+                val nomeBody = nome.toRequestBody("text/plain".toMediaTypeOrNull())
+                val dataBody = dataInvertidaParaAPI.toRequestBody("text/plain".toMediaTypeOrNull())
+                val serieBody = (serieEscolarSelecionada?.id ?: 0).toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                val grauBody = (grauSuporteSelecionado?.id ?: 0).toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                val diagnosticoBody = diagnosticoJsonString.toRequestBody("text/plain".toMediaTypeOrNull())
+
+                val cpfBody = "00000000000".toRequestBody("text/plain".toMediaTypeOrNull())
+
+                val sharedPreferences = context.getSharedPreferences("EspectraPrefs", android.content.Context.MODE_PRIVATE)
+                val idResponsavelLogado = sharedPreferences.getInt("ID_RESPONSAVEL", 0)
+
+                val responsavelBody = idResponsavelLogado.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+
+                if (idResponsavelLogado == 0){
+                    mensagemStatus = "Erro: Usuário não identificado"
+                    estaCarregando = false
+                    return@launch
+                }
 
                 val fotoPart = withContext(Dispatchers.IO) {
                     fotoUri?.let { uri ->
                         val file = uriToFile(uri)
-                        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                        val tipoMime = context.contentResolver.getType(uri) ?: "image/jpeg"
+                        val requestFile = file.asRequestBody(tipoMime.toMediaTypeOrNull())
                         MultipartBody.Part.createFormData("foto", file.name, requestFile)
                     }
                 }
@@ -240,7 +314,13 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
                 val response = withContext(Dispatchers.IO) {
                     espectraService.adicionarFamiliar(
                         token = tokenAutenticacao,
-                        request = novoFamiliar,
+                        nome = nomeBody,
+                        dataNascimento = dataBody,
+                        idSerieEscolar = serieBody,
+                        idGrauSuporte = grauBody,
+                        diagnostico = diagnosticoBody,
+                        cpf = cpfBody,
+                        idResponsavel = responsavelBody,
                         foto = fotoPart
                     )
                 }
@@ -248,6 +328,7 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
                 mensagemStatus = "Familiar cadastrado com sucesso!"
 
             } catch (e: Exception) {
+                android.util.Log.e("API_ESPECTRA", "Erro ao salvar", e)
                 mensagemStatus = "Erro ao conectar: ${e.localizedMessage}"
             } finally {
                 estaCarregando = false
@@ -257,8 +338,16 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
 
     //Converter Uri em Arquivo
     private fun uriToFile(uri: Uri): File {
+        val contentResolver = context.contentResolver
+        val tipoMime = contentResolver.getType(uri)
+        val extensao = when (tipoMime){
+            "image/png" -> "png"
+            "image/webp" -> "webp"
+            else -> "jpeg"
+        }
+
         val inputStream = context.contentResolver.openInputStream(uri)
-        val file = File(context.cacheDir, "temp_foto_familiar.jpg")
+        val file = File(context.cacheDir, "temp_foto_familiar.$extensao")
         val outputStream = FileOutputStream(file)
         inputStream?.use { input -> outputStream.use { output -> input.copyTo(output) } }
         return file
