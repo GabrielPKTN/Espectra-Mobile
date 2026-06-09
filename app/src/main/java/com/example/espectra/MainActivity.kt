@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import com.example.espectra.ui.screens.TelaAtividadesEmAndamento
 import com.example.espectra.ui.screens.TelaCadastro
 import com.example.espectra.ui.screens.TelaHome
 import com.example.espectra.ui.screens.TelaLogin
@@ -23,8 +24,9 @@ class MainActivity : ComponentActivity() {
                    // TelaLogin()
                     //TelaCadastro()
                   // TelaRedefinirSenha()
-                    TelaHome()
+                    //TelaHome()
 
+                    TelaAtividadesEmAndamento()
                 }
             }
         }
