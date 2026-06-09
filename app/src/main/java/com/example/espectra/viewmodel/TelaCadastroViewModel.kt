@@ -92,6 +92,35 @@ class TelaCadastroViewModel : ViewModel() {
                 val response = RetrofitInstance.espectraApiService.cadastrar(request)
 
                 if (response.isSuccessful) {
+                    val loginResponseBody = response.body()
+
+                    // Log do corpo completo da resposta de sucesso
+                    Log.d("ESPECTRA_CADASTRO", "Sucesso! Corpo da Resposta: $loginResponseBody")
+
+                    // CORREÇÃO ESSENCIAL: Entra no objeto "items" para ler os dados do usuário criados pelo seu backend
+                    try {
+                        if (loginResponseBody != null) {
+                            val jsonString = com.google.gson.Gson().toJson(loginResponseBody)
+                            val jsonResposta = JSONObject(jsonString)
+
+                            if (jsonResposta.has("items") && !jsonResposta.isNull("items")) {
+                                val itemsJson = jsonResposta.getJSONObject("items")
+
+                                val id = if (itemsJson.has("id")) itemsJson.getString("id") else "Não encontrado"
+                                val nomeUsuario = if (itemsJson.has("nome")) itemsJson.getString("nome") else "Não encontrado"
+                                val tipoUsuario = if (itemsJson.has("tipo_usuario")) itemsJson.getString("tipo_usuario") else "Não encontrado"
+
+                                Log.i("ESPECTRA_CADASTRO", "ID extraído de items: $id")
+                                Log.i("ESPECTRA_CADASTRO", "Nome extraído de items: $nomeUsuario")
+                                Log.i("ESPECTRA_CADASTRO", "Tipo de Usuário extraído: $tipoUsuario")
+                            } else {
+                                Log.w("ESPECTRA_CADASTRO", "O nó 'items' não foi encontrado na resposta do servidor.")
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.w("ESPECTRA_CADASTRO", "Não foi possível extrair os dados via JSONObject: ${e.message}")
+                    }
+
                     cadastroSucesso = true
                     onSucesso()
                 } else {

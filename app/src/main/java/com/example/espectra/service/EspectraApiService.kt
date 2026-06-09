@@ -1,9 +1,9 @@
 package com.example.espectra.service
 
-import com.example.espectra.model.ApiResponseResponsavel
+import com.example.espectra.model.ApiResponseHome
 import com.example.espectra.model.DataTelaCadastro
 import com.example.espectra.model.DataTelaLogin
-import com.example.espectra.model.RespostaAutenticacao // Importa o modelo correto que você já usa
+import com.example.espectra.model.RespostaAutenticacao
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -28,10 +28,10 @@ interface EspectraApiService {
         @Body request: DataTelaCadastro
     ): Response<RespostaAutenticacao>
 
-    // 3. ROTA DA HOME (BUSCAR PACIENTES)
+    // 3. ROTA DA HOME (BUSCAR PACIENTES) - CORRIGIDA 🚀
     @GET("v1/espectra/usuario/home/{id}")
     suspend fun buscarPacientes(
-        @Header("Authorization") token: String,
+        @Header("x-access-token") token: String, // Alterado para bater com o React/Backend
         @Path("id") idUsuario: Int
-    ): Response<ApiResponseResponsavel>
+    ): Response<ApiResponseHome>
 }

@@ -16,6 +16,12 @@ class TelaHomeViewModel : ViewModel() {
     var listaPacientes by mutableStateOf<List<DataTelaHome>>(emptyList())
         private set
 
+    var nomeUsuarioLogado by mutableStateOf("")
+        private set
+
+    var tipoUsuarioLogado by mutableStateOf("")
+        private set
+
     var isLoading by mutableStateOf(false)
         private set
 
@@ -33,6 +39,8 @@ class TelaHomeViewModel : ViewModel() {
         val tokenRaw = gerenciarSessao.buscarToken()
         val idUsuario = if (gerenciarSessao.buscarIdUsuario() == 0) 2 else gerenciarSessao.buscarIdUsuario()
 
+        Log.d("ESPECTRA_JSON", "Token bruto recuperado da sessao: $tokenRaw")
+
         if (tokenRaw.isNullOrBlank()) {
             erroMensagem = "Sessão inválida. Faça login novamente."
             return
@@ -42,46 +50,34 @@ class TelaHomeViewModel : ViewModel() {
             isLoading = true
             erroMensagem = null
             try {
-                // Força a remoção de qualquer "Bearer" antigo e limpa quebras de linha ou espaços invisíveis
-                val tokenLimpo = tokenRaw
-                    .replace("Bearer ", "", ignoreCase = true)
-                    .replace("Bearer", "", ignoreCase = true)
-                    .trim()
+                // Certifica-se apenas de remover "Bearer " se por acaso ele tiver sido salvo com ele
+                val tokenLimpo = tokenRaw.replace("Bearer ", "", ignoreCase = true).trim()
 
-                val tokenFormatado = "Bearer $tokenLimpo"
+                Log.d("ESPECTRA_JSON", "Enviando token limpo para o x-access-token: $tokenLimpo")
 
-                Log.d("ESPECTRA_DEBUG", "Enviando para ID: $idUsuario")
-
-                val response = RetrofitInstance.espectraApiService.buscarPacientes(tokenFormatado, idUsuario)
+                // Chamada ao Retrofit passando o token puro no cabeçalho x-access-token
+                val response = RetrofitInstance.espectraApiService.buscarPacientes(tokenLimpo, idUsuario)
 
                 if (response.isSuccessful && response.body() != null) {
                     val apiResponse = response.body()!!
 
                     if (apiResponse.status && apiResponse.items != null) {
-                        listaPacientes = apiResponse.items.familiares.map { paciente ->
-                            DataTelaHome(
-                                id = paciente.id,
-                                nome = paciente.nome,
-                                idade = paciente.idade,
-                                diagnostico = if (paciente.diagnostico_breve.isNotEmpty()) {
-                                    paciente.diagnostico_breve.joinToString(", ") { it.sigla }
-                                } else {
-                                    "Sem diagnóstico"
-                                },
-                                fotoUrl = paciente.foto
-                            )
-                        }
+                        nomeUsuarioLogado = apiResponse.items.nome
+                        tipoUsuarioLogado = apiResponse.items.tipoUsuario
+                        listaPacientes = apiResponse.items.familiares
+
+                        Log.d("ESPECTRA_JSON", "Sucesso! Foram carregados ${listaPacientes.size} pacientes.")
                     } else {
                         erroMensagem = apiResponse.message ?: "Nenhum dado encontrado."
                     }
                 } else {
-                    // Se der 401 aqui, o problema está na chave secreta de validação do JWT no Spring Boot
-                    erroMensagem = "Erro ${response.code()}: Não autorizado. Verifique o login."
-                    Log.e("ESPECTRA_DEBUG", "Erro do servidor: ${response.code()}")
+                    val erroServidor = response.errorBody()?.string()
+                    erroMensagem = "Erro ${response.code()}: Não autorizado pelo servidor."
+                    Log.e("ESPECTRA_JSON", "O servidor recusou o token. Corpo: $erroServidor")
                 }
             } catch (e: Exception) {
                 erroMensagem = "Erro de rede: ${e.localizedMessage}"
-                Log.e("ESPECTRA_DEBUG", "Falha de conexão", e)
+                Log.e("ESPECTRA_JSON", "Falha catastrófica de rede ou mapeamento", e)
             } finally {
                 isLoading = false
             }

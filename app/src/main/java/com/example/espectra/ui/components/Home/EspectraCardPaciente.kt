@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.espectra.R
@@ -30,6 +31,13 @@ fun EspectraCardPaciente(
     selecionado: Boolean,
     onClick: () -> Unit
 ) {
+    // CORREÇÃO: Ajustado para usar 'diagnosticoBreve' que veio mapeado do seu Model
+    val diagnosticosFormatados = if (paciente.diagnosticoBreve.isNotEmpty()) {
+        paciente.diagnosticoBreve.joinToString(", ") { it.sigla }
+    } else {
+        "Sem diagnóstico"
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -51,7 +59,7 @@ fun EspectraCardPaciente(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.foto_paciente),
-                contentDescription = "Foto Paciente",
+                contentDescription = "Foto de ${paciente.nome}",
                 modifier = Modifier.size(60.dp)
             )
 
@@ -60,25 +68,28 @@ fun EspectraCardPaciente(
             Column {
                 Text(
                     text = paciente.nome,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF333333)
                 )
-                Spacer(modifier = Modifier.height(6.dp))
-                Row {
-                    Text(
-                        text = "${paciente.idade} Anos",
-                        fontSize = 16.sp
-                    )
-                }
 
                 Spacer(modifier = Modifier.height(6.dp))
 
-                Row {
-                    Text(
-                        text = paciente.diagnostico ?: "Sem diagnóstico",
-                        fontSize = 16.sp,
-                        color = Color(0xFF2B78D6)
-                    )
-                }
+                Text(
+                    text = "${paciente.idade} Anos",
+                    fontSize = 16.sp,
+                    color = Color(0xFF666666)
+                )
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                // Exibe os diagnósticos formatados (Ex: "TDAH, TEA" ou "Sem diagnóstico")
+                Text(
+                    text = diagnosticosFormatados,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color(0xFF2B78D6)
+                )
             }
         }
     }
