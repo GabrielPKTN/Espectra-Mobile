@@ -15,6 +15,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.HttpException
 import java.io.File
 
 class EditarFamiliarViewModel : ViewModel() {
@@ -26,7 +27,6 @@ class EditarFamiliarViewModel : ViewModel() {
     fun String.toTextRequestBody(): RequestBody {
         return toRequestBody("text/plain".toMediaType())
     }
-
 
 
     fun atualizarPaciente(
@@ -45,6 +45,7 @@ class EditarFamiliarViewModel : ViewModel() {
                     }
                 )
 
+
                 val response = service.atualizarFamiliar(
                     token = token,
                     idUsuario = idUsuario,
@@ -54,6 +55,8 @@ class EditarFamiliarViewModel : ViewModel() {
                         .toString()
                         .toTextRequestBody(),
                     nome = request.nome.toTextRequestBody(),
+
+                    cpfFamiliar = request.cpfFamiliar.toTextRequestBody(),
 
                     dataNascimento = request.dataNascimento.toTextRequestBody(),
 
@@ -78,11 +81,10 @@ class EditarFamiliarViewModel : ViewModel() {
                 Log.d("respostaEditar", response.toString())
 
 
-            }catch (e: Exception){
+            }catch (e: HttpException){
                 Log.e(
-                    "EditarFamiliarViewModel",
-                    "Erro ao atualizar paciente",
-                    e
+                    "respostaEditar",
+                    e.response()?.errorBody()?.string() ?: "Sem body"
                 )
             }
 

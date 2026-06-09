@@ -1,8 +1,11 @@
 package com.example.espectra.ui.screens
 
 import android.graphics.drawable.Icon
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,6 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
@@ -52,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.i18n.DateTimeFormatter
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.espectra.R
 import com.example.espectra.model.editarFamiliar.AtualizarFamiliarRequest
 import com.example.espectra.model.perfilFamiliar.Diagnostico
@@ -70,13 +75,28 @@ fun TelaEditarFamiliar(
     viewModelEditar: EditarFamiliarViewModel = viewModel(),
     token: String,
     idUsuario: Int,
-    idFamiliar: Int
+    idFamiliar: Int,
+    cpfFamiliar: String,
+    fotoPerfil: String?
 ) {
 
     var nome by remember { mutableStateOf("") }
+
     var dataNascimentoTexto by remember {
         mutableStateOf(TextFieldValue())
     }
+
+    var fotoUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        fotoUri = uri
+    }
+
+    val imagemExibida = fotoUri ?: fotoPerfil
 
     val context  = LocalContext.current
 
@@ -115,7 +135,7 @@ fun TelaEditarFamiliar(
         SerieEscolar(13, "1º MÉDIO"),
         SerieEscolar(14, "2º MÉDIO"),
         SerieEscolar(15, "3º MÉDIO"),
-        SerieEscolar(16, "3º CONCLUÍDO")
+        SerieEscolar(16, "CONCLUÍDO")
 
     )
 
@@ -156,6 +176,7 @@ fun TelaEditarFamiliar(
                     //navController.popBackStack()
                 }
             ) {
+
                 Image(
                     painter = painterResource(R.drawable.arrow_back),
                     contentDescription = "Voltar",
@@ -168,16 +189,34 @@ fun TelaEditarFamiliar(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Image(
-                painter = painterResource(R.drawable.default_photo),
-                contentDescription = "Foto padrão",
-
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape)
+            if (imagemExibida != null) {
+                AsyncImage(
+                    model = imagemExibida,
+                    contentDescription = "Foto de perfil",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(CircleShape)
+                        .clickable {
+                            imagePicker.launch("image/*")
+                        }
                     .align(Alignment.CenterHorizontally)
 
-            )
+                )
+            } else {
+                Image(
+                    painter = painterResource(R.drawable.default_photo),
+                    contentDescription = "Foto padrão",
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(CircleShape)
+                        .clickable {
+                            imagePicker.launch("image/*")
+                        }
+                        .align(Alignment.CenterHorizontally)
+
+                )
+            }
 
             Card(
                 modifier = Modifier
@@ -408,6 +447,7 @@ fun TelaEditarFamiliar(
                         val request = AtualizarFamiliarRequest(
                             id = idFamiliar,
                             nome = nome,
+                            cpfFamiliar = cpfFamiliar,
                             dataNascimento = dataNascimento,
                             diagnostico = diagnosticosSelecionados.map { it.id },
                             grauSuporte = idGrauSuporte,
@@ -421,7 +461,7 @@ fun TelaEditarFamiliar(
                             token = token,
                             idUsuario = idUsuario,
                             request = request,
-                            fotoUri = null
+                            fotoUri = fotoUri
                         )
 
                     },

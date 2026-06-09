@@ -2,6 +2,7 @@ package com.example.espectra.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -46,13 +47,19 @@ object UploadUtils {
         uri: Uri
     ): MultipartBody.Part {
 
+
         val file = uriToFile(
             context = context,
             uri = uri
         )
 
+        val mimeType = context.contentResolver.getType(uri)
+            ?: "image/jpeg"
+
+        Log.d("FOTO", "MimeType = $mimeType")
+
         val requestBody = file.asRequestBody(
-            "image/*".toMediaType()
+            mimeType.toMediaType()
         )
 
         return MultipartBody.Part.createFormData(

@@ -17,6 +17,7 @@ interface EditarFamiliarService{
         @Path("id_usuario") idUsuario: Int,
 
         @Part("id") idFamiliar: RequestBody,
+        @Part("cpf") cpfFamiliar: RequestBody,
         @Part("nome") nome: RequestBody,
         @Part("data_nascimento") dataNascimento: RequestBody,
         @Part("diagnostico") diagnostico: RequestBody,
