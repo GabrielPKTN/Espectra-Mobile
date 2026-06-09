@@ -24,6 +24,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +33,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.espectra.R
 import com.example.espectra.ui.components.TelaAdicionarFamiliar.EspectraButtonAdicionarFamiliarBlue
@@ -41,14 +43,23 @@ import com.example.espectra.viewmodel.TelaAdicionarFamiliarViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TelaAdicionarFamiliar(modifier: Modifier = Modifier, viewModel: TelaAdicionarFamiliarViewModel
-    //navController: NavHostController
+fun TelaAdicionarFamiliar(modifier: Modifier = Modifier, viewModel: TelaAdicionarFamiliarViewModel,
+    navController: NavHostController
 ) {
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) {
             uri: Uri? -> viewModel.onFotoChange(uri)
+    }
+
+    //Navegação para a tela Home
+    LaunchedEffect(viewModel.cadastroSucesso) {
+        if (viewModel.cadastroSucesso) {
+            navController.navigate("home") {
+                popUpTo("adicionar_familiar") { inclusive = true }
+            }
+        }
     }
 
     Column(
@@ -118,9 +129,7 @@ fun TelaAdicionarFamiliar(modifier: Modifier = Modifier, viewModel: TelaAdiciona
                 modifier = Modifier.weight(1f),
                 enabled = !viewModel.estaCarregando,
                 onClick = {
-                    //Guardar o token dentro de Storage
-                    val tokenMock = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsImlhdCI6MTc3OTI4MjM1NywiZXhwIjoxMDAwMDE3NzkyODIzNTd9.Gg83eaBKGXg2Xa9tNm5rjAxXn9_8mJxj4w2GBG756yk"
-                    viewModel.salvarFamiliar(tokenAutenticacao = tokenMock)
+                    viewModel.salvarFamiliar()
                 }
             )
         }

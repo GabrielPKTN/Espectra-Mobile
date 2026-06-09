@@ -17,6 +17,7 @@ import android.util.Log.e
 import androidx.lifecycle.viewModelScope
 import com.example.espectra.model.familiar.Familiar
 import com.example.espectra.service.RetrofitFactory
+import com.example.espectra.storage.GerenciarSessao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,9 +30,14 @@ import java.io.FileOutputStream
 
 class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel(application) {
 
+    var cadastroSucesso by mutableStateOf(false)
+        private set
+
     private val context = application.applicationContext
 
     private val espectraService by lazy { RetrofitFactory().getEspectraService() }
+
+    private val gerenciarSessao = GerenciarSessao(context)
 
     var estaCarregando by mutableStateOf(false)
         private set
@@ -44,7 +50,6 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
 
     var dataNascimento by mutableStateOf("")
         private set
-
 
     var cpf by mutableStateOf("")
         private set
@@ -224,6 +229,7 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
 
     fun onSerieEscolarChange(valor: SerieEscolar) {
         serieEscolarSelecionada = valor
+        erroSerieEscolar = null
     }
 
     fun onDiagnosticoChange(diagnostico: Diagnostico) {
@@ -233,10 +239,13 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
             } else {
                 diagnosticoSelecionado + diagnostico
             }
+
+        erroDiagnostico = null
     }
 
     fun onGrauSuporteChange(valor: GrauSuporte) {
         grauSuporteSelecionado = valor
+        erroGrauSuporte = null
     }
 
     fun onFotoChange(uri: Uri?) {
@@ -269,38 +278,36 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun salvarFamiliar(tokenAutenticacao: String) {
-        if (!validarDados()) return
-
+    fun salvarFamiliar() {
         viewModelScope.launch {
             estaCarregando = true
             mensagemStatus = null
 
             try {
+
+                val tokenReal = gerenciarSessao.buscarToken()
+                val idUsuarioReal = gerenciarSessao.buscarIdUsuario()
+
+                if (tokenReal.isNullOrBlank() || idUsuarioReal == 0) {
+                    mensagemStatus = "Sessão expirada. Por favor, faça login novamente."
+                    estaCarregando = false
+                    return@launch
+                }
+
                 val apenasDigitosData = dataNascimento.filter { it.isDigit() }
                 val dataInvertidaParaAPI = apenasDigitosData.replace(Regex("(\\d{2})(\\d{2})(\\d{4})"), "$3-$2-$1")
 
-                val diagnosticoIds = diagnosticoSelecionado.map { it.id }
-                val diagnosticoJsonString = com.google.gson.Gson().toJson(diagnosticoIds)
+                val tokenHeader = "Bearer $tokenReal"
 
                 val nomeBody = nome.toRequestBody("text/plain".toMediaTypeOrNull())
                 val dataBody = dataInvertidaParaAPI.toRequestBody("text/plain".toMediaTypeOrNull())
                 val serieBody = (serieEscolarSelecionada?.id ?: 0).toString().toRequestBody("text/plain".toMediaTypeOrNull())
                 val grauBody = (grauSuporteSelecionado?.id ?: 0).toString().toRequestBody("text/plain".toMediaTypeOrNull())
-                val diagnosticoBody = diagnosticoJsonString.toRequestBody("text/plain".toMediaTypeOrNull())
+                val diagnosticoBody = com.google.gson.Gson().toJson(diagnosticoSelecionado.map { it.id })
+                    .toRequestBody("text/plain".toMediaTypeOrNull())
+                val cpfBody = cpf.toRequestBody("text/plain".toMediaTypeOrNull())
 
-                val cpfBody = "00000000000".toRequestBody("text/plain".toMediaTypeOrNull())
-
-                val sharedPreferences = context.getSharedPreferences("EspectraPrefs", android.content.Context.MODE_PRIVATE)
-                val idResponsavelLogado = sharedPreferences.getInt("ID_RESPONSAVEL", 0)
-
-                val responsavelBody = idResponsavelLogado.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-
-                if (idResponsavelLogado == 0){
-                    mensagemStatus = "Erro: Usuário não identificado"
-                    estaCarregando = false
-                    return@launch
-                }
+                val responsavelBody = idUsuarioReal.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
                 val fotoPart = withContext(Dispatchers.IO) {
                     fotoUri?.let { uri ->
@@ -313,7 +320,7 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
 
                 val response = withContext(Dispatchers.IO) {
                     espectraService.adicionarFamiliar(
-                        token = tokenAutenticacao,
+                        token = tokenHeader,
                         nome = nomeBody,
                         dataNascimento = dataBody,
                         idSerieEscolar = serieBody,
@@ -326,10 +333,12 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
                 }
 
                 mensagemStatus = "Familiar cadastrado com sucesso!"
+                cadastroSucesso = true
 
             } catch (e: Exception) {
                 android.util.Log.e("API_ESPECTRA", "Erro ao salvar", e)
                 mensagemStatus = "Erro ao conectar: ${e.localizedMessage}"
+                cadastroSucesso = false
             } finally {
                 estaCarregando = false
             }

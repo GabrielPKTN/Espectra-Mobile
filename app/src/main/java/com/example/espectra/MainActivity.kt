@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import com.example.espectra.ui.screens.TelaAdicionarFamiliar
 import com.example.espectra.ui.screens.TelaCadastro
 import com.example.espectra.ui.screens.TelaHome
@@ -32,11 +33,13 @@ class MainActivity : ComponentActivity() {
                     //TelaCadastro()
                   // TelaRedefinirSenha()
                     //TelaHome()
-                    val meuViewModel: TelaAdicionarFamiliarViewModel = viewModel(
-                        factory = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-                    )
+                        val navController = rememberNavController()
 
-                    TelaAdicionarFamiliar(viewModel = meuViewModel)
+                        val meuViewModel: TelaAdicionarFamiliarViewModel = viewModel(
+                            factory = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+                        )
+
+                        TelaAdicionarFamiliar(viewModel = meuViewModel, navController = navController)
                 }
             }
         }
