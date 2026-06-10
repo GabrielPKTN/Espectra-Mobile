@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.espectra.R
 import com.example.espectra.ui.components.perfilPaciente.ButtonHabilidade
 import com.example.espectra.ui.components.perfilPaciente.ColunaLegenda
@@ -69,6 +70,7 @@ import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 
 @Composable
 fun TelaPerfilFamiliar(
+    //navController: NavController,
     viewModel: PerfilViewModel = viewModel(),
     token: String,
     idPaciente: Int
@@ -104,7 +106,8 @@ fun TelaPerfilFamiliar(
 
     ) {
         perfil?.let { perfil ->
-            HeaderPerfil(perfil.foto)
+            HeaderPerfil(perfil.foto, //navController)
+            )
         }
 
         Column(
@@ -140,7 +143,7 @@ fun TelaPerfilFamiliar(
 
             Button(
                 onClick = {
-
+                    //navController.navigate("editar_familiar")
                 },
                 modifier = Modifier
                     .fillMaxWidth()

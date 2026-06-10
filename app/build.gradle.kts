@@ -57,6 +57,11 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.core.i18n)
+    implementation(libs.androidx.compose.ui.text)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
@@ -73,6 +78,10 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+
+    implementation("androidx.navigation:navigation-compose:2.9.7")
+
+
     implementation("androidx.navigation:navigation-compose:2.8.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation(libs.vico.compose)

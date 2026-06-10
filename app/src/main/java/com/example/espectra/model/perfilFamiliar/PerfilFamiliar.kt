@@ -8,6 +8,8 @@ data class PerfilFamiliar(
 
     val nome: String,
 
+    val cpf: String,
+
     val idade: Int,
 
     @SerializedName("grau_suporte")

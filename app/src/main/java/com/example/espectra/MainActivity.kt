@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import com.example.espectra.ui.screens.TelaCadastro
+import com.example.espectra.ui.screens.TelaEditarFamiliar
+import com.example.espectra.ui.screens.TelaHome
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
