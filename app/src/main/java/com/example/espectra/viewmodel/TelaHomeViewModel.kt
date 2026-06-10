@@ -64,7 +64,9 @@ class TelaHomeViewModel : ViewModel() {
                     if (apiResponse.status && apiResponse.items != null) {
                         nomeUsuarioLogado = apiResponse.items.nome
                         tipoUsuarioLogado = apiResponse.items.tipoUsuario
-                        listaPacientes = apiResponse.items.familiares
+
+                        // CORREÇÃO AQUI: Se 'familiares' vier nulo da API, ele assume uma lista vazia com segurança
+                        listaPacientes = apiResponse.items.familiares ?: emptyList()
 
                         Log.d("ESPECTRA_JSON", "Sucesso! Foram carregados ${listaPacientes.size} pacientes.")
                     } else {
