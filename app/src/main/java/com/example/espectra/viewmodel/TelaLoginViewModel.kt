@@ -39,8 +39,11 @@ class TelaLoginViewModel : ViewModel() {
         if (senhaErro != null) senhaErro = null
     }
 
-
-    fun realizarLogin(gerenciarSessao: GerenciarSessao, onSuccess: () -> Unit) {
+    fun limparErros() {
+        emailErro = null
+        senhaErro = null
+    }
+        fun realizarLogin(gerenciarSessao: GerenciarSessao, onSuccess: () -> Unit) {
         val emailLimpo = email.trim()
         val senhaLimpa = senha.trim()
 

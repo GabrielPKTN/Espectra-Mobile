@@ -21,8 +21,11 @@ interface EspectraApiService {
         @Body request: DataTelaLogin
     ): Response<RespostaAutenticacao>
 
-    @POST("auth/cadastro")
-    suspend fun cadastrar(@Body request: DataTelaCadastro): Response<RespostaAutenticacao>
+    @Headers("Content-Type: application/json")
+    @POST("v1/espectra/usuario")
+    suspend fun cadastrar(
+        @Body request: DataTelaCadastro
+    ): Response<RespostaAutenticacao>
 
 
     @GET("usuarios/{idUsuario}/pacientes")
