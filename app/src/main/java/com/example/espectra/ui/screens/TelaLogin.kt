@@ -1,6 +1,5 @@
 package com.example.espectra.ui.screens
 
-import androidx.lifecycle.ViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,23 +14,20 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-//import androidx.lifecycle.viewmodel.compose.viewModel
-//import androidx.navigation.NavHostController
-import com.example.espectra.ui.components.EspectraButton
-import com.example.espectra.ui.components.EspectraHeaderAzul
-import com.example.espectra.ui.components.EspectraTextField
-
-//import com.example.espectra.ui.navigation.Screen
-
-class LoginViewModel : ViewModel() {
-    var email by mutableStateOf("")
-    var senha by mutableStateOf("")
-}
+import com.example.espectra.ui.components.componentsGerais.EspectraButton
+import com.example.espectra.ui.components.TelaCadastroLogin.EspectraHeaderAzul
+import com.example.espectra.ui.components.componentsGerais.EspectraTextField
+import com.example.espectra.storage.GerenciarSessao
+import com.example.espectra.viewmodel.TelaLoginViewModel
 
 @Composable
 fun TelaLogin(
-    //navController: NavHostController, viewModel: LoginViewModel = viewModel()
-    ) {
+    viewModel: TelaLoginViewModel,
+    gerenciarSessao: GerenciarSessao,
+    onNavegarParaHome: () -> Unit,
+    onNavegarParaCadastro: () -> Unit
+) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -39,7 +35,7 @@ fun TelaLogin(
     ) {
         EspectraHeaderAzul(modifier = Modifier.weight(0.3f))
 
-        // Card Branco com cantos arredondados superiores
+
         Column(
             modifier = Modifier
                 .weight(0.7f)
@@ -52,40 +48,54 @@ fun TelaLogin(
             Spacer(modifier = Modifier.height(24.dp))
 
             EspectraTextField(
-                value ="",
-                    //viewModel.email,
-                    onValueChange = {
-                        //viewModel.email = it
-                                    }, placeholder = "E-mail")
+                value = viewModel.email,
+                onValueChange = { viewModel.novoEmail(it) },
+                placeholder = "E-mail"
+            )
+
+            if (viewModel.emailErro != null) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = viewModel.emailErro ?: "", color = Color.Red, fontSize = 12.sp)
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
+
             EspectraTextField(
-                value = "",
-                    //viewModel.senha,
-                onValueChange = {
-                   // viewModel.senha = it
-                                },
+                value = viewModel.senha,
+                onValueChange = { viewModel.novaSenha(it) },
                 placeholder = "Senha",
                 visualTransformation = PasswordVisualTransformation()
             )
 
-            // Botão Esqueci a senha implícito na imagem (Redefinir a senha)
+            if (viewModel.senhaErro != null) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = viewModel.senhaErro ?: "", color = Color.Red, fontSize = 12.sp)
+            }
+
             Box(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), contentAlignment = Alignment.CenterEnd) {
                 Text(
                     text = "Esqueceu a senha?",
                     fontSize = 12.sp,
                     color = Color.Gray,
                     modifier = Modifier.clickable {
-                        //navController.navigate(Screen.RedefinirSenha.route )
-                        }
+                        // Lógica futura para redefinir senha
+                    }
                 )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-            EspectraButton(text = "Entrar", onClick = { /* Lógica de Login */ })
+
+            EspectraButton(
+                text = if (viewModel.carregarDados) "Carregando..." else "Entrar",
+                onClick = {
+                    viewModel.realizarLogin(gerenciarSessao) {
+                        onNavegarParaHome()
+                    }
+                }
+            )
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Footer direcionando para o cadastro
             Row {
                 Text(text = "Não possui uma conta? ", color = Color.Gray, fontSize = 14.sp)
                 Text(
@@ -95,8 +105,9 @@ fun TelaLogin(
                     fontWeight = FontWeight.Bold,
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier.clickable {
-                        //navController.navigate(Screen.Cadastro.route)
-                        }
+                        viewModel.limparErros()
+                        onNavegarParaCadastro()
+                    }
                 )
             }
         }
