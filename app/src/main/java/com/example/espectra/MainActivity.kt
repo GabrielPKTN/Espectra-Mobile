@@ -15,6 +15,8 @@ import com.example.espectra.storage.GerenciarSessao
 import com.example.espectra.ui.screens.TelaLogin
 import com.example.espectra.ui.screens.TelaHome
 import com.example.espectra.ui.screens.TelaCadastro
+import com.example.espectra.ui.screens.TelaPerfilFamiliar
+import com.example.espectra.ui.screens.TelaRedefinirSenha
 import com.example.espectra.ui.theme.EspectraTheme
 import com.example.espectra.viewmodel.TelaLoginViewModel
 import com.example.espectra.viewmodel.TelaCadastroViewModel
