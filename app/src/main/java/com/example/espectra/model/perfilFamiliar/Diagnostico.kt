@@ -2,9 +2,14 @@ package com.example.espectra.model.perfilFamiliar
 
 import com.google.gson.annotations.SerializedName
 
+data class Diagnostico (
+     val id: Int,
+     val sigla: String,
 
-data class Diagnostico(
-    @SerializedName("sigla") val sigla: String,
-    @SerializedName("id_transtorno") val idTranstorno: Int,
-    @SerializedName("nome_completo") val nomeCompleto: String
+    @SerializedName("nome_completo_transtorno")
+    val nomeCompleto: String
+)
+
+data class DiagnosticoResponse(
+    val items: List<Diagnostico>
 )
