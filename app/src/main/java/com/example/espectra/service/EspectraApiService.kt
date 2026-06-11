@@ -1,6 +1,7 @@
 package com.example.espectra.service
 
 import com.example.espectra.model.*
+import com.example.espectra.model.usuario.RespostaAutenticacao
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

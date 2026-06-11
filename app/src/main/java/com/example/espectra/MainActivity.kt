@@ -16,13 +16,9 @@ import com.example.espectra.ui.screens.TelaLogin
 import com.example.espectra.ui.screens.TelaHome
 import com.example.espectra.ui.screens.TelaCadastro
 import com.example.espectra.ui.theme.EspectraTheme
-import com.example.espectra.viewmodel.TelaLoginViewModel
-import com.example.espectra.viewmodel.TelaCadastroViewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val loginViewModel: TelaLoginViewModel by viewModels()
-    private val cadastroViewModel: TelaCadastroViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
