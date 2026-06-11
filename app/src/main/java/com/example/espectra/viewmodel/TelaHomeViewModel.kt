@@ -66,8 +66,10 @@ class TelaHomeViewModel : ViewModel() {
                         tipoUsuarioLogado = apiResponse.items.tipoUsuario
 
                         // CORREÇÃO AQUI: Se 'familiares' vier nulo da API, ele assume uma lista vazia com segurança
-                        listaPacientes = apiResponse.items.familiares ?: emptyList()
+                        val novosPacientes = apiResponse.items.familiares ?: emptyList()
+                        listaPacientes = novosPacientes.toList()
 
+                        Log.i("pacientes:", "$listaPacientes")
                         Log.d("ESPECTRA_JSON", "Sucesso! Foram carregados ${listaPacientes.size} pacientes.")
                     } else {
                         erroMensagem = apiResponse.message ?: "Nenhum dado encontrado."

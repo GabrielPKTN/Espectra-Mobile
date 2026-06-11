@@ -11,31 +11,30 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import com.example.espectra.ui.screens.TelaCadastro
-import com.example.espectra.ui.screens.TelaEditarFamiliar
-import com.example.espectra.ui.screens.TelaHome
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.espectra.storage.GerenciarSessao
-import com.example.espectra.ui.screens.TelaLogin
-import com.example.espectra.ui.screens.TelaHome
-import com.example.espectra.ui.screens.TelaCadastro
 import com.example.espectra.ui.screens.TelaAdicionarFamiliar
-import com.example.espectra.ui.screens.TelaPerfilFamiliar
-import com.example.espectra.ui.screens.TelaRedefinirSenha
+import com.example.espectra.ui.screens.TelaCadastro
+import com.example.espectra.ui.screens.TelaHome
+import com.example.espectra.ui.screens.TelaLogin
 import com.example.espectra.ui.theme.EspectraTheme
-import com.example.espectra.viewmodel.TelaLoginViewModel
-import com.example.espectra.viewmodel.TelaCadastroViewModel
 import com.example.espectra.viewmodel.TelaAdicionarFamiliarViewModel
+import com.example.espectra.viewmodel.TelaCadastroViewModel
+import com.example.espectra.viewmodel.TelaHomeViewModel
+import com.example.espectra.viewmodel.TelaLoginViewModel
 
 class MainActivity : ComponentActivity() {
 
     private val loginViewModel: TelaLoginViewModel by viewModels()
     private val cadastroViewModel: TelaCadastroViewModel by viewModels()
+    private val homeViewModel: TelaHomeViewModel by viewModels()
+    private val TelaAdicionarFamiliarViewModel: TelaAdicionarFamiliarViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,31 +61,35 @@ class MainActivity : ComponentActivity() {
                                     onNavegarParaCadastro = { telaAtual = "cadastro" }
                                 )
                             }
+
                             "cadastro" -> {
                                 TelaCadastro(
                                     viewModel = cadastroViewModel,
                                     onNavegarParaLogin = { telaAtual = "login" }
                                 )
                             }
+
                             "home" -> {
                                 TelaHome(
                                     gerenciarSessao = gerenciarSessao,
                                     onLogout = {
                                         gerenciarSessao.limparSessao()
                                         telaAtual = "login"
-                                    }
-                                    // Dica: configure o botão de ir para o fluxo de familiar na sua TelaHome 
-                                    // chamando: { telaAtual = "adicionarFamiliar" }
+                                    },
+                                    onTelaAdicionarFamiliar = {
+                                        telaAtual = "adicionar_familiar"
+                                    },
+                                    viewModel = homeViewModel
                                 )
                             }
-                            "adicionarFamiliar" -> {
-                                val meuViewModel: TelaAdicionarFamiliarViewModel = viewModel(
-                                    factory = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-                                )
-                                TelaAdicionarFamiliar(
-                                    viewModel = meuViewModel, 
-                                    navController = navController
-                                )
+
+                            "adicionar_familiar" -> {
+                            TelaAdicionarFamiliar(
+                                onNavegarHome = {
+                                    telaAtual = "home"
+                                },
+                                viewModel = TelaAdicionarFamiliarViewModel
+                            )
                             }
                         }
                     }

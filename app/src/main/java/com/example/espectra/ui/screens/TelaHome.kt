@@ -22,7 +22,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.espectra.R
 import com.example.espectra.storage.GerenciarSessao
 import com.example.espectra.ui.components.Home.EspectraCardPaciente
@@ -34,12 +38,25 @@ import com.example.espectra.viewmodel.TelaHomeViewModel
 fun TelaHome(
     gerenciarSessao: GerenciarSessao,
     onLogout: () -> Unit,
+    onTelaAdicionarFamiliar: () -> Unit,
     viewModel: TelaHomeViewModel = viewModel()
 ) {
     var cardIdSelecionado by remember { mutableStateOf<Int?>(null) }
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(Unit) {
-        viewModel.carregarDadosDoPaciente(gerenciarSessao)
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                // Chama a sua requisição da API aqui
+                viewModel.carregarDadosDoPaciente(gerenciarSessao = gerenciarSessao)
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 
     // Container Principal: Todo branco conforme o protótipo final
@@ -196,7 +213,9 @@ fun TelaHome(
             ) {
                 EspectraButton(
                     text = "Adicionar paciente",
-                    onClick = { /* Rota para adicionar paciente */ },
+                    onClick = {
+                        onTelaAdicionarFamiliar()
+                    },
                     modifier = Modifier.fillMaxWidth()
                 )
             }

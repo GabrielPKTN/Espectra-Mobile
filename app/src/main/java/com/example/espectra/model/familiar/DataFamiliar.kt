@@ -15,3 +15,7 @@ data class ResponseFamiliar(
     val request_date: String,
     val items: List<Familiar>
 )
+
+data class ObjectTranstorno(
+    val id: Int
+)

@@ -9,6 +9,7 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.PartMap
 
 interface FamiliarService {
 
@@ -16,13 +17,7 @@ interface FamiliarService {
     @POST("v1/espectra/paciente/")
     suspend fun adicionarFamiliar(
         @Header("x-access-token") token: String,
-        @Part("nome") nome: RequestBody,
-        @Part("data_nascimento") dataNascimento: RequestBody,
-        @Part("id_serie_escolar") idSerieEscolar: RequestBody,
-        @Part("id_grau_suporte") idGrauSuporte: RequestBody,
-        @Part("diagnostico") diagnostico: RequestBody,
-        @Part("cpf") cpf: RequestBody,
-        @Part("id_responsavel") idResponsavel: RequestBody,
+        @PartMap dadosForm: Map<String, @JvmSuppressWildcards RequestBody>,
         @Part foto: MultipartBody.Part?
     )
 }

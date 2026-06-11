@@ -43,23 +43,16 @@ import com.example.espectra.viewmodel.TelaAdicionarFamiliarViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TelaAdicionarFamiliar(modifier: Modifier = Modifier, viewModel: TelaAdicionarFamiliarViewModel,
-    navController: NavHostController
+fun TelaAdicionarFamiliar(
+    modifier: Modifier = Modifier,
+    viewModel: TelaAdicionarFamiliarViewModel,
+    onNavegarHome: () -> Unit
 ) {
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) {
             uri: Uri? -> viewModel.onFotoChange(uri)
-    }
-
-    //Navegação para a tela Home
-    LaunchedEffect(viewModel.cadastroSucesso) {
-        if (viewModel.cadastroSucesso) {
-            navController.navigate("home") {
-                popUpTo("adicionar_familiar") { inclusive = true }
-            }
-        }
     }
 
     Column(
@@ -130,6 +123,7 @@ fun TelaAdicionarFamiliar(modifier: Modifier = Modifier, viewModel: TelaAdiciona
                 enabled = !viewModel.estaCarregando,
                 onClick = {
                     viewModel.salvarFamiliar()
+                    onNavegarHome()
                 }
             )
         }

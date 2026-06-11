@@ -29,6 +29,7 @@ interface EspectraApiService {
     ): Response<RespostaAutenticacao>
 
     // 3. ROTA DA HOME (BUSCAR PACIENTES) - CORRIGIDA 🚀
+//    @Headers("Cache-Control: no-cache")
     @GET("v1/espectra/usuario/home/{id}")
     suspend fun buscarPacientes(
         @Header("x-access-token") token: String, // Alterado para bater com o React/Backend

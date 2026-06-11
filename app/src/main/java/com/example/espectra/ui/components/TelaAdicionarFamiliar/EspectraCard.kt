@@ -1,6 +1,7 @@
 package com.example.espectra.ui.components.TelaAdicionarFamiliar
 
 import android.app.Application
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

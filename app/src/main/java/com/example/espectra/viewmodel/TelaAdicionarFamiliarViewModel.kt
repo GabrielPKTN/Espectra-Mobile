@@ -16,13 +16,17 @@ import android.app.Application
 import android.util.Log.e
 import androidx.lifecycle.viewModelScope
 import com.example.espectra.model.familiar.Familiar
+import com.example.espectra.model.familiar.ObjectTranstorno
 import com.example.espectra.service.RetrofitFactory
+import com.example.espectra.service.familiar.FamiliarService
 import com.example.espectra.storage.GerenciarSessao
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
@@ -44,6 +48,7 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
 
     var mensagemStatus: String? by mutableStateOf(null)
         private set
+
 
     var nome by mutableStateOf("")
         private set
@@ -297,46 +302,49 @@ class TelaAdicionarFamiliarViewModel(application: Application): AndroidViewModel
                 val apenasDigitosData = dataNascimento.filter { it.isDigit() }
                 val dataInvertidaParaAPI = apenasDigitosData.replace(Regex("(\\d{2})(\\d{2})(\\d{4})"), "$3-$2-$1")
 
-                val tokenHeader = "Bearer $tokenReal"
+                val tokenHeader = "$tokenReal"
 
                 val nomeBody = nome.toRequestBody("text/plain".toMediaTypeOrNull())
                 val dataBody = dataInvertidaParaAPI.toRequestBody("text/plain".toMediaTypeOrNull())
-                val serieBody = (serieEscolarSelecionada?.id ?: 0).toString().toRequestBody("text/plain".toMediaTypeOrNull())
-                val grauBody = (grauSuporteSelecionado?.id ?: 0).toString().toRequestBody("text/plain".toMediaTypeOrNull())
-                val diagnosticoBody = com.google.gson.Gson().toJson(diagnosticoSelecionado.map { it.id })
+                val serieBody = (serieEscolarSelecionada?.id ?: 0).toString().toRequestBody("application/json".toMediaTypeOrNull())
+                val grauBody = (grauSuporteSelecionado?.id ?: 0).toString().toRequestBody("application/json".toMediaTypeOrNull())
+                val diagnosticoBody = Gson().toJson(diagnosticoSelecionado.map { ObjectTranstorno(it.id) })
                     .toRequestBody("text/plain".toMediaTypeOrNull())
                 val cpfBody = cpf.toRequestBody("text/plain".toMediaTypeOrNull())
 
+
                 val responsavelBody = idUsuarioReal.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+
+                val dadosForm: HashMap<String, RequestBody> = hashMapOf(
+                    "nome" to nomeBody,
+                    "data_nascimento" to dataBody,
+                    "id_serie_escolar" to serieBody,
+                    "id_grau_suporte" to grauBody,
+                    "diagnostico" to diagnosticoBody,
+                    "cpf" to cpfBody,
+                    "id_responsavel" to responsavelBody
+                )
 
                 val fotoPart = withContext(Dispatchers.IO) {
                     fotoUri?.let { uri ->
                         val file = uriToFile(uri)
                         val tipoMime = context.contentResolver.getType(uri) ?: "image/jpeg"
-                        val requestFile = file.asRequestBody(tipoMime.toMediaTypeOrNull())
+                        val requestFile = file.readBytes().toRequestBody(tipoMime.toMediaTypeOrNull())
                         MultipartBody.Part.createFormData("foto", file.name, requestFile)
                     }
                 }
 
-                val response = withContext(Dispatchers.IO) {
-                    espectraService.adicionarFamiliar(
-                        token = tokenHeader,
-                        nome = nomeBody,
-                        dataNascimento = dataBody,
-                        idSerieEscolar = serieBody,
-                        idGrauSuporte = grauBody,
-                        diagnostico = diagnosticoBody,
-                        cpf = cpfBody,
-                        idResponsavel = responsavelBody,
-                        foto = fotoPart
-                    )
-                }
+                val response = RetrofitFactory().getEspectraService().adicionarFamiliar(
+                    token = tokenHeader,
+                    dadosForm = dadosForm,
+                    foto = fotoPart
+                )
 
                 mensagemStatus = "Familiar cadastrado com sucesso!"
                 cadastroSucesso = true
 
             } catch (e: Exception) {
-                android.util.Log.e("API_ESPECTRA", "Erro ao salvar", e)
+                e("API_ESPECTRA", "Erro ao salvar", e)
                 mensagemStatus = "Erro ao conectar: ${e.localizedMessage}"
                 cadastroSucesso = false
             } finally {
