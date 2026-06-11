@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -53,7 +54,7 @@ fun TelaPerfilUsuario(padding: PaddingValues) {
 
     val instrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
 
-    // Estados para os campos de texto (coloquei valores mockados baseados no seu design)
+    // Estados para os campos de texto
     var email by remember { mutableStateOf("antonio.almeida@email.com") }
     var telefone by remember { mutableStateOf("(11) 99999-9999") }
     var dataNascimento by remember { mutableStateOf("01/01/1980") }
@@ -61,6 +62,7 @@ fun TelaPerfilUsuario(padding: PaddingValues) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
+        // 1. Header Azul
         Column(
             modifier = Modifier
                 .background(colorResource(R.color.primary_color))
@@ -70,146 +72,199 @@ fun TelaPerfilUsuario(padding: PaddingValues) {
             Header(padding = padding, colorResource = Color.White)
         }
 
+        // 2. Coluna Principal de Conteúdo (Área Branca)
         Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
+            // Foto subindo metade para dentro do Header Azul
             Image(
                 painter = painterResource(R.drawable.responsavel),
                 contentDescription = "Foto do usuário",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(172.dp)
+                    .size(140.dp)
+                    .offset(y = (-70).dp)
                     .clip(CircleShape)
+                    .border(4.dp, Color.White, CircleShape)
             )
 
-            Spacer(Modifier.height(48.dp))
-
-            Text(
-                text = "ANTÔNIO ALMEIDA DA SILVA",
-                style = TextStyle(
-                    fontSize = 24.sp,
-                    fontFamily = instrumentSans,
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                    color = colorResource(R.color.primary_color)
-                )
-            )
-
-            Spacer(Modifier.height(48.dp))
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(y = (-40).dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                // Campo Email
-                TextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    readOnly = true,
-                    shape = RoundedCornerShape(16.dp),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Email,
-                            contentDescription = "Email",
-                            tint = colorResource(R.color.primary_color)
-                        )
-                    },
-                    modifier = Modifier.border(
-                        width = 1.dp,
-                        color = colorResource(R.color.primary_color),
-                        shape = RoundedCornerShape(16.dp)
-                    ),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color(233, 233, 233, 255),
-                        unfocusedContainerColor = Color(255, 255, 255, 255),
-                        disabledContainerColor = Color(255, 255, 255, 255),
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Red
+
+                Text(
+                    text = "ANTÔNIO ALMEIDA DA SILVA",
+                    style = TextStyle(
+                        fontSize = 24.sp,
+                        fontFamily = instrumentSans,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        color = colorResource(R.color.primary_color)
                     )
                 )
 
-                // Campo Telefone
-                TextField(
-                    value = telefone,
-                    onValueChange = { telefone = it },
-                    readOnly = true,
-                    shape = RoundedCornerShape(16.dp),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Phone,
-                            contentDescription = "Telefone",
-                            tint = colorResource(R.color.primary_color)
-                        )
-                    },
-                    modifier = Modifier.border(
-                        width = 1.dp,
-                        color = colorResource(R.color.primary_color),
-                        shape = RoundedCornerShape(16.dp)
-                    ),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color(255, 255, 255, 255),
-                        unfocusedContainerColor = Color(255, 255, 255, 255),
-                        disabledContainerColor = Color(255, 255, 255, 255),
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Red
+                // Espaço controlado entre o Nome e o primeiro Input
+                Spacer(Modifier.height(40.dp))
+
+                // Formulário com os Inputs
+                Column(
+                    //verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+
+                ) {
+
+                    Text(
+                        text = "E-mail",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontFamily = instrumentSans,
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.Bold,
+                            color = colorResource(R.color.primary_color)
+                        ),
+                        modifier = Modifier.padding(start = 12.dp)
                     )
-                )
-
-                // Campo Data de Nascimento
-                TextField(
-                    value = dataNascimento,
-                    onValueChange = { dataNascimento = it },
-                    readOnly = true,
-                    shape = RoundedCornerShape(16.dp),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.DateRange,
-                            contentDescription = "Data de Nascimento",
-                            tint = colorResource(R.color.primary_color)
+                    TextField(
+                        value = email,
+                        onValueChange = { email = it },
+                        readOnly = true,
+                        shape = RoundedCornerShape(16.dp),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Email,
+                                contentDescription = "Email",
+                                tint = colorResource(R.color.primary_color)
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth().border(
+                            width = 1.dp,
+                            color = colorResource(R.color.primary_color),
+                            shape = RoundedCornerShape(16.dp)
+                        ),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color(233, 233, 233, 255),
+                            unfocusedContainerColor = Color(255, 255, 255, 255),
+                            disabledContainerColor = Color(255, 255, 255, 255),
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent,
+                            errorIndicatorColor = Color.Red
                         )
-                    },
-                    modifier = Modifier.border(
-                        width = 1.dp,
-                        color = colorResource(R.color.primary_color),
-                        shape = RoundedCornerShape(16.dp)
-                    ),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color(255, 255, 255, 255),
-                        unfocusedContainerColor = Color(255, 255, 255, 255),
-                        disabledContainerColor = Color(255, 255, 255, 255),
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Red
                     )
-                )
-            }
+                    Spacer(Modifier.height(12.dp))
+                    // Campo Telefone
+                    Text(
+                        text = "Telefone",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontFamily = instrumentSans,
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.Bold,
+                            color = colorResource(R.color.primary_color)
+                        ),
+                        modifier = Modifier.padding(start = 12.dp)
+                    )
+                    TextField(
+                        value = telefone,
+                        onValueChange = { telefone = it },
+                        readOnly = true,
+                        shape = RoundedCornerShape(16.dp),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Phone,
+                                contentDescription = "Telefone",
+                                tint = colorResource(R.color.primary_color)
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth().border(
+                            width = 1.dp,
+                            color = colorResource(R.color.primary_color),
+                            shape = RoundedCornerShape(16.dp)
+                        ),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color(255, 255, 255, 255),
+                            unfocusedContainerColor = Color(255, 255, 255, 255),
+                            disabledContainerColor = Color(255, 255, 255, 255),
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent,
+                            errorIndicatorColor = Color.Red
+                        )
+                    )
 
-            Spacer(Modifier.height(48.dp))
+                    Spacer(Modifier.height(12.dp))
+                    // Campo Data de Nascimento
+                    Text(
+                        text = "Data de Nascimento",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontFamily = instrumentSans,
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.Bold,
+                            color = colorResource(R.color.primary_color)
+                        ),
+                        modifier = Modifier.padding(start = 12.dp)
+                    )
+                    TextField(
+                        value = dataNascimento,
+                        onValueChange = { dataNascimento = it },
+                        readOnly = true,
+                        shape = RoundedCornerShape(16.dp),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.DateRange,
+                                contentDescription = "Data de Nascimento",
+                                tint = colorResource(R.color.primary_color)
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth().border(
+                            width = 1.dp,
+                            color = colorResource(R.color.primary_color),
+                            shape = RoundedCornerShape(16.dp)
+                        ),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color(255, 255, 255, 255),
+                            unfocusedContainerColor = Color(255, 255, 255, 255),
+                            disabledContainerColor = Color(255, 255, 255, 255),
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent,
+                            errorIndicatorColor = Color.Red
+                        )
+                    )
+                }
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                EspectraButton(
-                    text = "Editar informações pessoais",
-                    onClick = {},
-                    modifier = Modifier.width(300.dp),
-                    buttonColor = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    corLetra = colorResource(R.color.primary_color)
-                )
+                // Espaço entre o formulário e os botões
+                Spacer(Modifier.height(40.dp))
 
-                EspectraButton(
-                    text = "Excluir perfil",
-                    onClick = {},
-                    modifier = Modifier.width(300.dp)
-                )
+                // Botões de Ação
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    EspectraButton(
+                        text = "Editar informações pessoais",
+                        onClick = {},
+                        modifier = Modifier.width(300.dp),
+                        buttonColor = ButtonDefaults.buttonColors(containerColor = Color.White),
+                        corLetra = colorResource(R.color.primary_color)
+                    )
+
+                    EspectraButton(
+                        text = "Excluir perfil",
+                        onClick = {},
+                        modifier = Modifier.width(300.dp)
+                    )
+                }
             }
         }
     }
