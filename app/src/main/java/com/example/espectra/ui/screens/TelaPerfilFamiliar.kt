@@ -74,7 +74,8 @@ fun TelaPerfilFamiliar(
     navController: NavController,
     viewModel: PerfilViewModel,
     gerenciarSessao: GerenciarSessao,
-    idPaciente: Int
+    idPaciente: Int,
+    onHabilidadeClicada: (Int) -> Unit
 ) {
 
     val corSocializacao         = Color(162, 226, 137, 255)
@@ -195,6 +196,7 @@ fun TelaPerfilFamiliar(
 
 
                 val modelProducer = remember { CartesianChartModelProducer() }
+
                 val columnProvider = ColumnCartesianLayer.ColumnProvider.series(
                     rememberLineComponent(fill = Fill(corSocializacao), thickness = 10.dp),
                     rememberLineComponent(fill = Fill(corLinguagem), thickness = 10.dp),
@@ -282,11 +284,20 @@ fun TelaPerfilFamiliar(
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            ButtonHabilidade(cor = corSocializacao, nomeHabilidade = "Socialização", 1)
-            ButtonHabilidade(cor = corLinguagem, nomeHabilidade = "Linguagem", 2)
-            ButtonHabilidade(cor = corCognicao, nomeHabilidade = "Cognição", 3)
-            ButtonHabilidade(cor = corAutoCuidados, nomeHabilidade = "Auto-Cuidados", 4)
-            ButtonHabilidade(cor = corDesenvolvimentoMotor, nomeHabilidade = "Desenvolvimento motor", 5)
+            ButtonHabilidade(cor = corSocializacao, nomeHabilidade = "Socialização", 1, onClick = { idClicado -> onHabilidadeClicada(idClicado) })
+
+            ButtonHabilidade(cor = corLinguagem, nomeHabilidade = "Linguagem", 2, onClick = { idClicado ->
+                onHabilidadeClicada(idClicado)
+            })
+            ButtonHabilidade(cor = corCognicao, nomeHabilidade = "Cognição", 3, onClick = { idClicado ->
+                onHabilidadeClicada(idClicado)
+            })
+            ButtonHabilidade(cor = corAutoCuidados, nomeHabilidade = "Auto-Cuidados", 4, onClick = { idClicado ->
+                onHabilidadeClicada(idClicado)
+            })
+            ButtonHabilidade(cor = corDesenvolvimentoMotor, nomeHabilidade = "Desenvolvimento motor", 5, onClick = { idClicado ->
+                onHabilidadeClicada(idClicado)
+            })
         }
 
         Row(

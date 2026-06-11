@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.util.Logger
 import com.example.espectra.storage.GerenciarSessao
 import com.example.espectra.ui.screens.TelaAdicionarFamiliar
+import com.example.espectra.ui.screens.TelaAtividadesEmAndamento
 import com.example.espectra.ui.screens.TelaCadastro
 import com.example.espectra.ui.screens.TelaHome
 import com.example.espectra.ui.screens.TelaLogin
@@ -58,6 +59,8 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
 
                     var idPacienteSelecionado by remember {mutableStateOf<Int?>(null)}
+                    var idHabilidadeClicada by remember {mutableStateOf<Int?>(null)}
+                    var idAtividadeClicada by remember {mutableStateOf<Int?>(null)}
 
                     Box(modifier = Modifier.padding(innerPadding)) {
                         when (telaAtual) {
@@ -113,10 +116,35 @@ class MainActivity : ComponentActivity() {
                                         navController = navController,
                                         viewModel = TelaPerfilFamiliarViewModel,
                                         gerenciarSessao = gerenciarSessao,
-                                        idPaciente = id
+                                        idPaciente = id,
+                                        onHabilidadeClicada = { idHabilidade ->
+                                            idHabilidadeClicada = idHabilidade
+                                            telaAtual = "atividades_cadastradas"
+                                        }
                                     )
 
                                 }
+                            }
+
+                            "atividades_cadastradas" -> {
+
+                                idHabilidadeClicada?.let {id ->
+
+                                    Log.i("idHabilidade", "$id")
+                                    Log.i("idPaciente", "$idPacienteSelecionado")
+
+                                    TelaAtividadesEmAndamento(
+                                        gerenciarSessao = gerenciarSessao,
+                                        idPaciente = idPacienteSelecionado!!,
+                                        idHabiblidade = id,
+                                        onHistoricoClicado = {id ->
+                                            idAtividadeClicada = id
+                                            telaAtual = "historico-tentativas"
+                                        }
+                                    )
+
+                                }
+
                             }
                         }
                     }

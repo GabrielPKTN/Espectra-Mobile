@@ -21,17 +21,17 @@ import com.example.espectra.R
 
 @Composable
 fun ButtonHabilidade(
-    cor: Color, nomeHabilidade: String,
-    id: Int
+    cor: Color,
+    nomeHabilidade: String,
+    id: Int,
+    onClick: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
     ) {
         Button(
-            onClick = {
-
-            },
+            onClick = { onClick(id) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp),
