@@ -26,7 +26,13 @@ class MainActivity : ComponentActivity() {
                   // TelaRedefinirSenha()
                     //TelaHome()
 
-                    TelaAtividadesEmAndamento()
+                    TelaAtividadesEmAndamento(
+                        token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsImlhdCI6MTc3OT" +
+                                "QwNDkyNywiZXhwIjoxMDAwMDE3Nzk0MDQ5Mjd9.Q947YnrmuHIp7VEHcrCC_79lToUf" +
+                                "kfrNGwSMFjPkoHo",
+                        idPaciente = 1,
+                        idHabiblidade = 1
+                    )
                 }
             }
         }
