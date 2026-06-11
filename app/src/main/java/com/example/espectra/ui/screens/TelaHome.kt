@@ -39,7 +39,9 @@ fun TelaHome(
     gerenciarSessao: GerenciarSessao,
     onLogout: () -> Unit,
     onTelaAdicionarFamiliar: () -> Unit,
-    viewModel: TelaHomeViewModel = viewModel()
+    onPacienteClicado: (Int) -> Unit,
+    viewModel: TelaHomeViewModel = viewModel(),
+    navController: NavController
 ) {
     var cardIdSelecionado by remember { mutableStateOf<Int?>(null) }
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -197,7 +199,9 @@ fun TelaHome(
                                 EspectraCardPaciente(
                                     paciente = paciente,
                                     selecionado = false,
-                                    onClick = { cardIdSelecionado = paciente.id }
+                                    onClick = {
+                                        onPacienteClicado(paciente.id)
+                                    }
                                 )
                             }
                         }
@@ -219,6 +223,7 @@ fun TelaHome(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
+
         }
     }
 }

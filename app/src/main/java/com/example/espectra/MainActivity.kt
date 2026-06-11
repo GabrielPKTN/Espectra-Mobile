@@ -2,6 +2,7 @@ package com.example.espectra
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -18,12 +19,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import coil.util.Logger
 import com.example.espectra.storage.GerenciarSessao
 import com.example.espectra.ui.screens.TelaAdicionarFamiliar
 import com.example.espectra.ui.screens.TelaCadastro
 import com.example.espectra.ui.screens.TelaHome
 import com.example.espectra.ui.screens.TelaLogin
+import com.example.espectra.ui.screens.TelaPerfilFamiliar
 import com.example.espectra.ui.theme.EspectraTheme
+import com.example.espectra.viewmodel.PerfilViewModel
 import com.example.espectra.viewmodel.TelaAdicionarFamiliarViewModel
 import com.example.espectra.viewmodel.TelaCadastroViewModel
 import com.example.espectra.viewmodel.TelaHomeViewModel
@@ -35,6 +39,8 @@ class MainActivity : ComponentActivity() {
     private val cadastroViewModel: TelaCadastroViewModel by viewModels()
     private val homeViewModel: TelaHomeViewModel by viewModels()
     private val TelaAdicionarFamiliarViewModel: TelaAdicionarFamiliarViewModel by viewModels()
+    private val TelaPerfilFamiliarViewModel: PerfilViewModel by viewModels()
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +56,8 @@ class MainActivity : ComponentActivity() {
                     // Sistema de navegação baseado no estado da develop
                     var telaAtual by remember { mutableStateOf("login") }
                     val navController = rememberNavController()
+
+                    var idPacienteSelecionado by remember {mutableStateOf<Int?>(null)}
 
                     Box(modifier = Modifier.padding(innerPadding)) {
                         when (telaAtual) {
@@ -79,17 +87,36 @@ class MainActivity : ComponentActivity() {
                                     onTelaAdicionarFamiliar = {
                                         telaAtual = "adicionar_familiar"
                                     },
-                                    viewModel = homeViewModel
+                                    viewModel = homeViewModel,
+                                    navController = navController,
+                                    onPacienteClicado = { id ->
+                                        idPacienteSelecionado = id
+                                        telaAtual = "perfil_familiar"
+                                    }
                                 )
                             }
 
                             "adicionar_familiar" -> {
-                            TelaAdicionarFamiliar(
-                                onNavegarHome = {
-                                    telaAtual = "home"
-                                },
-                                viewModel = TelaAdicionarFamiliarViewModel
-                            )
+                                TelaAdicionarFamiliar(
+                                    onNavegarHome = {
+                                        telaAtual = "home"
+                                    },
+                                    viewModel = TelaAdicionarFamiliarViewModel
+                                )
+                            }
+
+                            "perfil_familiar" -> {
+
+                                idPacienteSelecionado?.let { id ->
+
+                                    TelaPerfilFamiliar(
+                                        navController = navController,
+                                        viewModel = TelaPerfilFamiliarViewModel,
+                                        gerenciarSessao = gerenciarSessao,
+                                        idPaciente = id
+                                    )
+
+                                }
                             }
                         }
                     }

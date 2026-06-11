@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.espectra.R
+import com.example.espectra.storage.GerenciarSessao
 import com.example.espectra.ui.components.perfilPaciente.ButtonHabilidade
 import com.example.espectra.ui.components.perfilPaciente.ColunaLegenda
 import com.example.espectra.ui.components.perfilPaciente.HeaderPerfil
@@ -70,9 +71,9 @@ import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 
 @Composable
 fun TelaPerfilFamiliar(
-    //navController: NavController,
-    viewModel: PerfilViewModel = viewModel(),
-    token: String,
+    navController: NavController,
+    viewModel: PerfilViewModel,
+    gerenciarSessao: GerenciarSessao,
     idPaciente: Int
 ) {
 
@@ -84,9 +85,12 @@ fun TelaPerfilFamiliar(
 
     val instrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
 
+    val token = gerenciarSessao.buscarToken()
 
-    LaunchedEffect(token, idPaciente) {
-        viewModel.buscarPerfil(idPaciente, token)
+    LaunchedEffect(idPaciente, token) {
+
+        viewModel.buscarPerfil(idPaciente, token!!)
+
     }
 
     val perfil = viewModel.perfil
