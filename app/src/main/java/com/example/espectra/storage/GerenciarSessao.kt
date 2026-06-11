@@ -5,7 +5,8 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
 class GerenciarSessao(contexto: Context) {
-    private val chaveMestra =MasterKey.Builder(contexto)
+
+    protected val chaveMestra =MasterKey.Builder(contexto)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
         .build()
     private val preferenciasCompartilhadas = EncryptedSharedPreferences.create(

@@ -43,7 +43,8 @@ class TelaLoginViewModel : ViewModel() {
         emailErro = null
         senhaErro = null
     }
-        fun realizarLogin(gerenciarSessao: GerenciarSessao, onSuccess: () -> Unit) {
+
+    fun realizarLogin(gerenciarSessao: GerenciarSessao, onSuccess: () -> Unit) {
         val emailLimpo = email.trim()
         val senhaLimpa = senha.trim()
 
@@ -64,23 +65,25 @@ class TelaLoginViewModel : ViewModel() {
 
                 if (response.isSuccessful && response.body()?.sucesso == true) {
                     val corpoResposta = response.body()
-                    val token = corpoResposta?.token
+                    val tokenRaw = corpoResposta?.token
                     val idUsuario = corpoResposta?.idUsuario ?: 0
 
-                    if (token != null && idUsuario != 0) {
-                        gerenciarSessao.salvarSessao(token, idUsuario)
+                    if (tokenRaw != null && idUsuario != 0) {
+                        // GARANTIA: Remove espaços e quebras que o JSON do back possa ter enviado de brinde
+                        val tokenTratado = tokenRaw.trim().replace("\n", "").replace("\r", "")
 
-                        //comentar linha de baixo depois
-                        android.util.Log.d("TOKEN_TESTE", "O token recuperado é: ${gerenciarSessao.buscarToken()}")
+                        gerenciarSessao.salvarSessao(tokenTratado, idUsuario)
+
+                        android.util.Log.d(
+                            "TOKEN_TESTE",
+                            "Novo token salvo com sucesso para o ID: $idUsuario"
+                        )
                         onSuccess()
                     } else {
                         emailErro = "Erro: Dados de sessão inválidos (Token ou ID nulos)."
                     }
                 } else {
-                    // CORREÇÃO AQUI: Se o servidor rejeitou (401), pegamos a resposta real dele
                     val erroDoServidor = response.errorBody()?.string()
-
-                    // Exibe o erro real vindo do backend na tela para você diagnosticar
                     emailErro = if (!erroDoServidor.isNullOrBlank()) {
                         "Erro do Servidor (${response.code()}): $erroDoServidor"
                     } else {

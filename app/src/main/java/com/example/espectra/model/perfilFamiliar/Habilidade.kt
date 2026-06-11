@@ -8,4 +8,3 @@ data class Habilidade (
     @SerializedName("idade_meses")
     val valorMeses: Int
 )
-
