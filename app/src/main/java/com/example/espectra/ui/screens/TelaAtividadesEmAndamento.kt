@@ -77,14 +77,13 @@ fun TelaAtividadesEmAndamento(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFFFFFFF)),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
@@ -144,7 +143,8 @@ fun TelaAtividadesEmAndamento(
                     item {
                         Text(
                             text = "Nenhuma atividade em andamento",
-                            fontSize = 20.sp
+                            fontSize = 20.sp,
+                            color = Color.Red
                         )
                     }
                 }else{
@@ -187,7 +187,8 @@ fun TelaAtividadesEmAndamento(
                     item {
                         Text(
                             text = "Não existem atividades Concluídas",
-                            fontSize = 20.sp
+                            fontSize = 20.sp,
+                            color = Color.Red
                         )
                     }
                 }else {
