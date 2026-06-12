@@ -51,10 +51,26 @@ fun TelaAtividadesEmAndamento(
     onHistoricoClicado: (Int) -> Unit
 ) {
 
+    val corHabilidade = when (idHabiblidade) {
+        1 -> Color(0xFFA2E289) // Socialização
+        2 -> Color(0xFFFFC87B) // Linguagem
+        3 -> Color(0xFF71AFFF) // Cognição
+        4 -> Color(0xFFD293F0) // Auto-Cuidados
+        5 -> Color(0xFFC8C8C8) // Desenvolvimento Motor
+        else -> Color.Gray
+    }
+
+    val nomeHabilidade = when (idHabiblidade) {
+        1 -> "Socialização"
+        2 -> "Linguagem"
+        3 -> "Cognição"
+        4 -> "Auto-Cuidados"
+        5 -> "Desenvolvimento Motor"
+        else -> ""
+    }
+
     val instrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
     val inclusiveSans = FontFamily(Font(R.font.inclusivesans_variablefont_wght))
-
-    val nomeHabilidade by remember {mutableStateOf("Socialização")}
 
     val atividadesConcluidas = viewModel.atividadesConcluidas
 
@@ -62,20 +78,6 @@ fun TelaAtividadesEmAndamento(
 
     val token = gerenciarSessao.buscarToken()
 
-    Log.i("FLUXO", "TelaAtividades iniciou")
-    Log.i("FLUXO", "Paciente: $idPaciente")
-    Log.i("FLUXO", "Habilidade: $idHabiblidade")
-    Log.i("FLUXO", "Token: $token")
-
-    Log.d(
-        "ATIVIDADES",
-        "Concluídas: ${Gson().toJson(atividadesConcluidas)}"
-    )
-
-    Log.d(
-        "ATIVIDADES",
-        "Em andamento: ${Gson().toJson(atividadesAndamento)}"
-    )
 
     LaunchedEffect(token, idPaciente, idHabiblidade) {
         viewModel.buscarAtividades(token!!, idPaciente, idHabiblidade)
@@ -91,7 +93,7 @@ fun TelaAtividadesEmAndamento(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp),
+                .padding(horizontal = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
@@ -119,7 +121,8 @@ fun TelaAtividadesEmAndamento(
                     text = nomeHabilidade,
                     fontSize = 24.sp,
                     textAlign = TextAlign.Center,
-                    fontFamily = instrumentSans
+                    fontFamily = instrumentSans,
+                    color = corHabilidade
                 )
             }
         }

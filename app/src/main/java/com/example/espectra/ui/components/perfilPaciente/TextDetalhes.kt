@@ -37,12 +37,12 @@ fun TextDetalhes(
     val trechoEscolar = if (serieEscolar == "CONCLUÍDO") {
         ""
     } else {
-        " está no $serieEscolar e"
+        " está no $serieEscolar e "
     }
 
     Text(
         text = "$nome nasceu em $dataNascimento," +
-                " tem $idade anos, está no $trechoEscolar e " +
+                " tem $idade anos,$trechoEscolar" +
                 "possui diagnóstico de $textoDiagnosticos com " +
                 "grau de suporte $grauSuporte.",
 
