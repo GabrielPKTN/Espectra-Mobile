@@ -62,6 +62,11 @@ fun TelaAtividadesEmAndamento(
 
     val token = gerenciarSessao.buscarToken()
 
+    Log.i("FLUXO", "TelaAtividades iniciou")
+    Log.i("FLUXO", "Paciente: $idPaciente")
+    Log.i("FLUXO", "Habilidade: $idHabiblidade")
+    Log.i("FLUXO", "Token: $token")
+
     Log.d(
         "ATIVIDADES",
         "Concluídas: ${Gson().toJson(atividadesConcluidas)}"

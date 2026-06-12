@@ -25,6 +25,6 @@ data class ResponseAtividades(
     val development: String,
     val api_description: String,
     val request_date: String,
-    val items: List<Atividade>
+    val items: List<Atividade>?
 
 )

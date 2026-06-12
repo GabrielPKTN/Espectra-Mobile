@@ -31,18 +31,18 @@ class TelaAtividadesViewModel : ViewModel() {
                 .getAtividades(token, idPaciente, idHabilidade)
 
 
-            Log.d("API_PERFIL", Gson().toJson(result.items))
+            Log.d("API_ATIVIDADE", Gson().toJson(result.items))
 
-            _atividades = result.items
+            _atividades = result.items ?: emptyList()
         }catch (error: HttpException) {
 
             Log.e(
-                "API_PERFIL",
+                "API_ATIVIDADE",
                 "HTTP ${error.code()} - ${error.message()}"
             )
 
             Log.e(
-                "API_PERFIL",
+                "API_ATIVIDADE",
                 "Body: ${error.response()?.errorBody()?.string()}"
             )
 
@@ -51,7 +51,7 @@ class TelaAtividadesViewModel : ViewModel() {
         } catch (error: Exception) {
 
             Log.e(
-                "API_PERFIL",
+                "API_ATIVIDADE",
                 "Erro genérico",
                 error
             )
