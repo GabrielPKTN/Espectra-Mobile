@@ -91,6 +91,16 @@ fun TelaHistoricoTentativa(
     val total = viewModelTentativa.listTotal
     val erro = viewModelTentativa.listErro
 
+    Log.d(
+        "TELA HISTORICO",
+        "atividade=${viewModelAtividade.atividade}"
+    )
+
+    Log.d(
+        "TELA HISTORICO",
+        "tentativas=${viewModelTentativa.tentativas.size}"
+    )
+
     val isLoading = tentativas.isEmpty() || atividade == null
 
     var tentativaSelecionada by remember { mutableStateOf<Tentativa?>(null) }

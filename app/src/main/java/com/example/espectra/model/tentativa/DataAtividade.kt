@@ -3,7 +3,7 @@ package com.example.espectra.model.tentativa
 data class Atividade(
 
     val concluida: Int,
-    val habilidade: List<Habilidade>,
+    val habilidade: Habilidade,
     val id_paciente: Int,
     val id_atividade: Int,
     val comportamento: String,

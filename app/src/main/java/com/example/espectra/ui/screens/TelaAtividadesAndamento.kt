@@ -122,7 +122,8 @@ fun TelaAtividadesEmAndamento(
                     fontSize = 24.sp,
                     textAlign = TextAlign.Center,
                     fontFamily = instrumentSans,
-                    color = corHabilidade
+                    color = corHabilidade,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
@@ -130,8 +131,7 @@ fun TelaAtividadesEmAndamento(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp),
-            //verticalArrangement = Arrangement.spacedBy(24.dp)
+                .padding(horizontal = 12.dp)
         ) {
             Text(
                 text = "Atividades em Andamento:",

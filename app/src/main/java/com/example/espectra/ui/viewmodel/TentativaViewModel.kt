@@ -43,6 +43,8 @@ class TentativaViewModel : ViewModel() {
 
                 )
 
+            Log.d("TELA HISTORICO", "Resposta completa = $result")
+
             _tentativas = result.items
 
             var datasNonFormatted = _tentativas.map {

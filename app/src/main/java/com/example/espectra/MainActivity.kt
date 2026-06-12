@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import coil.util.Logger
 import com.example.espectra.storage.GerenciarSessao
+import com.example.espectra.ui.screens.HistoricoTentativa.TelaHistoricoTentativa
 import com.example.espectra.ui.screens.TelaAdicionarFamiliar
 import com.example.espectra.ui.screens.TelaAtividadesEmAndamento
 import com.example.espectra.ui.screens.TelaCadastro
@@ -144,7 +145,21 @@ class MainActivity : ComponentActivity() {
                                     )
 
                                 }
+                            }
 
+                            "historico-tentativas" -> {
+                                idAtividadeClicada?.let { id ->
+
+                                    Log.i("idAtividade", "$id")
+                                    Log.i("idPaciente", "$idPacienteSelecionado")
+
+                                    TelaHistoricoTentativa(
+                                        padding = innerPadding,
+                                        idAtividade = id,
+                                        idUsuario = gerenciarSessao.buscarIdUsuario(),
+                                        token = gerenciarSessao.buscarToken() ?: ""
+                                    )
+                                }
                             }
                         }
                     }
