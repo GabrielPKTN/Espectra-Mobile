@@ -13,6 +13,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.example.espectra.storage.GerenciarSessao
 import com.example.espectra.ui.screens.TelaLogin
+import com.example.espectra.ui.screens.TelaPerfilFamiliar
+import com.example.espectra.ui.screens.TelaPerfilUsuario
 import com.example.espectra.ui.theme.EspectraTheme
 import com.example.espectra.viewmodel.TelaLoginViewModel
 
@@ -30,32 +32,37 @@ class MainActivity : ComponentActivity() {
             EspectraTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                    var telaAtual by remember {
-                        mutableStateOf(if (gerenciarSessao.buscarToken() != null) "home" else "login")
+                    // 🚀 SOLUÇÃO: Envolvemos a tela de perfil em um Box para aplicar o padding corretamente
+                    Box(modifier = Modifier.padding(innerPadding)) {
+                        TelaPerfilUsuario()
                     }
 
-                    Box(modifier = Modifier.padding(innerPadding)) {
-                        when (telaAtual) {
-                            "login" -> {
-                                TelaLogin(
-                                    viewModel = loginViewModel,
-                                    gerenciarSessao = gerenciarSessao,
-                                    onNavegarParaHome = {
-                                        telaAtual = "home"
-                                    }
-                                )
-                            }
-                            "home" -> {
-                                //TelaHomePaciente(
-                                   // gerenciarSessao = gerenciarSessao,
-                                   // onLogout = {
-                                      //  gerenciarSessao.limparSessao()
-                                      //  telaAtual = "login"
-                                   // }
-                                //)
-                            }
-                        }
-                    }
+//                    var telaAtual by remember {
+//                        mutableStateOf(if (gerenciarSessao.buscarToken() != null) "home" else "login")
+//                    }
+//
+//                    Box(modifier = Modifier.padding(innerPadding)) {
+//                        when (telaAtual) {
+//                            "login" -> {
+//                                TelaLogin(
+//                                    viewModel = loginViewModel,
+//                                    gerenciarSessao = gerenciarSessao,
+//                                    onNavegarParaHome = {
+//                                        telaAtual = "home"
+//                                    }
+//                                )
+//                            }
+//                            "home" -> {
+//                                //TelaHomePaciente(
+//                                   // gerenciarSessao = gerenciarSessao,
+//                                   // onLogout = {
+//                                      //  gerenciarSessao.limparSessao()
+//                                      //  telaAtual = "login"
+//                                   // }
+//                                //)
+//                            }
+//                        }
+//                    }
                 }
             }
         }
