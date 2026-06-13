@@ -46,7 +46,8 @@ import com.example.espectra.viewmodel.TelaAdicionarFamiliarViewModel
 fun TelaAdicionarFamiliar(
     modifier: Modifier = Modifier,
     viewModel: TelaAdicionarFamiliarViewModel,
-    onNavegarHome: () -> Unit
+    onNavegarHome: () -> Unit,
+    onVoltar: () -> Unit
 ) {
 
     val launcher = rememberLauncherForActivityResult(
@@ -114,7 +115,7 @@ fun TelaAdicionarFamiliar(
                 text = "Cancelar",
                 modifier = Modifier
                     .weight(1f),
-                onClick = {}
+                onClick = onVoltar
             )
 
             EspectraButtonAdicionarFamiliarBlue(

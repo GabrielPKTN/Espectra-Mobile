@@ -105,7 +105,10 @@ class MainActivity : ComponentActivity() {
                                     onNavegarHome = {
                                         telaAtual = "home"
                                     },
-                                    viewModel = TelaAdicionarFamiliarViewModel
+                                    viewModel = TelaAdicionarFamiliarViewModel,
+                                    onVoltar = {
+                                        telaAtual = "home"
+                                    }
                                 )
                             }
 
@@ -114,13 +117,16 @@ class MainActivity : ComponentActivity() {
                                 idPacienteSelecionado?.let { id ->
 
                                     TelaPerfilFamiliar(
-                                        navController = navController,
                                         viewModel = TelaPerfilFamiliarViewModel,
                                         gerenciarSessao = gerenciarSessao,
                                         idPaciente = id,
                                         onHabilidadeClicada = { idHabilidade ->
                                             idHabilidadeClicada = idHabilidade
                                             telaAtual = "atividades_cadastradas"
+                                        },
+
+                                        onVoltar = {
+                                            telaAtual = "home"
                                         }
                                     )
 
@@ -141,6 +147,10 @@ class MainActivity : ComponentActivity() {
                                         onHistoricoClicado = {id ->
                                             idAtividadeClicada = id
                                             telaAtual = "historico-tentativas"
+                                        },
+
+                                        onVoltar = {
+                                            telaAtual = "perfil_familiar"
                                         }
                                     )
 

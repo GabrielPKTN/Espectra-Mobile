@@ -1,4 +1,5 @@
 package com.example.espectra.ui.components.perfilPaciente
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,8 +22,11 @@ import com.example.espectra.R
 @Composable
 fun HeaderPerfil(
     fotoPerfil: String?,
-    //navController: NavController
+    onVoltar: () -> Unit
 ) {
+
+
+    Log.d("FOTO DATA", "fotoPerfil = '$fotoPerfil'")
 
     Box(
         modifier = Modifier
@@ -47,9 +51,8 @@ fun HeaderPerfil(
             ) {
 
                 IconButton(
-                    onClick = {
-                        //navController.popBackStack()
-                    }
+                    onClick = onVoltar
+
                 ) {
                     Image(
                         painter = painterResource(R.drawable.arrow_back),

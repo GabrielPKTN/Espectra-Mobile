@@ -48,7 +48,8 @@ fun TelaAtividadesEmAndamento(
     gerenciarSessao: GerenciarSessao,
     idPaciente: Int,
     idHabiblidade: Int,
-    onHistoricoClicado: (Int) -> Unit
+    onHistoricoClicado: (Int) -> Unit,
+    onVoltar: () -> Unit
 ) {
 
     val corHabilidade = when (idHabiblidade) {
@@ -104,7 +105,8 @@ fun TelaAtividadesEmAndamento(
             ) {
                 //Adicionar click para voltar a tela anterior
                 IconButton(
-                    onClick = {}
+                    onClick = onVoltar
+
                 ) {
                     Image(
                         painter = painterResource(R.drawable.arrow_back),

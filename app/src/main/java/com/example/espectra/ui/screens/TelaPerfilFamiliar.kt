@@ -71,7 +71,7 @@ import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 
 @Composable
 fun TelaPerfilFamiliar(
-    navController: NavController,
+    onVoltar: () -> Unit,
     viewModel: PerfilViewModel,
     gerenciarSessao: GerenciarSessao,
     idPaciente: Int,
@@ -99,7 +99,7 @@ fun TelaPerfilFamiliar(
     val grafico = perfil?.grafico ?: emptyList()
     val exibirGrafico = grafico.any { it.valorMeses > 0 }
 
-    Log.d("grafico", exibirGrafico.toString())
+
 
 
     Column(
@@ -111,8 +111,8 @@ fun TelaPerfilFamiliar(
 
     ) {
         perfil?.let { perfil ->
-            HeaderPerfil(perfil.foto, //navController)
-            )
+            HeaderPerfil(perfil.foto, onVoltar)
+
         }
 
         Column(
