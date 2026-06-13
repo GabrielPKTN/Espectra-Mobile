@@ -45,7 +45,8 @@ fun ColunaLegenda(modifier: Modifier = Modifier) {
                 Font(R.font.instrumentsans_variablefont_wdth_wght)
             ),
             fontWeight = FontWeight.SemiBold,
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            color = Color.Black
 
         )
 

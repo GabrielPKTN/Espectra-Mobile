@@ -38,7 +38,9 @@ fun EspectraTextField(
             unfocusedBorderColor = Color(0xFFDCDCDC),
             cursorColor = Color(0xFF2B78D6),
             focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White
+            unfocusedContainerColor = Color.White,
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.Black
         )
     )
 }

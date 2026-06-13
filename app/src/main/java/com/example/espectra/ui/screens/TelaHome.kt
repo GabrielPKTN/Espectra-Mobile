@@ -98,7 +98,7 @@ fun TelaHome(
 
 
                 Image(
-                    painter = painterResource(id = R.drawable.foto_paciente),
+                    painter = painterResource(id = R.drawable.default_photo),
                     contentDescription = "Foto de perfil do paciente",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
