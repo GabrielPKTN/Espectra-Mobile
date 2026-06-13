@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -75,7 +77,7 @@ fun TelaPerfilFamiliar(
     viewModel: PerfilViewModel,
     gerenciarSessao: GerenciarSessao,
     idPaciente: Int,
-    onHabilidadeClicada: (Int) -> Unit
+    onHabilidadeClicada: (Int) -> Unit,
 ) {
 
     val corSocializacao         = Color(162, 226, 137, 255)
@@ -96,8 +98,24 @@ fun TelaPerfilFamiliar(
 
     val perfil = viewModel.perfil
 
-    val grafico = perfil?.grafico ?: emptyList()
-    val exibirGrafico = grafico.any { it.valorMeses > 0 }
+    var graficoReq = perfil?.grafico
+    var grafico = mutableListOf<Double>()
+
+    if(graficoReq != null) {
+
+        for (habilidade in graficoReq) {
+
+            var valor = habilidade.valorMeses
+
+            grafico.add(String.format("%.1f", valor).toDouble())
+
+        }
+
+    }
+
+    var exibirGrafico = grafico.any {it > 0}
+
+    val isLoading = perfil == null
 
 
     Column(
@@ -110,221 +128,243 @@ fun TelaPerfilFamiliar(
 
 
     ) {
-        perfil?.let { perfil ->
-            HeaderPerfil(perfil.foto, onVoltar)
 
-        }
+        HeaderPerfil(perfil, onVoltar)
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        if (isLoading) {
 
-        ) {
+            Column (
+                modifier = Modifier
+                    .height(500.dp)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator(
+                    color = colorResource(R.color.primary_color)
+                )
+            }
 
-            perfil?.let { perfil ->
+        } else {
+
+            Log.i("valor", "${grafico}")
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+
+            ) {
+
+                perfil?.let { perfil ->
+                    Text(
+                        text = perfil.nome,
+                        fontSize = 24.sp,
+                        fontFamily = instrumentSans,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF2B78D6),
+                    )
+                }
+
+
+
+                perfil?.let { perfil ->
+                    TextDetalhes(
+                        nome = perfil.nome,
+                        dataNascimento = perfil.dataNascimento,
+                        idade = perfil.idade,
+                        serieEscolar = perfil.serieEscolar,
+                        diagnosticos = perfil.diagnostico,
+                        grauSuporte = perfil.grauSuporte
+                    )
+                }
+
+                Button(
+                    onClick = {
+                        //navController.navigate("editar_familiar")
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 52.dp)
+                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp))
+                        .height(40.dp),
+                    colors = ButtonDefaults.buttonColors(Color.White),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+
+                    Text(
+                        text = "Editar informações pessoais",
+                        color = Color(0xFF2B78D6),
+                        fontFamily = instrumentSans,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+
+            }
+
+            // GRÁFICO
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(32.dp)
+            ) {
+
                 Text(
-                    text = perfil.nome,
+                    text = "Grafico de Desempenho",
                     fontSize = 24.sp,
                     fontFamily = instrumentSans,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF2B78D6),
                 )
-            }
+
+                ColunaLegenda()
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(18.dp)
+                ) {
 
 
+                    val modelProducer = remember { CartesianChartModelProducer() }
 
-            perfil?.let { perfil ->
-                TextDetalhes(
-                    nome = perfil.nome,
-                    dataNascimento = perfil.dataNascimento,
-                    idade = perfil.idade,
-                    serieEscolar = perfil.serieEscolar,
-                    diagnosticos = perfil.diagnostico,
-                    grauSuporte = perfil.grauSuporte
-                )
-            }
-
-            Button(
-                onClick = {
-                    //navController.navigate("editar_familiar")
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 52.dp)
-                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp))
-                    .height(40.dp),
-                colors = ButtonDefaults.buttonColors(Color.White),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-
-                Text(
-                    text = "Editar informações pessoais",
-                    color = Color(0xFF2B78D6),
-                    fontFamily = instrumentSans,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-
-        }
-
-        // GRÁFICO
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(32.dp)
-        ) {
-
-            Text(
-                text = "Grafico de Desempenho",
-                fontSize = 24.sp,
-                fontFamily = instrumentSans,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF2B78D6),
-            )
-
-            ColunaLegenda()
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(18.dp)
-            ) {
-
-
-                val modelProducer = remember { CartesianChartModelProducer() }
-
-                val columnProvider = ColumnCartesianLayer.ColumnProvider.series(
-                    rememberLineComponent(fill = Fill(corSocializacao), thickness = 10.dp),
-                    rememberLineComponent(fill = Fill(corLinguagem), thickness = 10.dp),
-                    rememberLineComponent(fill = Fill(corCognicao), thickness = 10.dp),
-                    rememberLineComponent(fill = Fill(corAutoCuidados), thickness = 10.dp),
-                    rememberLineComponent(fill = Fill(corDesenvolvimentoMotor), thickness = 10.dp),
-                )
-
-                val dataLabelComponent = remember {
-                    TextComponent(
-                        textStyle = TextStyle(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
+                    val columnProvider = ColumnCartesianLayer.ColumnProvider.series(
+                        rememberLineComponent(fill = Fill(corSocializacao), thickness = 10.dp),
+                        rememberLineComponent(fill = Fill(corLinguagem), thickness = 10.dp),
+                        rememberLineComponent(fill = Fill(corCognicao), thickness = 10.dp),
+                        rememberLineComponent(fill = Fill(corAutoCuidados), thickness = 10.dp),
+                        rememberLineComponent(fill = Fill(corDesenvolvimentoMotor), thickness = 10.dp),
                     )
-                }
 
-                LaunchedEffect(grafico) {
-                    if (exibirGrafico){
-                        modelProducer.runTransaction {
-                            columnSeries {
-                                grafico.forEach {
-                                    series(it.valorMeses / 12.0)
-                                }
+                    val dataLabelComponent = remember {
+                        TextComponent(
+                            textStyle = TextStyle(
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        )
+                    }
+
+                    Log.i("resultado", "${grafico[0] / 12}")
+
+                    LaunchedEffect(grafico) {
+                        if (exibirGrafico){
+                            modelProducer.runTransaction {
+                                columnSeries {
+
+                                    val valoresFormatados = grafico.map { (String.format("%.1f", it / 12)).toDouble() }.toTypedArray()
+                                    series(*valoresFormatados) }
+
                             }
                         }
+
+                    }
+
+                    if (exibirGrafico){
+                        CartesianChartHost(
+                            chart = rememberCartesianChart(
+                                rememberColumnCartesianLayer(
+                                    columnProvider,
+                                    dataLabel = dataLabelComponent,
+
+                                    dataLabelValueFormatter = CartesianValueFormatter{
+                                            _, value, _ ->
+
+                                        var valor = value
+                                        Log.i("valor", "${valor}")
+
+                                        if (value < 2){
+                                            "${value} ano"
+                                        }else{
+                                            "${value} anos"
+                                        }
+                                    },
+                                    rangeProvider = CartesianLayerRangeProvider.fixed(
+                                        minY = 0.0,
+                                        maxY = 7.0
+                                    )
+                                ),
+                                bottomAxis = HorizontalAxis.rememberBottom(
+                                    line = rememberLineComponent(
+                                        thickness = 3.dp
+                                    ),
+                                    tick = null,
+                                    guideline = null,
+                                    itemPlacer = remember { HorizontalAxis.ItemPlacer.aligned() },
+                                    label = null,
+                                )
+                            ),
+                            modelProducer = modelProducer,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 32.dp)
+                        )
+                    } else{
+
+                        Text(
+                            text = "Essa criança ainda não tem um gráfico de desempenho, ou não está visível para os responsáveis",
+                            fontFamily = FontFamily(
+                                Font(R.font.inclusivesans_variablefont_wght)
+                            ),
+                            fontSize = 18.sp,
+                            textAlign = TextAlign.Center,
+                            color = Color(0xFF2B78D6),
+                        )
                     }
 
                 }
-
-                if (exibirGrafico){
-                    CartesianChartHost(
-                        chart = rememberCartesianChart(
-                            rememberColumnCartesianLayer(
-                                columnProvider,
-                                dataLabel = dataLabelComponent,
-
-                                dataLabelValueFormatter = CartesianValueFormatter{
-                                        _, value, _ ->
-                                    if (value.toInt() == 1){
-                                        "${value.toInt()} ano"
-                                    }else{
-                                        "${value.toInt()} anos"
-                                    }
-                                },
-                                rangeProvider = CartesianLayerRangeProvider.fixed(
-                                    minY = 0.0,
-                                    maxY = 7.0
-                                )
-                            ),
-                            bottomAxis = HorizontalAxis.rememberBottom(
-                                line = rememberLineComponent(
-                                    thickness = 3.dp
-                                ),
-                                tick = null,
-                                guideline = null,
-                                itemPlacer = remember { HorizontalAxis.ItemPlacer.aligned() },
-                                label = null,
-                            )
-                        ),
-                        modelProducer = modelProducer,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 32.dp)
-                    )
-                } else{
-
-                    Text(
-                        text = "Essa criança ainda não tem um gráfico de desempenho, ou não está visível para os responsáveis",
-                        fontFamily = FontFamily(
-                            Font(R.font.inclusivesans_variablefont_wght)
-                        ),
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Center,
-                        color = Color(0xFF2B78D6),
-                    )
-                }
-
             }
-        }
 
 
-        // BOTÕES DE HABILIDADE
+            // BOTÕES DE HABILIDADE
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            ButtonHabilidade(cor = corSocializacao, nomeHabilidade = "Socialização", 1, onClick = { idClicado -> onHabilidadeClicada(idClicado) })
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                ButtonHabilidade(cor = corSocializacao, nomeHabilidade = "Socialização", 1, onClick = { idClicado -> onHabilidadeClicada(idClicado) })
 
-            ButtonHabilidade(cor = corLinguagem, nomeHabilidade = "Linguagem", 2, onClick = { idClicado ->
-                onHabilidadeClicada(idClicado)
-            })
-            ButtonHabilidade(cor = corCognicao, nomeHabilidade = "Cognição", 3, onClick = { idClicado ->
-                onHabilidadeClicada(idClicado)
-            })
-            ButtonHabilidade(cor = corAutoCuidados, nomeHabilidade = "Auto-Cuidados", 4, onClick = { idClicado ->
-                onHabilidadeClicada(idClicado)
-            })
-            ButtonHabilidade(cor = corDesenvolvimentoMotor, nomeHabilidade = "Desenvolvimento motor", 5, onClick = { idClicado ->
-                onHabilidadeClicada(idClicado)
-            })
-        }
+                ButtonHabilidade(cor = corLinguagem, nomeHabilidade = "Linguagem", 2, onClick = { idClicado ->
+                    onHabilidadeClicada(idClicado)
+                })
+                ButtonHabilidade(cor = corCognicao, nomeHabilidade = "Cognição", 3, onClick = { idClicado ->
+                    onHabilidadeClicada(idClicado)
+                })
+                ButtonHabilidade(cor = corAutoCuidados, nomeHabilidade = "Auto-Cuidados", 4, onClick = { idClicado ->
+                    onHabilidadeClicada(idClicado)
+                })
+                ButtonHabilidade(cor = corDesenvolvimentoMotor, nomeHabilidade = "Desenvolvimento motor", 5, onClick = { idClicado ->
+                    onHabilidadeClicada(idClicado)
+                })
+            }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 32.dp)
-                .padding(horizontal = 52.dp)
-        ) {
-            Button(
-                onClick = {},
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .height(40.dp),
-                colors = ButtonDefaults.buttonColors(Color(0xFFEA1212)),
-                shape = RoundedCornerShape(8.dp)
+                    .padding(bottom = 32.dp)
+                    .padding(horizontal = 52.dp)
             ) {
-                Text(
-                    text = "Excluir familiar",
-                    color = Color.White,
-                    fontFamily = instrumentSans,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
+                Button(
+                    onClick = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                        .height(40.dp),
+                    colors = ButtonDefaults.buttonColors(Color(0xFFEA1212)),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text(
+                        text = "Excluir familiar",
+                        color = Color.White,
+                        fontFamily = instrumentSans,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
 
-                )
+                        )
+                }
             }
         }
-
     }
 }

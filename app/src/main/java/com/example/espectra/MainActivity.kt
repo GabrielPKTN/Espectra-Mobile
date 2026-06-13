@@ -146,7 +146,7 @@ class MainActivity : ComponentActivity() {
                                         idHabiblidade = id,
                                         onHistoricoClicado = {id ->
                                             idAtividadeClicada = id
-                                            telaAtual = "historico-tentativas"
+                                            telaAtual = "historico_tentativas"
                                         },
 
                                         onVoltar = {
@@ -157,7 +157,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
 
-                            "historico-tentativas" -> {
+                            "historico_tentativas" -> {
                                 idAtividadeClicada?.let { id ->
 
                                     Log.i("idAtividade", "$id")
@@ -166,8 +166,10 @@ class MainActivity : ComponentActivity() {
                                     TelaHistoricoTentativa(
                                         padding = innerPadding,
                                         idAtividade = id,
-                                        idUsuario = gerenciarSessao.buscarIdUsuario(),
-                                        token = gerenciarSessao.buscarToken() ?: ""
+                                        gerenciarSessao = gerenciarSessao,
+                                        onVoltar = {
+                                            telaAtual = "atividades_cadastradas"
+                                        }
                                     )
                                 }
                             }

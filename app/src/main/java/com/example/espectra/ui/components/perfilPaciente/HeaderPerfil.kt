@@ -18,14 +18,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.espectra.R
+import com.example.espectra.model.perfilFamiliar.PerfilFamiliar
 
 @Composable
 fun HeaderPerfil(
-    fotoPerfil: String?,
+    perfil: PerfilFamiliar?,
     onVoltar: () -> Unit
 ) {
-
-
 
 
     Box(
@@ -63,9 +62,9 @@ fun HeaderPerfil(
             }
         }
 
-        if (fotoPerfil != null) {
+        if (perfil?.foto != null) {
             AsyncImage(
-                model = fotoPerfil,
+                model = perfil.foto,
                 contentDescription = "Foto de perfil",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

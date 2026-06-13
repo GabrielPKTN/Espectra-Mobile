@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -84,6 +86,8 @@ fun TelaAtividadesEmAndamento(
         viewModel.buscarAtividades(token!!, idPaciente, idHabiblidade)
     }
 
+    var isLoading = atividadesConcluidas.isEmpty() && atividadesAndamento.isEmpty()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -110,7 +114,7 @@ fun TelaAtividadesEmAndamento(
                 ) {
                     Image(
                         painter = painterResource(R.drawable.arrow_back),
-                        contentDescription = "voltar"
+                        contentDescription = "voltar",
                     )
                 }
             }
@@ -145,34 +149,52 @@ fun TelaAtividadesEmAndamento(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .weight(1f),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
+            if (isLoading) {
 
-                if (atividadesAndamento.isEmpty()){
-                    item {
-                        Text(
-                            text = "Nenhuma atividade em andamento",
-                            fontSize = 20.sp,
-                            color = Color.Red
-                        )
-                    }
-                }else{
-                    items(
-                        items = atividadesAndamento,
-                        key = { it.id_atividade }
-                    ) { atividade ->
+                Column (
+                    modifier = Modifier
+                        .height(500.dp)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator(
+                        color = colorResource(R.color.primary_color)
+                    )
+                }
 
-                        CardAtividade(
-                            idAtividade = atividade.id_atividade,
-                            descricao = atividade.comportamento,
-                            onHistoricoClick = {idClicado -> onHistoricoClicado(idClicado) }
-                        )
+            } else {
+
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+
+                    if (atividadesAndamento.isEmpty()){
+                        item {
+                            Text(
+                                text = "Nenhuma atividade em andamento",
+                                fontSize = 20.sp,
+                                color = Color.Red
+                            )
+                        }
+                    }else{
+                        items(
+                            items = atividadesAndamento,
+                            key = { it.id_atividade }
+                        ) { atividade ->
+
+                            CardAtividade(
+                                idAtividade = atividade.id_atividade,
+                                descricao = atividade.comportamento,
+                                onHistoricoClick = {idClicado -> onHistoricoClicado(idClicado) }
+                            )
+                        }
                     }
+
                 }
 
             }
@@ -189,36 +211,55 @@ fun TelaAtividadesEmAndamento(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .weight(1f),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
+            if (isLoading) {
 
-                if (atividadesConcluidas.isEmpty()){
-                    item {
-                        Text(
-                            text = "Não existem atividades Concluídas",
-                            fontSize = 20.sp,
-                            color = Color.Red
-                        )
-                    }
-                }else {
-                    items(
-                        items = atividadesConcluidas,
-                        key = { it.id_atividade }
-                    ) { atividade ->
+                Column (
+                    modifier = Modifier
+                        .height(500.dp)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator(
+                        color = colorResource(R.color.primary_color)
+                    )
+                }
 
-                        CardAtividade(
-                            idAtividade = atividade.id_atividade,
-                            descricao = atividade.comportamento,
-                            onHistoricoClick = {idClicado -> onHistoricoClicado(idClicado)}
-                        )
+            } else {
+
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+
+                    if (atividadesConcluidas.isEmpty()){
+                        item {
+                            Text(
+                                text = "Não existem atividades Concluídas",
+                                fontSize = 20.sp,
+                                color = Color.Red
+                            )
+                        }
+                    }else {
+                        items(
+                            items = atividadesConcluidas,
+                            key = { it.id_atividade }
+                        ) { atividade ->
+
+                            CardAtividade(
+                                idAtividade = atividade.id_atividade,
+                                descricao = atividade.comportamento,
+                                onHistoricoClick = {idClicado -> onHistoricoClicado(idClicado)}
+                            )
+                        }
                     }
                 }
+
             }
+
         }
 
     }

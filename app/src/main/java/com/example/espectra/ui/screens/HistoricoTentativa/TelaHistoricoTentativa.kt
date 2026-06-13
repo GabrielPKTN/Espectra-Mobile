@@ -43,6 +43,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.LaunchedEffect
@@ -55,6 +56,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.espectra.model.tentativa.Tentativa
+import com.example.espectra.storage.GerenciarSessao
 import com.example.espectra.ui.components.TelaHistoricoTentativa.CardTentativa
 import com.example.espectra.ui.components.TelaHistoricoTentativa.GraficoTentativa
 import com.example.espectra.ui.viewmodel.AtividadeViewModel
@@ -63,11 +65,10 @@ import com.example.espectra.ui.viewmodel.TentativaViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TelaHistoricoTentativa(
-
     padding: PaddingValues,
     idAtividade: Int,
-    idUsuario: Int,
-    token: String,
+    gerenciarSessao: GerenciarSessao,
+    onVoltar: () -> Unit,
     viewModelTentativa: TentativaViewModel = viewModel(),
     viewModelAtividade: AtividadeViewModel = viewModel()
 ) {
@@ -76,6 +77,9 @@ fun TelaHistoricoTentativa(
     val fontInstrumentSans = FontFamily(Font(R.font.instrumentsans_variablefont_wdth_wght))
 
     val scrollState = rememberScrollState()
+
+    var token = gerenciarSessao.buscarToken()!!
+    var idUsuario = gerenciarSessao.buscarIdUsuario()
 
     LaunchedEffect(idAtividade, idUsuario, token) {
         viewModelAtividade.buscaAtividadeId(idAtividade, idUsuario, token)
@@ -124,29 +128,16 @@ fun TelaHistoricoTentativa(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Icon(
-                painter = painterResource(R.drawable.baseline_arrow_back_24),
-                contentDescription = null,
-                tint = colorResource(R.color.primary_color),
-                modifier = Modifier.size(32.dp)
-            )
+            IconButton(onClick = onVoltar) {
 
-            // if(paciente tem foto?) { se sim mostra foto } else { se não mostra o ícone de usuário sem foto }
+                Icon(
+                    painter = painterResource(R.drawable.baseline_arrow_back_24),
+                    contentDescription = null,
+                    tint = colorResource(R.color.primary_color),
+                    modifier = Modifier.size(32.dp),
+                )
 
-            Image(
-
-                painter = painterResource(R.drawable.responsavel),
-                contentDescription = "Foto do usuário",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(52.dp)
-                    .clip(CircleShape)
-                    .border(
-                        width = 2.dp,
-                        color = colorResource(R.color.primary_color),
-                        shape = CircleShape
-                    )
-            )
+            }
         }
         // Fim header
 

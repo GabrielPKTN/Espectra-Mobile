@@ -25,6 +25,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +41,9 @@ import com.example.espectra.ui.components.TelaAdicionarFamiliar.EspectraButtonAd
 import com.example.espectra.ui.components.TelaAdicionarFamiliar.EspectraButtonAdicionarFamiliarWhite
 import com.example.espectra.ui.components.TelaAdicionarFamiliar.EspectraCard
 import com.example.espectra.viewmodel.TelaAdicionarFamiliarViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.concurrent.timer
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -49,6 +53,8 @@ fun TelaAdicionarFamiliar(
     onNavegarHome: () -> Unit,
     onVoltar: () -> Unit
 ) {
+
+    val coroutineScope = rememberCoroutineScope()
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -124,7 +130,10 @@ fun TelaAdicionarFamiliar(
                 enabled = !viewModel.estaCarregando,
                 onClick = {
                     viewModel.salvarFamiliar()
-                    onNavegarHome()
+                    coroutineScope.launch {
+                        delay(timeMillis = 1000)
+                        onVoltar()
+                    }
                 }
             )
         }

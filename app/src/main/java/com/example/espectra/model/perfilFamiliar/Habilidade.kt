@@ -6,5 +6,5 @@ data class Habilidade (
     val id: Int,
     val nome: String,
     @SerializedName("idade_meses")
-    val valorMeses: Int
+    val valorMeses: Double
 )

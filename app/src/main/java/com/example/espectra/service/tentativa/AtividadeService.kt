@@ -9,7 +9,7 @@ import retrofit2.http.Query
 
 interface AtividadeService {
 
-    @GET("v1/espectra/atividade/")
+    @GET("v1/espectra/atividade")
     suspend fun getAtividadeById(
 
         @Header("x-access-token") token: String,

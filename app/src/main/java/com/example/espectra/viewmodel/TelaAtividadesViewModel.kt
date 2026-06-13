@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.espectra.model.tentativa.Atividade
+import com.example.espectra.model.tentativa.ResponseAtividadeTela
 import com.example.espectra.service.RetrofitFactory
 import com.google.gson.Gson
 import retrofit2.HttpException
@@ -13,13 +14,13 @@ import retrofit2.HttpException
 class TelaAtividadesViewModel : ViewModel() {
 
 
-    private var _atividades by mutableStateOf<List<Atividade>>(emptyList())
-    val atividades: List<Atividade> get() = _atividades
+    private var _atividades by mutableStateOf<List<ResponseAtividadeTela>>(emptyList())
+    val atividades: List<ResponseAtividadeTela> get() = _atividades
 
-    val atividadesConcluidas: List<Atividade> get() =
+    val atividadesConcluidas: List<ResponseAtividadeTela> get() =
         _atividades.filter { atividade -> atividade.concluida == 1 }
 
-    val atividadesEmAndamento: List<Atividade> get() =
+    val atividadesEmAndamento: List<ResponseAtividadeTela> get() =
         _atividades.filter { atividade -> atividade.concluida == 0 }
 
     suspend fun buscarAtividades(token: String, idPaciente: Int, idHabilidade: Int){
