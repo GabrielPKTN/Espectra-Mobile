@@ -26,7 +26,7 @@ fun HeaderPerfil(
 ) {
 
 
-    Log.d("FOTO DATA", "fotoPerfil = '$fotoPerfil'")
+
 
     Box(
         modifier = Modifier

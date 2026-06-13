@@ -100,13 +100,13 @@ fun TelaPerfilFamiliar(
     val exibirGrafico = grafico.any { it.valorMeses > 0 }
 
 
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState())
+            .background(Color.White),
         verticalArrangement = Arrangement.spacedBy(40.dp),
+
 
 
     ) {

@@ -63,7 +63,7 @@ fun EspectraCardPaciente(
             AsyncImage(
                 model = paciente.foto, // URL ou Base64 String tratada
                 placeholder = painterResource(id = R.drawable.foto_paciente),
-                error = painterResource(id = R.drawable.foto_paciente), // Sua imagem padrão
+                error = painterResource(id = R.drawable.default_photo), // Sua imagem padrão
                 contentDescription = "Foto de ${paciente.nome}",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
