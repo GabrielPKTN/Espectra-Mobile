@@ -57,7 +57,8 @@ fun CardAtividade(
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
-                fontFamily = inclusiveSans
+                fontFamily = inclusiveSans,
+                color = Color.Black
             )
 
             Button(
@@ -74,7 +75,8 @@ fun CardAtividade(
                     text = "Histórico de tentativas",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
-                    fontFamily = instrumentSans
+                    fontFamily = instrumentSans,
+                    color = Color.White
                 )
             }
         }

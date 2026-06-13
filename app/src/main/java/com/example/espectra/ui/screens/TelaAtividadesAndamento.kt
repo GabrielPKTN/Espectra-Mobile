@@ -139,7 +139,8 @@ fun TelaAtividadesEmAndamento(
                 text = "Atividades em Andamento:",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
-                fontFamily = instrumentSans
+                fontFamily = instrumentSans,
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -176,12 +177,14 @@ fun TelaAtividadesEmAndamento(
 
             }
 
+            Spacer(modifier = Modifier.height(24.dp))
 
             Text(
                 text = "Atividades Concluídas:",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
-                fontFamily = instrumentSans
+                fontFamily = instrumentSans,
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(12.dp))
