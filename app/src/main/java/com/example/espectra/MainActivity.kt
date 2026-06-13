@@ -32,7 +32,10 @@ class MainActivity : ComponentActivity() {
             EspectraTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                    TelaPerfilUsuario(innerPadding)
+                    // 🚀 SOLUÇÃO: Envolvemos a tela de perfil em um Box para aplicar o padding corretamente
+                    Box(modifier = Modifier.padding(innerPadding)) {
+                        TelaPerfilUsuario()
+                    }
 
 //                    var telaAtual by remember {
 //                        mutableStateOf(if (gerenciarSessao.buscarToken() != null) "home" else "login")
