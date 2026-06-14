@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitFactory {
 
-    val BASE_URL = "https://espectra-back.onrender.com/"
+    val BASE_URL = "https://minha-api-unica.azurewebsites.net"
 
     private val retrofitFactory = Retrofit
         .Builder()
